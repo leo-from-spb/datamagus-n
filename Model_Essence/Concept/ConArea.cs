@@ -5,16 +5,18 @@ namespace Model.Essence.Concept;
 /// <summary>
 /// Conceptual Area — can be either a ConModel or ConSubjArea.
 /// </summary>
-public interface ConArea : AbSegment
+public interface ConArea : MediumMatter
 {
-    
+
+    public NamingFamily<ConEntity> Entities { get; }
+
 }
 
 
 /// <summary>
 /// Conceptual Model.
 /// </summary>
-public interface ConModel : ConArea
+public interface ConModel : ConArea, AbSegment
 {
     
     public NamingFamily<ConSubjArea> SubjectAreas { get; }
@@ -25,7 +27,7 @@ public interface ConModel : ConArea
 /// <summary>
 /// SubjectArea.
 /// </summary>
-public interface ConSubjArea : ConArea
+public interface ConSubjArea : ConArea, AbSection
 {
     
     
