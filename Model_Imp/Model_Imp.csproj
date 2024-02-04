@@ -9,6 +9,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Model_Essence\Model_Essence.csproj" />
+      <ProjectReference Include="..\Util_Common\Util_Common.csproj" />
     </ItemGroup>
 
 </Project>

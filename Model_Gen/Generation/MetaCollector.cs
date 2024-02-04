@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Reflection;
 using Model.Essence.Abstracts;
+using Util.Common.Fun;
 
 namespace Model.Gen.Generation;
 
@@ -56,7 +57,7 @@ internal class MetaCollector (MetaModel mm)
     {
         var propIntf = prop.PropertyType.GenericTypeArguments[0];
         if (!mm.Intfs.ContainsKey(propIntf)) 
-            HandleInterface(propIntf, true, (byte)(parentLevel+1));
+            HandleInterface(propIntf, true, parentLevel.succ());
         var child = mm.Intfs[propIntf];
         Debug.Assert(child != null);
         var family = new MetaFamily(parent, child);
