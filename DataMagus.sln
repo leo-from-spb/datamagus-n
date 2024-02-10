@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model_Essence", "Model_Esse
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model_Imp", "Model_Imp\Model_Imp.csproj", "{441AA088-EC31-45A7-A710-D139896F243E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model_Test", "Model_Test\Model_Test.csproj", "{AE5993B7-8A4B-4581-AFAF-5BF9F34097D2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{441AA088-EC31-45A7-A710-D139896F243E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{441AA088-EC31-45A7-A710-D139896F243E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{441AA088-EC31-45A7-A710-D139896F243E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE5993B7-8A4B-4581-AFAF-5BF9F34097D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE5993B7-8A4B-4581-AFAF-5BF9F34097D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE5993B7-8A4B-4581-AFAF-5BF9F34097D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE5993B7-8A4B-4581-AFAF-5BF9F34097D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
