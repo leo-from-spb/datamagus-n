@@ -53,8 +53,9 @@ public readonly struct Dim : IEquatable<Dim>, IComparable<Dim>
     private static readonly uint[] UnitFactors = new uint[] { 1, 1000, 10000, 100000 };
 
 
-    public int  CompareTo(Dim that) => this.L.CompareTo(that.L);
-    public bool Equals(Dim that) => this.L == that.L;
+    public          int  CompareTo(Dim  that) => this.L.CompareTo(that.L);
+    public          bool Equals(Dim     that) => this.L == that.L;
+    public override bool Equals(object? obj)  => obj is Dim that && Equals(that);
 
     public static bool operator == (Dim a, Dim b) => a.L == b.L;
     public static bool operator != (Dim a, Dim b) => a.L != b.L;
