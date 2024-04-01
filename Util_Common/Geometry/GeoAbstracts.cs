@@ -10,19 +10,19 @@ public readonly struct GeoPoint : IEquatable<GeoPoint>
     /// <summary>
     /// Coordinate X.
     /// </summary>
-    public readonly Dimension X;
+    public readonly Dim X;
 
     /// <summary>
     /// Coordinate Y.
     /// </summary>
-    public readonly Dimension Y;
+    public readonly Dim Y;
 
     /// <summary>
     /// Initializes the instance.
     /// </summary>
     /// <param name="x">Coordinate X.</param>
     /// <param name="y">Coordinate Y.</param>
-    public GeoPoint(Dimension x, Dimension y)
+    public GeoPoint(Dim x, Dim y)
     {
         X = x;
         Y = y;
@@ -51,16 +51,16 @@ public readonly struct GeoSize
     /// <summary>
     /// Width.
     /// </summary>
-    public readonly Dimension W;
+    public readonly Dim W;
 
     /// <summary>
     /// Height.
     /// </summary>
-    public readonly Dimension H;
+    public readonly Dim H;
 
 
 
-    public GeoSize(Dimension w, Dimension h)
+    public GeoSize(Dim w, Dim h)
     {
         W = w;
         H = h;
@@ -85,13 +85,13 @@ public readonly struct GeoSize
 /// </summary>
 public readonly struct GeoRect
 {
-    public readonly Dimension X1;
-    public readonly Dimension Y1;
-    public readonly Dimension X2;
-    public readonly Dimension Y2;
+    public readonly Dim X1;
+    public readonly Dim Y1;
+    public readonly Dim X2;
+    public readonly Dim Y2;
 
 
-    public GeoRect(Dimension x1, Dimension y1, Dimension x2, Dimension y2)
+    public GeoRect(Dim x1, Dim y1, Dim x2, Dim y2)
     {
         X1 = x1;
         Y1 = y1;
@@ -118,15 +118,15 @@ public readonly struct GeoRect
 public static class GeoAbstracts
 {
 
-    public static GeoPoint point(Dimension x, Dimension y) => new GeoPoint(x, y);
+    public static GeoPoint point(Dim x, Dim y) => new GeoPoint(x, y);
 
-    public static GeoPoint point(int x, int y, Unit unit) => new GeoPoint(new Dimension(x, unit), new Dimension(y, unit));
-    public static GeoPoint point(double x, double y, Unit unit) => new GeoPoint(new Dimension(x, unit), new Dimension(y, unit));
+    public static GeoPoint point(int x, int y, Unit unit) => new GeoPoint(new Dim(x, unit), new Dim(y, unit));
+    public static GeoPoint point(double x, double y, Unit unit) => new GeoPoint(new Dim(x, unit), new Dim(y, unit));
 
-    public static GeoSize size(Dimension w, Dimension h) => new GeoSize(w, h);
+    public static GeoSize size(Dim w, Dim h) => new GeoSize(w, h);
 
-    public static GeoSize size(int w, int h, Unit unit) => new GeoSize(new Dimension(w, unit), new Dimension(h, unit));
-    public static GeoSize size(double w, double h, Unit unit) => new GeoSize(new Dimension(w, unit), new Dimension(h, unit));
+    public static GeoSize size(int w, int h, Unit unit) => new GeoSize(new Dim(w, unit), new Dim(h, unit));
+    public static GeoSize size(double w, double h, Unit unit) => new GeoSize(new Dim(w, unit), new Dim(h, unit));
 
 
 

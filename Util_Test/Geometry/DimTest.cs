@@ -4,25 +4,25 @@ namespace Util.Test.Geometry;
 
 
 [TestFixture]
-public class DimensionTest
+public class DimTest
 {
 
     [Test]
     public void Basic_InitWithConstructor_Int()
     {
-        var m1 = new Dimension(3, Unit.mk);
-        var m2 = new Dimension(3, Unit.mm);
-        var m3 = new Dimension(3, Unit.cm);
-        var m4 = new Dimension(3, Unit.dm);
+        var m1 = new Dim(3, Unit.mk);
+        var m2 = new Dim(3, Unit.mm);
+        var m3 = new Dim(3, Unit.cm);
+        var m4 = new Dim(3, Unit.dm);
         Assert.That(m1.L, Is.EqualTo(3));
         Assert.That(m2.L, Is.EqualTo(3_000));
         Assert.That(m3.L, Is.EqualTo(30_000));
         Assert.That(m4.L, Is.EqualTo(300_000));
 
-        var m5 = new Dimension(-3, Unit.mk);
-        var m6 = new Dimension(-3, Unit.mm);
-        var m7 = new Dimension(-3, Unit.cm);
-        var m8 = new Dimension(-3, Unit.dm);
+        var m5 = new Dim(-3, Unit.mk);
+        var m6 = new Dim(-3, Unit.mm);
+        var m7 = new Dim(-3, Unit.cm);
+        var m8 = new Dim(-3, Unit.dm);
         Assert.That(m5.L, Is.EqualTo(-3));
         Assert.That(m6.L, Is.EqualTo(-3_000));
         Assert.That(m7.L, Is.EqualTo(-30_000));
@@ -32,19 +32,19 @@ public class DimensionTest
     [Test]
     public void Basic_InitWithConstructor_Double()
     {
-        var m1 = new Dimension(3.0, Unit.mk);
-        var m2 = new Dimension(3.1, Unit.mm);
-        var m3 = new Dimension(3.3, Unit.cm);
-        var m4 = new Dimension(3.5, Unit.dm);
+        var m1 = new Dim(3.0, Unit.mk);
+        var m2 = new Dim(3.1, Unit.mm);
+        var m3 = new Dim(3.3, Unit.cm);
+        var m4 = new Dim(3.5, Unit.dm);
         Assert.That(m1.L, Is.EqualTo(3));
         Assert.That(m2.L, Is.EqualTo(3_100));
         Assert.That(m3.L, Is.EqualTo(33_000));
         Assert.That(m4.L, Is.EqualTo(350_000));
 
-        var m5 = new Dimension(-3.0, Unit.mk);
-        var m6 = new Dimension(-3.1, Unit.mm);
-        var m7 = new Dimension(-3.3, Unit.cm);
-        var m8 = new Dimension(-3.5, Unit.dm);
+        var m5 = new Dim(-3.0, Unit.mk);
+        var m6 = new Dim(-3.1, Unit.mm);
+        var m7 = new Dim(-3.3, Unit.cm);
+        var m8 = new Dim(-3.5, Unit.dm);
         Assert.That(m5.L, Is.EqualTo(-3));
         Assert.That(m6.L, Is.EqualTo(-3_100));
         Assert.That(m7.L, Is.EqualTo(-33_000));
