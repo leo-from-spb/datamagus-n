@@ -1,6 +1,7 @@
+namespace Util.Test.Fun;
+
 using Util.Common.Fun;
 
-namespace Util.Test.Fun;
 
 [TestFixture]
 public class CodeBuilderTest
@@ -10,7 +11,7 @@ public class CodeBuilderTest
     {
         CodeBuilder cb = new CodeBuilder();
         cb.Append("One_Line");
-        Assert.That(cb.Result, Is.EqualTo("One_Line\n"));
+        cb.Result.ShouldBe("One_Line\n");
     }
     
     [Test]
@@ -21,7 +22,7 @@ public class CodeBuilderTest
 
         CodeBuilder cb = new CodeBuilder();
         cb.Append(text);
-        Assert.That(cb.Result, Is.EqualTo(result));
+        cb.Result.ShouldBe(result);
     }
     
     [Test]
@@ -32,7 +33,7 @@ public class CodeBuilderTest
 
         CodeBuilder cb = new CodeBuilder();
         cb.Append(text);
-        Assert.That(cb.Result, Is.EqualTo(result));
+        cb.Result.ShouldBe(result);
     }
     
     [Test]
@@ -45,7 +46,7 @@ public class CodeBuilderTest
         cb.Indent();
         cb.Append(text);
         cb.Unindent();
-        Assert.That(cb.Result, Is.EqualTo(result));
+        cb.Result.ShouldBe(result);
     }
 
     [Test]
@@ -53,7 +54,7 @@ public class CodeBuilderTest
     {
         CodeBuilder cb = new CodeBuilder();
         cb.Phrase("AAA", "BBB", "CCC");
-        Assert.That(cb.Result, Is.EqualTo("AAA BBB CCC\n"));        
+        cb.Result.ShouldBe("AAA BBB CCC\n");        
     }
 
     [Test]
@@ -61,6 +62,6 @@ public class CodeBuilderTest
     {
         CodeBuilder cb = new CodeBuilder();
         cb.Phrase("AAA", null, "CCC", "DDD", null, null, "FFF", "GGG");
-        Assert.That(cb.Result, Is.EqualTo("AAA CCC DDD FFF GGG\n"));        
+        cb.Result.ShouldBe("AAA CCC DDD FFF GGG\n");        
     }
 }
