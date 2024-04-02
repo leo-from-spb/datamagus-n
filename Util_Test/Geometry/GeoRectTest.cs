@@ -41,43 +41,35 @@ public class GeoRectTest
     {
         Multiple(() =>
         {
-            That(Rect_A.Overlaps(Rect_B), Is.False);
-            That(Rect_B.Overlaps(Rect_A), Is.False);
-            That(Rect_A.Overlaps(Rect_C), Is.False);
-            That(Rect_C.Overlaps(Rect_A), Is.False);
-            That(Rect_B.Overlaps(Rect_D), Is.False);
-            That(Rect_D.Overlaps(Rect_B), Is.False);
-            That(Rect_C.Overlaps(Rect_D), Is.False);
-            That(Rect_D.Overlaps(Rect_C), Is.False);
-
-            That(Rect_A.Overlaps(Rect_X), Is.True);
-            That(Rect_B.Overlaps(Rect_X), Is.True);
-            That(Rect_C.Overlaps(Rect_X), Is.True);
-            That(Rect_D.Overlaps(Rect_X), Is.True);
-
-            That(Rect_X.Overlaps(Rect_A), Is.True);
-            That(Rect_X.Overlaps(Rect_B), Is.True);
-            That(Rect_X.Overlaps(Rect_C), Is.True);
-            That(Rect_X.Overlaps(Rect_D), Is.True);
-
-            That(Rect_P.Overlaps(Rect_P), Is.True);
-
-            That(Rect_P.Overlaps(Rect_Q), Is.True);
-            That(Rect_Q.Overlaps(Rect_P), Is.True);
-
-            That(Rect_P.Overlaps(Rect_Y), Is.True);
-            That(Rect_Y.Overlaps(Rect_P), Is.True);
+            CheckRectsOverlapped(Rect_A, Rect_B, false);
+            CheckRectsOverlapped(Rect_A, Rect_C, false);
+            CheckRectsOverlapped(Rect_A, Rect_D, false);
+            CheckRectsOverlapped(Rect_B, Rect_C, false);
+            CheckRectsOverlapped(Rect_B, Rect_D, false);
+            CheckRectsOverlapped(Rect_C, Rect_D, false);
+            
+            CheckRectsOverlapped(Rect_A, Rect_X, true);
+            CheckRectsOverlapped(Rect_B, Rect_X, true);
+            CheckRectsOverlapped(Rect_C, Rect_X, true);
+            CheckRectsOverlapped(Rect_D, Rect_X, true);
+            
+            CheckRectsOverlapped(Rect_P, Rect_Q, true);
+            CheckRectsOverlapped(Rect_P, Rect_Y, true);
+            
+            CheckRectsOverlapped(Rect_Q, Rect_Y, false);
         });
     }
 
     [Test]
     public void Overlaps_Border()
     {
-        Multiple(() =>
-        {
-            That(Rect_P.Overlaps(Rect_R), Is.True);
-            That(Rect_R.Overlaps(Rect_P), Is.True);
-        });
+        CheckRectsOverlapped(Rect_R, Rect_P, true);
     }
 
+    private static void CheckRectsOverlapped(GeoRect rect1, GeoRect rect2, bool overlap) =>
+        Multiple(() =>
+        {
+            That(rect1.Overlaps(rect2), Is.EqualTo(overlap));
+            That(rect2.Overlaps(rect1), Is.EqualTo(overlap));
+        });
 }
