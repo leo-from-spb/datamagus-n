@@ -67,9 +67,9 @@ public class GeoRectTest
     }
 
     private static void CheckRectsOverlapped(GeoRect rect1, GeoRect rect2, bool overlap) =>
-        Multiple(() =>
-        {
-            That(rect1.Overlaps(rect2), Is.EqualTo(overlap));
-            That(rect2.Overlaps(rect1), Is.EqualTo(overlap));
-        });
+        true.ShouldSatisfyAllConditions
+        (
+            () => rect1.Overlaps(rect2).ShouldBe(overlap),
+            () => rect2.Overlaps(rect1).ShouldBe(overlap)
+        );
 }

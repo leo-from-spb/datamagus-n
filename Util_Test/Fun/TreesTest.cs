@@ -1,7 +1,8 @@
+namespace Util.Test.Fun;
+
 using Util.Common.Fun;
 using static Util.Common.Fun.Trees;
 
-namespace Util.Test.Fun;
 
 [TestFixture]
 public class TreesTest
@@ -23,7 +24,7 @@ public class TreesTest
             TraversDepthFirst("Germany", s => SimpleTree.Get(s, EmptyStringArray))
                .ToList();
         List<string> expected = ["Germany", "Bayern", "München", "Augsburg", "NRW", "Köln", "Düsseldorf"];
-        Assert.That(list, Is.EqualTo(expected));
+        list.ShouldBe(expected);
     }
     
     [Test]
@@ -33,7 +34,7 @@ public class TreesTest
             TraverseBreadthFirst("Germany", s => SimpleTree.Get(s, EmptyStringArray))
                .ToList();
         List<string> expected = ["Germany", "Bayern", "NRW", "München", "Augsburg", "Köln", "Düsseldorf"];
-        Assert.That(list, Is.EqualTo(expected));
+        list.ShouldBe(expected);
     }
     
 }
