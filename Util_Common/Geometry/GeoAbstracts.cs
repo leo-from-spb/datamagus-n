@@ -30,7 +30,7 @@ public readonly struct GeoPoint : IEquatable<GeoPoint>
 
     public override int GetHashCode() => X.L ^ Y.L;
 
-    public bool Equals(GeoPoint other) => this.X == other.X && this.Y == other.Y;
+    public bool Equals(GeoPoint that) => this.X == that.X && this.Y == that.Y;
 
     public override bool Equals([NotNullWhen(true)] object? obj) => obj is GeoPoint other && Equals(other);
 
@@ -46,7 +46,7 @@ public readonly struct GeoPoint : IEquatable<GeoPoint>
 /// <summary>
 /// Geometric size of a figure (width and height).
 /// </summary>
-public readonly struct GeoSize
+public readonly struct GeoSize : IEquatable<GeoSize>
 {
     /// <summary>
     /// Width.
@@ -67,9 +67,14 @@ public readonly struct GeoSize
     }
 
 
+    /// <summary>
+    /// Check whether the size is degenerated, in other words, one of dimensions is zero.
+    /// </summary>
+    public bool IsDegenerated => W.L == 0 || H.L == 0;
+
     public override int GetHashCode() => W.L + H.L - (W.L ^ H.L);
 
-    public bool Equals(GeoSize other) => this.W == other.W && this.H == other.H;
+    public bool Equals(GeoSize that) => this.W == that.W && this.H == that.H;
 
     public override bool Equals([NotNullWhen(true)] object? obj) => obj is GeoSize other && Equals(other);
 

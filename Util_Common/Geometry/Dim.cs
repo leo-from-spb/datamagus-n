@@ -94,6 +94,8 @@ public static class Dimensions
     public static Dim dm(this double length) => new Dim(length, Unit.dm);
 
 
+    public static readonly Dim _0_mk = 0.mk();
+
     public static readonly Dim _1_mm = 1.mm();
     public static readonly Dim _2_mm = 2.mm();
     public static readonly Dim _3_mm = 3.mm();
@@ -113,6 +115,18 @@ public static class Dimensions
     public static readonly Dim _7_cm = 7.cm();
     public static readonly Dim _8_cm = 8.cm();
     public static readonly Dim _9_cm = 9.cm();
+
+
+    /// <summary>
+    /// The smaller dimension of the two given.
+    /// </summary>
+    public static Dim min(Dim a, Dim b) => a.L <= b.L ? a : b;
+
+    /// <summary>
+    /// The larger dimension of the two given.
+    /// </summary>
+    public static Dim max(Dim a, Dim b) => a.L >= b.L ? a : b;
+
 
 }
 

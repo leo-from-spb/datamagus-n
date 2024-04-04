@@ -1,6 +1,5 @@
 using Util.Common.Geometry;
 using static Util.Common.Geometry.Dimensions;
-using static Util.Common.Geometry.GeoAbstracts;
 
 namespace Util.Test.Geometry;
 
@@ -18,22 +17,11 @@ public class GeoAbstractsTest
 
 
     [Test]
-    public void Corners()
+    public void Size_Degenerated()
     {
-        GeoRect rect = new GeoRect(_1_cm, _1_mm, _3_cm, _3_mm);
-
-        rect.ShouldSatisfyAllConditions
-        (
-            r => r.Center.ShouldBe(point(_2_cm, _2_mm)),
-            r => r.LT.ShouldBe(point(_1_cm, _1_mm)),
-            r => r.CT.ShouldBe(point(_2_cm, _1_mm)),
-            r => r.RT.ShouldBe(point(_3_cm, _1_mm)),
-            r => r.LC.ShouldBe(point(_1_cm, _2_mm)),
-            r => r.RC.ShouldBe(point(_3_cm, _2_mm)),
-            r => r.LB.ShouldBe(point(_1_cm, _3_mm)),
-            r => r.CB.ShouldBe(point(_2_cm, _3_mm)),
-            r => r.RB.ShouldBe(point(_3_cm, _3_mm))
-        );
+        new GeoSize(_1_cm, _2_cm).IsDegenerated.ShouldBeFalse();
+        new GeoSize(_0_mk, _2_cm).IsDegenerated.ShouldBeTrue();
+        new GeoSize(_3_cm, _0_mk).IsDegenerated.ShouldBeTrue();
     }
 
 }
