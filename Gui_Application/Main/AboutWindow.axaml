@@ -4,8 +4,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="200"
         x:Class="Gui.Application.Main.AboutWindow"
-        Title="About DataMagus">
-    <DockPanel>
-        <Label VerticalAlignment="Center" HorizontalAlignment="Center">Welcome to DataMagus!</Label>
+        Title="About DataMagus"
+        WindowStartupLocation="CenterOwner"
+        ExtendClientAreaChromeHints="NoChrome"
+        ExtendClientAreaToDecorationsHint="True"
+        CanResize="False"
+        PointerPressed="AboutSpace_OnPointerPressed"
+        PointerMoved="AboutSpace_OnPointerMoved"
+        PointerReleased="AboutSpace_OnPointerReleased"
+        KeyDown="AboutSpace_OnKeyDown"
+        >
+    <DockPanel >
+        <Label Name="WelcomeLabel"
+               VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+               HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+            Welcome to DataMagus!
+        </Label>
     </DockPanel>
 </Window>
