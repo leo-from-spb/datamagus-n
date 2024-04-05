@@ -2,6 +2,7 @@ namespace Util.Test.Fun;
 
 using static Common.Fun.Strings;
 
+
 [TestFixture]
 public class StringsTest
 {
@@ -9,7 +10,7 @@ public class StringsTest
     public void With_Char_Basic()
     {
         string? str = "ABC";
-        str.ShouldSatisfyAllConditions
+        Verify
         (
             () => str.with('z', 'x').ShouldBe("zABCx"),
             () => str.with(prefix: '-').ShouldBe("-ABC"), 
@@ -21,7 +22,7 @@ public class StringsTest
     public void With_Char_Null()
     {
         string? str = null;
-        str.ShouldSatisfyAllConditions
+        Verify
         (
             () => str.with('z', 'x').ShouldBeNull(),
             () => str.with(prefix: '-').ShouldBeNull(),
@@ -33,11 +34,11 @@ public class StringsTest
     public void With_Str_Basic()
     {
         string? str = "ABC";
-        str.ShouldSatisfyAllConditions
+        str.Verify
         (
-            () => str.with("zz", "xx").ShouldBe("zzABCxx"),
-            () => str.with(prefix: "--").ShouldBe("--ABC"),
-            () => str.with(suffix: "--").ShouldBe("ABC--")
+            s => s.with("zz", "xx").ShouldBe("zzABCxx"),
+            s => s.with(prefix: "--").ShouldBe("--ABC"),
+            s => s.with(suffix: "--").ShouldBe("ABC--")
         );
     }
     
@@ -45,7 +46,7 @@ public class StringsTest
     public void With_Str_Null()
     {
         string? str = null;
-        str.ShouldSatisfyAllConditions
+        Verify
         (
            () => str.with("zz", "xx").ShouldBeNull(),
            () => str.with(prefix: "--").ShouldBeNull(),
@@ -54,13 +55,11 @@ public class StringsTest
     }
 
     [Test]
-    public void lastWord_basic()
-    {
-        0.ShouldSatisfyAllConditions
-        (
-            () => "TheLastWord".lastWord().ShouldBe("Word"),
-            () => "Word".lastWord().ShouldBe("Word"),
-            () => "word".lastWord().ShouldBe("word")
-        );
-    }
+    public void lastWord_basic() => Verify
+    (
+        "The last word",
+        () => "TheLastWord".lastWord().ShouldBe("Word"),
+        () => "Word".lastWord().ShouldBe("Word"),
+        () => "word".lastWord().ShouldBe("word")
+    );
 }
