@@ -2,8 +2,24 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:easel="using:Gui.Application.Easel"
+        xmlns:explorer="using:Gui.Application.Explorer"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Gui.Application.Main.MainWindow"
+        KeyDown="Window_OnKeyDown"
+        PositionChanged="WindowBase_OnPositionChanged"
+        Resized="Window_OnResized"
         Title="DataMagus">
-    Welcome to DataMagus!
+    <DockPanel Name="PrimaryPanel">
+        <DockPanel Name="StatusPanel" DockPanel.Dock="Bottom" MinHeight="18">
+            <Label Content="  " DockPanel.Dock="Left"/>
+            <Label Name="StatusLine" DockPanel.Dock="Left" VerticalAlignment="Stretch"/>
+        </DockPanel>
+        <Panel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <easel:EaselFrame Name="Easel"
+                              VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+            <explorer:ExplorerFrame Name="Explorer"
+                                    VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+        </Panel>
+    </DockPanel>
 </Window>

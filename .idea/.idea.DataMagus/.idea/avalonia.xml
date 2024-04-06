@@ -4,6 +4,10 @@
     <option name="projectPerEditor">
       <map>
         <entry key="Gui_Application/App.axaml" value="Gui_Application/Gui_Application.csproj" />
+        <entry key="Gui_Application/Easel/EaselFrame.axaml" value="Gui_Application/Gui_Application.csproj" />
+        <entry key="Gui_Application/Easel/EaselWindow.axaml" value="Gui_Application/Gui_Application.csproj" />
+        <entry key="Gui_Application/Explorer/ExplorerFrame.axaml" value="Gui_Application/Gui_Application.csproj" />
+        <entry key="Gui_Application/Explorer/ExplorerWindow.axaml" value="Gui_Application/Gui_Application.csproj" />
         <entry key="Gui_Application/Main/AboutWindow.axaml" value="Gui_Application/Gui_Application.csproj" />
         <entry key="Gui_Application/Main/MainWindow.axaml" value="Gui_Application/Gui_Application.csproj" />
         <entry key="Gui_Application/MainWindow.axaml" value="Gui_Application/Gui_Application.csproj" />
