@@ -1,12 +1,15 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Gui.Application.Workbenches;
 
 namespace Gui.Application.Main;
 
 public partial class MainWindow : Window
 {
-    
+    internal Workbench? CurrentWorkbench;
+
+
     public MainWindow()
     {
         InitializeComponent(true, false); // don't attach the DevTools by default because it occupies the F12 key
@@ -20,6 +23,10 @@ public partial class MainWindow : Window
 
     private void Window_OnKeyDown(object? sender, KeyEventArgs e)
     {
+        if (CurrentWorkbench != null) {
+            CurrentWorkbench.HandleKeyDown(sender, e);
+            if (e.Handled) return;
+        }
         switch (e.Key, e.KeyModifiers)
         {
             case (Key.F11, 0):
@@ -31,22 +38,21 @@ public partial class MainWindow : Window
             default:
                 return;
         }
-
         e.Handled = true;
     }
 
     public void SwitchToEasel()
     {
-        Explorer.IsVisible = false;
-        Easel.IsVisible    = true;
+        Explorer.Deactivate();
+        Easel.Activate();
+        CurrentWorkbench = Easel;
     }
 
     public void SwitchToExplorer()
     {
-        Easel.IsVisible    = false;
-        Explorer.IsVisible = true;
-
-
+        Easel.Deactivate();
+        Explorer.Activate();
+        CurrentWorkbench = Explorer;
     }
 
     private void Window_OnResized(object? sender, WindowResizedEventArgs e)
@@ -62,5 +68,14 @@ public partial class MainWindow : Window
     private void ShowPositionInStatusLine()
     {
         StatusLine.Content = $"Position = {Position}; Bounds = {Bounds.Size}; ";
+    }
+
+    private void Window_OnClosing(object? sender, WindowClosingEventArgs e)
+    {
+        if (CurrentWorkbench != null)
+        {
+            CurrentWorkbench.Deactivate();
+            CurrentWorkbench = null;
+        }
     }
 }

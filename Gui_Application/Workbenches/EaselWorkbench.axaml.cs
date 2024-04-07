@@ -1,10 +1,11 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Media;
 
-namespace Gui.Application.Easel;
+namespace Gui.Application.Workbenches;
 
-public partial class EaselFrame : UserControl
+public partial class EaselWorkbench : UserControl, Workbench
 {
     private Size PaperSize = new Size(210, 297);
 
@@ -14,7 +15,7 @@ public partial class EaselFrame : UserControl
     private double OuterFieldWidth = 25;
     private double OuterFieldWidthDips = 25 * MmDips;
 
-    public EaselFrame()
+    public EaselWorkbench()
     {
         InitializeComponent();
 
@@ -54,6 +55,22 @@ public partial class EaselFrame : UserControl
         PageGrid.Data = pgd;
 
         this.IsVisible = true;
+    }
+
+
+    public void Activate()
+    {
+        this.IsVisible = true;
+    }
+
+    public void Deactivate()
+    {
+        this.IsVisible = false;
+    }
+
+    public void HandleKeyDown(object? sender, KeyEventArgs e)
+    {
+        return;
     }
 }
 

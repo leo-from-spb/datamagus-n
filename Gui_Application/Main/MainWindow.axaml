@@ -2,13 +2,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:easel="using:Gui.Application.Easel"
-        xmlns:explorer="using:Gui.Application.Explorer"
+        xmlns:wb="clr-namespace:Gui.Application.Workbenches"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Gui.Application.Main.MainWindow"
         KeyDown="Window_OnKeyDown"
         PositionChanged="WindowBase_OnPositionChanged"
         Resized="Window_OnResized"
+        Closing="Window_OnClosing"
         Title="DataMagus">
     <DockPanel Name="PrimaryPanel">
         <DockPanel Name="StatusPanel" DockPanel.Dock="Bottom" MinHeight="18">
@@ -16,10 +16,10 @@
             <Label Name="StatusLine" DockPanel.Dock="Left" VerticalAlignment="Stretch"/>
         </DockPanel>
         <Panel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-            <easel:EaselFrame Name="Easel"
-                              VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
-            <explorer:ExplorerFrame Name="Explorer"
-                                    VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+            <wb:EaselWorkbench Name="Easel"
+                               VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
+            <wb:ExplorerWorkbench Name="Explorer"
+                                  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
         </Panel>
     </DockPanel>
 </Window>

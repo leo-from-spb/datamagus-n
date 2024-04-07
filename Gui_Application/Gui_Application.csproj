@@ -25,5 +25,13 @@
         <DependentUpon>MainWindow.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
+      <Compile Update="WorkBenches\EaselFrame.axaml.cs">
+        <DependentUpon>EaselFrame.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="WorkBenches\ExplorerFrame.axaml.cs">
+        <DependentUpon>ExplorerFrame.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
     </ItemGroup>
 </Project>
