@@ -2,8 +2,22 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="450"
              x:Class="Gui.Application.Easel.EaselFrame"
+             Background="OldLace"
              >
-    EASEL
+    <DockPanel>
+        <ScrollViewer HorizontalScrollBarVisibility="Visible"
+                      VerticalScrollBarVisibility="Visible">
+            <Canvas Name="Canva"
+                    Background="OldLace">
+                <Rectangle Name="PageWhiteSurface" ZIndex="-19"
+                           Fill="White"/>
+                <Path Name="PageGrid" ZIndex="-18"
+                      Stroke="WhiteSmoke" StrokeThickness="1"/>
+                <Rectangle Name="PageBorder" ZIndex="-16"
+                           Stroke="DarkGray" StrokeThickness="1"/>
+            </Canvas>
+        </ScrollViewer>
+    </DockPanel>
 </UserControl>
