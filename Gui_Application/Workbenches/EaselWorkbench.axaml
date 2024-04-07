@@ -7,10 +7,15 @@
              Background="OldLace"
              >
     <DockPanel>
-        <ScrollViewer HorizontalScrollBarVisibility="Visible"
-                      VerticalScrollBarVisibility="Visible">
-            <Canvas Name="Canva"
-                    Background="OldLace">
+        <ScrollViewer VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                      HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <Canvas Name="Canva" IsHitTestVisible="True"
+                    RenderTransformOrigin="0,0"
+                    Background="OldLace"
+                    KeyDown="HandleKeyDown"
+                    PointerPressed="Canva_OnPointerPressed"
+                    PointerWheelChanged="Canva_OnPointerWheelChanged"
+                    >
                 <Rectangle Name="PageWhiteSurface" ZIndex="-19"
                            Fill="White"/>
                 <Path Name="PageGrid" ZIndex="-18"

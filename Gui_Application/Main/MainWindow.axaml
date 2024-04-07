@@ -11,9 +11,12 @@
         Closing="Window_OnClosing"
         Title="DataMagus">
     <DockPanel Name="PrimaryPanel">
-        <DockPanel Name="StatusPanel" DockPanel.Dock="Bottom" MinHeight="18">
+        <DockPanel Name="StatusPanel" DockPanel.Dock="Bottom" MinHeight="18" HorizontalAlignment="Stretch">
             <Label Content="  " DockPanel.Dock="Left"/>
-            <Label Name="StatusLine" DockPanel.Dock="Left" VerticalAlignment="Stretch"/>
+            <Label Name="StatusLine" DockPanel.Dock="Left"/>
+            <Label Content="  " DockPanel.Dock="Right"/>
+            <Label Name="ScaleLabel" DockPanel.Dock="Right"/>
+            <Label HorizontalAlignment="Stretch"/>
         </DockPanel>
         <Panel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <wb:EaselWorkbench Name="Easel"
