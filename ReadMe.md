@@ -9,6 +9,8 @@ being developed on C# and Avalonia UI.
 
 It's a my pet-project.
 
+<img src=".idea/icon.png" width="96">
+
 
 Motivation
 ----------
