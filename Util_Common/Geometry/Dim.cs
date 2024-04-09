@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Globalization;
 using static System.Math;
 
 namespace Util.Common.Geometry;
@@ -44,7 +45,7 @@ public readonly struct Dim : IEquatable<Dim>, IComparable<Dim>
         Debug.Assert(unitIndex < UnitFactors.Length);
         long theDim = length * UnitFactors[unitIndex];
         if (theDim is > int.MinValue and <= int.MaxValue) this.L = (int)theDim;
-        else throw new StackOverflowException($"The value too big or too small: {length} {UnitMArkers[unitIndex]}");
+        else throw new StackOverflowException($"The value too big or too small: {length} {UnitMarkers[unitIndex]}");
     }
 
     /// <summary>
@@ -59,12 +60,12 @@ public readonly struct Dim : IEquatable<Dim>, IComparable<Dim>
         Debug.Assert(unitIndex < UnitFactors.Length);
         double theDim = double.Round(length * UnitFactors[unitIndex]);
         if (theDim is > int.MinValue and <= int.MaxValue) this.L = (int)theDim;
-        else throw new StackOverflowException($"The value too big or too small: {length} {UnitMArkers[unitIndex]}");
+        else throw new StackOverflowException($"The value too big or too small: {length} {UnitMarkers[unitIndex]}");
     }
 
     
     private static readonly uint[]   UnitFactors = [1,   1000, 10000, 100000];
-    private static readonly string[] UnitMArkers = ["µ", "mm", "cm",  "m"   ];
+    private static readonly string[] UnitMarkers = ["µ", "mm", "cm",  "m"   ];
 
 
     public          int  CompareTo(Dim  that) => this.L.CompareTo(that.L);
@@ -91,6 +92,20 @@ public readonly struct Dim : IEquatable<Dim>, IComparable<Dim>
 
     public override int GetHashCode() => Abs(this.L);
 
+    public override string ToString() => L.ToString("# ### ### ##0", NumberFormat).TrimStart();
+
+    // STATIC
+
+    private static readonly NumberFormatInfo NumberFormat;
+
+    static Dim()
+    {
+        NumberFormat = new NumberFormatInfo()
+                       {
+                           NumberDecimalSeparator = ".",
+                           NumberGroupSeparator   = " "
+                       };
+    }
 }
 
 
@@ -109,6 +124,7 @@ public static class Dimensions
 
 
     public static readonly Dim _0_mk = 0.mk();
+    public static readonly Dim _1_mk = 1.mk();
 
     public static readonly Dim _1_mm = 1.mm();
     public static readonly Dim _2_mm = 2.mm();

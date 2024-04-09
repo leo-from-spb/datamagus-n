@@ -1,4 +1,5 @@
 using Util.Common.Geometry;
+using static Util.Common.Geometry.Dimensions;
 
 namespace Util.Test.Geometry;
 
@@ -94,6 +95,45 @@ public class DimTest
         m7.L.ShouldBe(-33_000);
         m8.L.ShouldBe(-350_000);
     }
+
+    [Test]
+    public void ToString_Bit() => Verify
+    (
+        () => _0_mk.ToString().ShouldBe("0"),
+        () => _1_mk.ToString().ShouldBe("1")
+    );
+
+    [Test]
+    public void ToString_GroupSeparator() => Verify
+    (
+        () => _3_mm.ToString().ShouldBe("3 000"),
+        () => _5_cm.ToString().ShouldBe("50 000")
+    );
+
+
+    [Test]
+    public void Dimension_Constants_Test() => Verify
+    (
+        () => _1_mm.ShouldBe(new Dim(1, Unit.mm)),
+        () => _2_mm.ShouldBe(new Dim(2, Unit.mm)),
+        () => _3_mm.ShouldBe(new Dim(3, Unit.mm)),
+        () => _4_mm.ShouldBe(new Dim(4, Unit.mm)),
+        () => _5_mm.ShouldBe(new Dim(5, Unit.mm)),
+        () => _6_mm.ShouldBe(new Dim(6, Unit.mm)),
+        () => _7_mm.ShouldBe(new Dim(7, Unit.mm)),
+        () => _8_mm.ShouldBe(new Dim(8, Unit.mm)),
+        () => _9_mm.ShouldBe(new Dim(9, Unit.mm)),
+
+        () => _1_cm.ShouldBe(new Dim(10, Unit.mm)),
+        () => _2_cm.ShouldBe(new Dim(20, Unit.mm)),
+        () => _3_cm.ShouldBe(new Dim(30, Unit.mm)),
+        () => _4_cm.ShouldBe(new Dim(40, Unit.mm)),
+        () => _5_cm.ShouldBe(new Dim(50, Unit.mm)),
+        () => _6_cm.ShouldBe(new Dim(60, Unit.mm)),
+        () => _7_cm.ShouldBe(new Dim(70, Unit.mm)),
+        () => _8_cm.ShouldBe(new Dim(80, Unit.mm)),
+        () => _9_cm.ShouldBe(new Dim(90, Unit.mm))
+    );
 
 
 }
