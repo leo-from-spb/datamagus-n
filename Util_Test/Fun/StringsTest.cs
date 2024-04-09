@@ -2,62 +2,64 @@ namespace Util.Test.Fun;
 
 using static Common.Fun.Strings;
 
+
 [TestFixture]
 public class StringsTest
 {
     [Test]
     public void With_Char_Basic()
     {
-        string? s = "ABC";
-        Assert.Multiple(() =>
-        {
-            Assert.That(s.with('z', 'x'),    Is.EqualTo("zABCx"));
-            Assert.That(s.with(prefix: '-'), Is.EqualTo("-ABC"));
-            Assert.That(s.with(suffix: '-'), Is.EqualTo("ABC-"));
-        });
+        string? str = "ABC";
+        Verify
+        (
+            () => str.with('z', 'x').ShouldBe("zABCx"),
+            () => str.with(prefix: '-').ShouldBe("-ABC"), 
+            () => str.with(suffix: '-').ShouldBe("ABC-") 
+        );
     }
     
     [Test]
     public void With_Char_Null()
     {
-        string? s = null;
-        Assert.Multiple(() =>
-        {
-            Assert.That(s.with('z', 'x'),    Is.Null);
-            Assert.That(s.with(prefix: '-'), Is.Null);
-            Assert.That(s.with(suffix: '-'), Is.Null);
-        });
+        string? str = null;
+        Verify
+        (
+            () => str.with('z', 'x').ShouldBeNull(),
+            () => str.with(prefix: '-').ShouldBeNull(),
+            () => str.with(suffix: '-').ShouldBeNull()
+        );
     }
     
     [Test]
     public void With_Str_Basic()
     {
-        string? s = "ABC";
-        Assert.Multiple(() =>
-        {
-            Assert.That(s.with("zz", "xx"), Is.EqualTo("zzABCxx"));
-            Assert.That(s.with(prefix: "--"), Is.EqualTo("--ABC"));
-            Assert.That(s.with(suffix: "--"), Is.EqualTo("ABC--"));
-        });
+        string? str = "ABC";
+        str.Verify
+        (
+            s => s.with("zz", "xx").ShouldBe("zzABCxx"),
+            s => s.with(prefix: "--").ShouldBe("--ABC"),
+            s => s.with(suffix: "--").ShouldBe("ABC--")
+        );
     }
     
     [Test]
     public void With_Str_Null()
     {
-        string? s = null;
-        Assert.Multiple(() =>
-        {
-            Assert.That(s.with("zz", "xx"), Is.Null);
-            Assert.That(s.with(prefix: "--"), Is.Null);
-            Assert.That(s.with(suffix: "--"), Is.Null);
-        });
+        string? str = null;
+        Verify
+        (
+           () => str.with("zz", "xx").ShouldBeNull(),
+           () => str.with(prefix: "--").ShouldBeNull(),
+           () => str.with(suffix: "--").ShouldBeNull()
+        );
     }
 
     [Test]
-    public void lastWord_basic()
-    {
-        Assert.That("TheLastWord".lastWord(), Is.EqualTo("Word"));
-        Assert.That("Word".lastWord(), Is.EqualTo("Word"));
-        Assert.That("word".lastWord(), Is.EqualTo("word"));
-    }
+    public void lastWord_basic() => Verify
+    (
+        "The last word",
+        () => "TheLastWord".lastWord().ShouldBe("Word"),
+        () => "Word".lastWord().ShouldBe("Word"),
+        () => "word".lastWord().ShouldBe("word")
+    );
 }
