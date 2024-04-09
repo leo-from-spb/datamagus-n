@@ -2,22 +2,13 @@ using System.Text;
 
 namespace Util.Common.Fun;
 
+
+/// <summary>
+/// Utility functions for working with collections.
+/// </summary>
 public static class CollectionExt
 {
     
-    public static V Get<K, V>(this IDictionary<K, V> dictionary, K key, V missing)
-    {
-        bool ok = dictionary.TryGetValue(key, out var result);
-        return ok ? result : missing;
-    }
-
-    public static V? Get<K, V>(this IDictionary<K, V> dictionary, K key)
-    {
-        bool ok = dictionary.TryGetValue(key, out var result);
-        return ok ? result : default(V);
-    }
-
-
     public static void Into<T>(this IEnumerable<T> sequence, List<T> list)
     {
         list.AddRange(sequence);
