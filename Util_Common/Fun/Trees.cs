@@ -4,6 +4,7 @@ public static class Trees
 {
 
     public static IEnumerable<T> TraversDepthFirst<T>(T root, Func<T, IEnumerable<T>> children)
+        where T: notnull
     {
         yield return root;
 
@@ -18,6 +19,7 @@ public static class Trees
     
     
     public static IEnumerable<T> TraverseBreadthFirst<T>(T root, Func<T, IEnumerable<T>> children)
+        where T: notnull
     {
         yield return root;
 
