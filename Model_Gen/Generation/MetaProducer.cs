@@ -13,6 +13,7 @@ internal class MetaProducer (MetaModel mm)
     private const string ImmDirPath         = ModuleDirPath + "/Imm";
     private const string ImmCommonFilePath  = ImmDirPath + "/ModelCommonImmImp.cs";
     private const string ImmConceptFilePath = ImmDirPath + "/ModelConceptImmImp.cs";
+    private const string ImmVisualityFilePath = ImmDirPath + "/ModelVisualityImmImp.cs";
 
 
     internal void CheckDirectory()
@@ -34,6 +35,7 @@ internal class MetaProducer (MetaModel mm)
     {
         produceImmutableClasses(SegmentKind.soCommon, ImmCommonFilePath);
         produceImmutableClasses(SegmentKind.soConcept, ImmConceptFilePath);
+        produceImmutableClasses(SegmentKind.soVisuality, ImmVisualityFilePath);
     }
 
 
@@ -45,6 +47,7 @@ internal class MetaProducer (MetaModel mm)
                   using System.Linq;
                   using Model.Essence.Abstracts;
                   using Model.Essence.Concept;
+                  using Model.Essence.Visuality;
                   using Model.Imp.Abstracts;
                   
                   namespace Model.Imp.Imm;

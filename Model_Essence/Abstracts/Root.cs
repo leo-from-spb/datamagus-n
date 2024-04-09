@@ -1,4 +1,5 @@
 using Model.Essence.Concept;
+using Model.Essence.Visuality;
 
 namespace Model.Essence.Abstracts;
 
@@ -8,4 +9,7 @@ namespace Model.Essence.Abstracts;
 public interface Root : MediumMatter
 {
     public NamingFamily<ConModel> ConceptualModels { get; }
+
+    public NamingFamily<DiaAlbum> Albums { get; }
+    
 }

@@ -23,7 +23,7 @@ internal enum SegmentKind : byte
     soCommon,
     soConcept,
     soDB,
-    soDiagram
+    soVisuality
 }
 
 internal class MetaMatter
@@ -87,7 +87,7 @@ internal class MetaMatter
                 "Ab"  => SegmentKind.soCommon,
                 "Con" => SegmentKind.soConcept,
                 "Db"  => SegmentKind.soDB,
-                "Dia" => SegmentKind.soDiagram,
+                "Dia" => SegmentKind.soVisuality,
                 _     => SegmentKind.soCommon
             };
         Name = IntfName.Remove(0, Prefix.Length);
