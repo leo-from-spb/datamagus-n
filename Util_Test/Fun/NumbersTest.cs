@@ -1,3 +1,5 @@
+using System;
+
 namespace Util.Test.Fun;
 
 using static Common.Fun.Numbers;

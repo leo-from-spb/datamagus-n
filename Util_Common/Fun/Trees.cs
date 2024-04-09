@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+
 namespace Util.Common.Fun;
 
 public static class Trees
