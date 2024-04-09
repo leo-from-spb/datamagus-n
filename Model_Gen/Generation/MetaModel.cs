@@ -35,8 +35,8 @@ internal class MetaMatter
     internal          bool        IsAbstract => !IsConcrete;
     internal readonly string      Prefix;
     internal readonly string      Name;
-    internal          string      Names  => Name.plural();
-    internal          string      LowName  => Name.decap();
+    internal          string      Names    => Name.plural();
+    internal          string      LowName  => Name.decapitalize();
     internal          string      LowNames => LowName.plural();
 
     internal readonly HashSet<Type>                    AllBaseIntfs        = [];
@@ -57,11 +57,12 @@ internal class MetaMatter
     private static byte matterOrderCounter = 0;
     
     
-    internal class MetaImm (MetaMatter m)
+    internal class MetaImm (MetaMatter matter)
     {
-        internal string ClassName;
-        internal string BaseClassName;
-        internal bool   ManuallyImplemented;
+        internal readonly MetaMatter Matter        = matter;
+        internal          string     ClassName     = "?";
+        internal          string     BaseClassName = "?";
+        internal          bool       ManuallyImplemented;
     }
     
     internal MetaMatter(Type intf, bool isConcrete, byte level)
@@ -112,7 +113,7 @@ internal class MetaFamily
     internal readonly bool       Owned;
     
     internal bool   IsAbstract    => Child.IsAbstract;
-    internal string FamilyVarName => FamilyName.decap();
+    internal string FamilyVarName => FamilyName.decapitalize();
     
     internal MetaFamily(MetaMatter matter, MetaMatter child, Type familyType, string familyName)
         : this(matter, child, familyType, familyName, true) { }
@@ -139,7 +140,7 @@ internal class MetaProperty
 {
     internal readonly MetaMatter Matter;
     internal readonly string     ProName;
-    internal          string     ProVarName => ProName.decap();
+    internal          string     ProVarName => ProName.decapitalize();
     internal readonly Type       ProType;
     internal readonly string     ProTypeName;
 

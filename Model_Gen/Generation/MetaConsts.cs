@@ -3,7 +3,7 @@ namespace Model.Gen.Generation;
 internal static class MetaConsts
 {
     internal static readonly Dictionary<Type, string> SystemTypes =
-        new Dictionary<Type, string>()
+        new()
         {
             { typeof(bool),   "bool" },
             { typeof(byte),   "byte" },

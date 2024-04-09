@@ -13,19 +13,19 @@ public static class Strings
         str is not null ? $"{prefix}{str}{suffix}" : null;
 
 
-    public static string partBefore(this string str, char marker, string whenNoMArker = "")
+    public static string partBefore(this string str, char marker, string whenNoMarker = "")
     {
         int p = str.IndexOf(marker);
         return p switch
                {
                    > 0 => str[..p],
                    0   => "",
-                   < 0 => whenNoMArker
+                   < 0 => whenNoMarker
                };
     }
     
 
-    public static string decap(this string str)
+    public static string decapitalize(this string str)
     {
         int n = str.Length;
         if (n == 0) return str;

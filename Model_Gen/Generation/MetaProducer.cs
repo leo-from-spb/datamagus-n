@@ -20,7 +20,7 @@ internal class MetaProducer (MetaModel mm)
         }
         if (!Directory.Exists(ImmDirPath))
         {
-            Console.Error.WriteLine("Subdirectory Imp shoudl exist.");
+            Console.Error.WriteLine("Subdirectory Imp should exist.");
             Environment.Exit(-2);
         }
     }

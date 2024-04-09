@@ -1,8 +1,11 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Util.Common.Fun;
 
 public static class EnglishFun
 {
 
+    [SuppressMessage("ReSharper", "StringLiteralTypo")]
     public static string plural(this string thing)
     {
         int n = thing.Length;
