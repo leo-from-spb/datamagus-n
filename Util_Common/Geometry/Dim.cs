@@ -22,35 +22,49 @@ public readonly struct Dim : IEquatable<Dim>, IComparable<Dim>
 
     private Dim(long lengthInMicrons)
     {
-        Debug.Assert(lengthInMicrons is > int.MinValue and <= int.MaxValue);
-        this.L = (int)lengthInMicrons;
+        if (lengthInMicrons is > int.MinValue and <= int.MaxValue) this.L = (int)lengthInMicrons;
+        else throw new StackOverflowException($"The value is too big or too small: {lengthInMicrons} µ");
     }
 
     private Dim(double lengthInMicrons)
     {
-        Debug.Assert(lengthInMicrons is > int.MinValue and <= int.MaxValue);
-        this.L = (int)lengthInMicrons;
+        if (lengthInMicrons is > int.MinValue and <= int.MaxValue) this.L = (int)lengthInMicrons;
+        else throw new StackOverflowException($"The value is too big or too small: {lengthInMicrons} µ");
     }
 
+    /// <summary>
+    /// Specified dimension in given units.
+    /// </summary>
+    /// <param name="length">the value.</param>
+    /// <param name="unit">the unit.</param>
+    /// <exception cref="StackOverflowException"> when the value is too large or too small.</exception>
     public Dim(int length, Unit unit)
     {
         byte unitIndex = (byte)unit;
         Debug.Assert(unitIndex < UnitFactors.Length);
-        long longDistance = length * UnitFactors[unitIndex];
-        Debug.Assert(longDistance is > int.MinValue and <= int.MaxValue);
-        this.L = (int)longDistance;
+        long theDim = length * UnitFactors[unitIndex];
+        if (theDim is > int.MinValue and <= int.MaxValue) this.L = (int)theDim;
+        else throw new StackOverflowException($"The value too big or too small: {length} {UnitMArkers[unitIndex]}");
     }
 
+    /// <summary>
+    /// Specified dimension in given units.
+    /// </summary>
+    /// <param name="length">the value.</param>
+    /// <param name="unit">the unit.</param>
+    /// <exception cref="StackOverflowException"> when the value is too large or too small.</exception>
     public Dim(double length, Unit unit)
     {
         byte unitIndex = (byte)unit;
         Debug.Assert(unitIndex < UnitFactors.Length);
-        double doubleDistance = double.Round(length * UnitFactors[unitIndex]);
-        Debug.Assert(doubleDistance is > int.MinValue and <= int.MaxValue);
-        this.L = (int)doubleDistance;
+        double theDim = double.Round(length * UnitFactors[unitIndex]);
+        if (theDim is > int.MinValue and <= int.MaxValue) this.L = (int)theDim;
+        else throw new StackOverflowException($"The value too big or too small: {length} {UnitMArkers[unitIndex]}");
     }
 
-    private static readonly uint[] UnitFactors = new uint[] { 1, 1000, 10000, 100000 };
+    
+    private static readonly uint[]   UnitFactors = [1,   1000, 10000, 100000];
+    private static readonly string[] UnitMArkers = ["µ", "mm", "cm",  "m"   ];
 
 
     public          int  CompareTo(Dim  that) => this.L.CompareTo(that.L);
