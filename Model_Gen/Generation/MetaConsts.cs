@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+
 namespace Model.Gen.Generation;
 
 internal static class MetaConsts

@@ -1,4 +1,5 @@
-﻿using Model.Gen.Generation;
+﻿using System;
+using Model.Gen.Generation;
 
 namespace Model.Gen;
 

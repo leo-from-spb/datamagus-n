@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using Util.Common.Fun;
 
 namespace Model.Gen.Generation;
@@ -37,6 +41,8 @@ internal class MetaProducer (MetaModel mm)
     {
         CodeBuilder cb = new CodeBuilder();
         cb.Append("""
+                  using System.Collections.Generic;
+                  using System.Linq;
                   using Model.Essence.Abstracts;
                   using Model.Essence.Concept;
                   using Model.Imp.Abstracts;

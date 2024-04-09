@@ -1,4 +1,7 @@
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 using Model.Essence.Abstracts;
 using Util.Common.Fun;
@@ -25,7 +28,7 @@ internal class MetaCollector (MetaModel mm)
     {
         Debug.Assert(intf.IsInterface);
 
-        List<Type> baseIntfs; 
+        List<Type> baseIntfs;
         HandleBaseInterfaces(intf, level, out baseIntfs);
         
         var m = new MetaMatter(intf, isConcrete, level);
