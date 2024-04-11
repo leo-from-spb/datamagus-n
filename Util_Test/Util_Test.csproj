@@ -7,7 +7,8 @@
 
         <IsPackable>false</IsPackable>
         <IsTestProject>true</IsTestProject>
-        <RootNamespace>Util.Test</RootNamespace>
+        <RootNamespace>Util</RootNamespace>
+        <AssemblyName>Util.Test</AssemblyName>
     </PropertyGroup>
 
     <ItemGroup>
@@ -21,7 +22,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Test_Appliance\Test_Appliance.csproj" />
-      <ProjectReference Include="..\Util_Common\Util_Common.csproj" />
+      <ProjectReference Include="..\Util\Util.csproj" />
     </ItemGroup>
 
 </Project>

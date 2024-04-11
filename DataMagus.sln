@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{1E2C3005-A077-4208-8AE6-F808E76DC698}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Util_Common", "Util_Common\Util_Common.csproj", "{CDA3C6E0-F139-4C14-B279-5CA8B5702725}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Util", "Util\Util.csproj", "{CDA3C6E0-F139-4C14-B279-5CA8B5702725}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Util_Test", "Util_Test\Util_Test.csproj", "{1A5AE482-DDD9-4D75-AB2F-5C6D3D3CA46F}"
 EndProject
