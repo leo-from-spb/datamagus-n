@@ -21,7 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Test_Appliance\Test_Appliance.csproj" />
+      <ProjectReference Include="..\Testing_Appliance\Testing_Appliance.csproj" />
       <ProjectReference Include="..\Util\Util.csproj" />
     </ItemGroup>
 

@@ -2,7 +2,7 @@ using System;
 using JetBrains.Annotations;
 using Shouldly;
 
-namespace Test.Appliance.Assertions;
+namespace Testing.Appliance.Assertions;
 
 public static class Verification
 {

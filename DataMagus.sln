@@ -6,7 +6,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Util", "Util\Util.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Util_Test", "Util_Test\Util_Test.csproj", "{1A5AE482-DDD9-4D75-AB2F-5C6D3D3CA46F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test_Appliance", "Test_Appliance\Test_Appliance.csproj", "{9F4EAA93-2AF7-49A9-9326-113CDD410494}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testing_Appliance", "Testing_Appliance\Testing_Appliance.csproj", "{9F4EAA93-2AF7-49A9-9326-113CDD410494}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core_Test", "Core_Test\Core_Test.csproj", "{1C32F970-B585-4001-B2F0-D7176817390C}"
 EndProject
