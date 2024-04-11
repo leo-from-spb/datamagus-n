@@ -1,7 +1,9 @@
-namespace Util.Test.Fun;
-
+using System.Collections.Generic;
+using System.Linq;
 using Util.Common.Fun;
 using static Util.Common.Fun.Trees;
+
+namespace Util.Test.Fun;
 
 
 [TestFixture]
