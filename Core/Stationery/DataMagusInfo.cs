@@ -10,6 +10,6 @@ public class DataMagusInfo
     /// <summary>
     /// Current version.
     /// </summary>
-    public readonly Version SoftwareVersion = new Version(0, 1);
+    public static readonly Version ProductVersion = new Version(0, 1);
 
 }
