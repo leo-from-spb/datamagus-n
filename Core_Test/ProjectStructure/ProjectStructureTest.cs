@@ -8,12 +8,11 @@ namespace Core.ProjectStructure;
 
 public class ProjectStructureTest
 {
-    private static RealDirectory  Root     = null!;
-    private static string         RootPath = null!;
-    private static List<FileInfo> AllFiles = new List<FileInfo>();
+    private static RealDirectory  Root => _root!;
+    private static RealDirectory? _root;
 
-    private static string[] UniterestedDirs =  ["yonder", ".git", ".idea"];
-    private static string[] UniterestedFiles = ["DataMagus.sln.DotSettings.user"];
+    private static readonly string[] UninvolvedDirs  = ["yonder", ".git", ".idea"];
+    private static readonly string[] UninvolvedFiles = ["DataMagus.sln.DotSettings.user"];
 
 
 
@@ -21,8 +20,8 @@ public class ProjectStructureTest
     {
         public readonly DirectoryInfo Info;
 
-        public RealDirectory[] Directories;
-        public FileInfo[]      Files;
+        public RealDirectory[] Directories = [];
+        public FileInfo[]      Files       = [];
 
         public RealDirectory(DirectoryInfo info) => Info = info;
 
@@ -44,34 +43,32 @@ public class ProjectStructureTest
             if (parentDirInfo is null) throw new Exception($"Cannot get parent of the directory {dir}");
             dir = parentDirInfo.FullName;
         }
-        RootPath = dir;
 
         // list all files
-        LoadProjectStructure();
+        _root = LoadProjectStructure(dir);
     }
 
-    private static void LoadProjectStructure()
+    private static RealDirectory LoadProjectStructure(string rootPath)
     {
-        RealDirectory root = new RealDirectory(new DirectoryInfo(RootPath));
+        RealDirectory root = new RealDirectory(new DirectoryInfo(rootPath));
         HandleProjectDirectoryRecursively(root);
-        Root = root;
+        return root;
     }
 
     private static void HandleProjectDirectoryRecursively(RealDirectory dir)
     {
         var ds = from d in dir.Info.EnumerateDirectories()
                  where !d.Name.StartsWith('.')
-                    && !UniterestedDirs.Contains(d.Name)
+                    && !UninvolvedDirs.Contains(d.Name)
                  orderby d.Name
                  select new RealDirectory(d);
         dir.Directories = ds.ToArray();
         var fs = from f in dir.Info.EnumerateFiles()
                  where !f.Name.StartsWith('.')
-                    && !UniterestedFiles.Contains(f.Name)
+                    && !UninvolvedFiles.Contains(f.Name)
                  orderby f.Name
                  select f;
         dir.Files = fs.ToArray();
-        AllFiles.AddRange(dir.Files);
         foreach (var d in dir.Directories)
         {
             HandleProjectDirectoryRecursively(d);
@@ -83,14 +80,13 @@ public class ProjectStructureTest
         return File.Exists($"{path}/DataMagus.sln");
     }
 
-
     [Test]
     public void NoImplicitUsing()
     {
+        var allDirs           = Trees.TraversDepthFirst(Root, d => d.Directories);
+        var csprojFiles       = allDirs.SelectMany(d => d.Files).Where(f => f.Name.EndsWith(".csproj")).Select(f => f.FullName);
         var wrongProjectFiles = new List<string>();
-        var csprojFiles = from f in AllFiles
-                          where f.Name.EndsWith(".csproj")
-                          select f.FullName;
+
         foreach (var f in csprojFiles)
         {
             string text = File.ReadAllText(f);
