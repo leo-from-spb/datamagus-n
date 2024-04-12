@@ -92,9 +92,10 @@ public class CodeBuilder
         {
             var lines = text.Split('\n');
             int n     = lines.Length;
+
             for (var i = 0; i < n; i++)
             {
-                var line = lines[i];
+                var line = lines[i].TrimEnd('\r');
                 if (i + 1 == n && line == "") break;
                 Buf.Append(CurrIndentation).AppendLine(line);
             }
@@ -114,7 +115,7 @@ public class CodeBuilder
     public void EnsureEOL()
     {
         if (Buf.Length == 0) return;
-        if (LastChar != '\n') Buf.Append('\n');
+        if (LastChar != '\n') Buf.AppendLine();
     }
 
     public string Result => Buf.ToString();
