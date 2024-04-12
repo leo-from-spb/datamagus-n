@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Util.Common.Fun;
+namespace Util.Extensions;
 
 
 /// <summary>

@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using Util.Common.Fun;
-using static Util.Common.Fun.NumberConstants;
+using Util.Extensions;
+using static Util.Fun.NumberConstants;
 
-namespace Util.Test.Fun;
+namespace Util.Fun;
 
 
 [TestFixture]

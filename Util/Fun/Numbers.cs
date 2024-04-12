@@ -1,6 +1,6 @@
-using static Util.Common.Fun.NumberConstants;
+using static Util.Fun.NumberConstants;
 
-namespace Util.Common.Fun;
+namespace Util.Fun;
 
 public static class Numbers
 {

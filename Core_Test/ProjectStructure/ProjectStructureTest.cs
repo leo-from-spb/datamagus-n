@@ -2,7 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Util.Common.Fun;
+using Util.Extensions;
+using Util.Fun;
 
 namespace Core.ProjectStructure;
 

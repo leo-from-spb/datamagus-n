@@ -1,7 +1,6 @@
 using System;
-using Util.Common.Fun;
 
-namespace Util.Test.Fun;
+namespace Util.Fun;
 
 [TestFixture]
 public class CodeBuilderTest

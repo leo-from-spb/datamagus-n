@@ -1,4 +1,4 @@
-namespace Util.Common.Fun;
+namespace Util.Fun;
 
 /// <summary>
 /// Number constants just for conviniens.

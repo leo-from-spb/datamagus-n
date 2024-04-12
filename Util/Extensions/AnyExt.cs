@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Util.Common.Fun;
+namespace Util.Extensions;
 
 public static class AnyExt
 {

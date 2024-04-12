@@ -1,6 +1,6 @@
-namespace Util.Common.Fun;
+namespace Util.Extensions;
 
-public static class Strings
+public static class StringExt
 {
     public static string? with(this string? str, char prefix = '\0', char suffix = '\0') =>
         str is null ? null :

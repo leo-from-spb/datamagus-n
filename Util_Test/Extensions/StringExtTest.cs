@@ -1,10 +1,7 @@
-namespace Util.Test.Fun;
-
-using static Common.Fun.Strings;
-
+namespace Util.Extensions;
 
 [TestFixture]
-public class StringsTest
+public class StringExtTest
 {
     [Test]
     public void With_Char_Basic()

@@ -1,6 +1,6 @@
-namespace Util.Test.Fun;
+namespace Util.Fun;
 
-using static Common.Fun.NumberConstants;
+using static NumberConstants;
 
 [TestFixture]
 public class NumberConstantsTest
