@@ -52,11 +52,12 @@ public class StringExtTest
     }
 
     [Test]
-    public void lastWord_basic() => Verify
+    public void LastWord_basic() => Verify
     (
         "The last word",
         () => "TheLastWord".LastWord().ShouldBe("Word"),
         () => "Word".LastWord().ShouldBe("Word"),
         () => "word".LastWord().ShouldBe("word")
     );
+
 }
