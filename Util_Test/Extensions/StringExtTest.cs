@@ -9,9 +9,9 @@ public class StringExtTest
         string? str = "ABC";
         Verify
         (
-            () => str.with('z', 'x').ShouldBe("zABCx"),
-            () => str.with(prefix: '-').ShouldBe("-ABC"), 
-            () => str.with(suffix: '-').ShouldBe("ABC-") 
+            () => str.With('z', 'x').ShouldBe("zABCx"),
+            () => str.With(prefix: '-').ShouldBe("-ABC"), 
+            () => str.With(suffix: '-').ShouldBe("ABC-") 
         );
     }
     
@@ -21,9 +21,9 @@ public class StringExtTest
         string? str = null;
         Verify
         (
-            () => str.with('z', 'x').ShouldBeNull(),
-            () => str.with(prefix: '-').ShouldBeNull(),
-            () => str.with(suffix: '-').ShouldBeNull()
+            () => str.With('z', 'x').ShouldBeNull(),
+            () => str.With(prefix: '-').ShouldBeNull(),
+            () => str.With(suffix: '-').ShouldBeNull()
         );
     }
     
@@ -33,9 +33,9 @@ public class StringExtTest
         string? str = "ABC";
         str.Verify
         (
-            s => s.with("zz", "xx").ShouldBe("zzABCxx"),
-            s => s.with(prefix: "--").ShouldBe("--ABC"),
-            s => s.with(suffix: "--").ShouldBe("ABC--")
+            s => s.With("zz", "xx").ShouldBe("zzABCxx"),
+            s => s.With(prefix: "--").ShouldBe("--ABC"),
+            s => s.With(suffix: "--").ShouldBe("ABC--")
         );
     }
     
@@ -45,9 +45,9 @@ public class StringExtTest
         string? str = null;
         Verify
         (
-           () => str.with("zz", "xx").ShouldBeNull(),
-           () => str.with(prefix: "--").ShouldBeNull(),
-           () => str.with(suffix: "--").ShouldBeNull()
+           () => str.With("zz", "xx").ShouldBeNull(),
+           () => str.With(prefix: "--").ShouldBeNull(),
+           () => str.With(suffix: "--").ShouldBeNull()
         );
     }
 
@@ -55,8 +55,8 @@ public class StringExtTest
     public void lastWord_basic() => Verify
     (
         "The last word",
-        () => "TheLastWord".lastWord().ShouldBe("Word"),
-        () => "Word".lastWord().ShouldBe("Word"),
-        () => "word".lastWord().ShouldBe("word")
+        () => "TheLastWord".LastWord().ShouldBe("Word"),
+        () => "Word".LastWord().ShouldBe("Word"),
+        () => "word".LastWord().ShouldBe("word")
     );
 }

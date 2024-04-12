@@ -2,18 +2,18 @@ namespace Util.Extensions;
 
 public static class StringExt
 {
-    public static string? with(this string? str, char prefix = '\0', char suffix = '\0') =>
+    public static string? With(this string? str, char prefix = '\0', char suffix = '\0') =>
         str is null ? null :
         prefix != '\0' && suffix != '\0' ? $"{prefix}{str}{suffix}" :
         prefix != '\0' ? prefix + str :
         suffix != '\0' ? str + suffix :
         str;
 
-    public static string? with(this string? str, string prefix = "", string suffix = "") =>
+    public static string? With(this string? str, string prefix = "", string suffix = "") =>
         str is not null ? $"{prefix}{str}{suffix}" : null;
 
 
-    public static string partBefore(this string str, char marker, string whenNoMArker = "")
+    public static string PartBefore(this string str, char marker, string whenNoMArker = "")
     {
         int p = str.IndexOf(marker);
         return p switch
@@ -25,7 +25,7 @@ public static class StringExt
     }
     
 
-    public static string decap(this string str)
+    public static string Decap(this string str)
     {
         int n = str.Length;
         if (n == 0) return str;
@@ -36,7 +36,7 @@ public static class StringExt
     }
 
 
-    public static string lastWord(this string str)
+    public static string LastWord(this string str)
     {
         int n = str.Length;
         if (n == 0) return str;

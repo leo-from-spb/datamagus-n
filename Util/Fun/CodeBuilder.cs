@@ -61,7 +61,7 @@ public class CodeBuilder
 
     public void Unindent()
     {
-        EnsureEOL();
+        EnsureEoL();
         CurrIndentation = Indentations.Pop();
     }
 
@@ -108,11 +108,11 @@ public class CodeBuilder
 
     public void EmptyLine()
     {
-        EnsureEOL();
+        EnsureEoL();
         Buf.AppendLine();
     }
 
-    public void EnsureEOL()
+    public void EnsureEoL()
     {
         if (Buf.Length == 0) return;
         if (LastChar != '\n') Buf.AppendLine();

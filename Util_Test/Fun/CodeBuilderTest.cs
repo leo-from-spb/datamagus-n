@@ -5,7 +5,7 @@ namespace Util.Fun;
 [TestFixture]
 public class CodeBuilderTest
 {
-    private string nl = Environment.NewLine;
+    private readonly string nl = Environment.NewLine;
 
     [Test]
     public void Append_1Line()

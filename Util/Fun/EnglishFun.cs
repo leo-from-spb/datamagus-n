@@ -3,7 +3,7 @@ namespace Util.Fun;
 public static class EnglishFun
 {
 
-    public static string plural(this string thing)
+    public static string Plural(this string thing)
     {
         int n = thing.Length;
         if (n == 0) return thing;
