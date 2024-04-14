@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Util.Common.Fun;
+namespace Util.Extensions;
 
 
 /// <summary>
@@ -15,26 +15,19 @@ public static class CollectionExt
     {
         list.AddRange(sequence);
     }
-    
+
 
     public static string JoinToString(this IEnumerable<string> strings,
-                                      string separator = ", ",
-                                      string prefix    = "",
-                                      string suffix    = "",
-                                      string empty     = "")
-    {
-        var b     = new StringBuilder();
-        var begin = true;
-        foreach (var s in strings)
-        {
-            b.Append(begin ? prefix : separator);
-            b.Append(s);
-            begin = false;
-        }
+                                      string                   separator = ", ",
+                                      string                   prefix    = "",
+                                      string                   suffix    = "",
+                                      string                   empty     = "") =>
+        strings.JoinToString(func: s => s,
+                             separator: separator,
+                             prefix: prefix,
+                             suffix: suffix,
+                             empty: empty );
 
-        b.Append(begin ? empty : suffix);
-        return b.ToString();
-    }
 
     public static string JoinToString<T>(this IEnumerable<T> items,
                                          Func<T, string?>    func,

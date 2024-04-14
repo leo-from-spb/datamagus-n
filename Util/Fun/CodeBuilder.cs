@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Util.Common.Fun;
+namespace Util.Fun;
 
 
 public class CodeBuilder
@@ -61,7 +61,7 @@ public class CodeBuilder
 
     public void Unindent()
     {
-        EnsureEOL();
+        EnsureEoL();
         CurrIndentation = Indentations.Pop();
     }
 
@@ -92,9 +92,10 @@ public class CodeBuilder
         {
             var lines = text.Split('\n');
             int n     = lines.Length;
+
             for (var i = 0; i < n; i++)
             {
-                var line = lines[i];
+                var line = lines[i].TrimEnd('\r');
                 if (i + 1 == n && line == "") break;
                 Buf.Append(CurrIndentation).AppendLine(line);
             }
@@ -107,14 +108,14 @@ public class CodeBuilder
 
     public void EmptyLine()
     {
-        EnsureEOL();
+        EnsureEoL();
         Buf.AppendLine();
     }
 
-    public void EnsureEOL()
+    public void EnsureEoL()
     {
         if (Buf.Length == 0) return;
-        if (LastChar != '\n') Buf.Append('\n');
+        if (LastChar != '\n') Buf.AppendLine();
     }
 
     public string Result => Buf.ToString();

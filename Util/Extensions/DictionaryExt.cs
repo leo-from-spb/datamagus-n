@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Util.Common.Fun;
+namespace Util.Extensions;
 
 
 /// <summary>
