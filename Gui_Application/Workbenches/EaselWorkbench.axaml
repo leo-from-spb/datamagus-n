@@ -15,6 +15,7 @@
                     KeyDown="HandleKeyDown"
                     PointerPressed="Canva_OnPointerPressed"
                     PointerWheelChanged="Canva_OnPointerWheelChanged"
+                    UseLayoutRounding="True"
                     >
                 <Rectangle Name="PageWhiteSurface" ZIndex="-19"
                            Fill="White"/>
