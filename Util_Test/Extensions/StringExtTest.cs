@@ -51,6 +51,27 @@ public class StringExtTest
         );
     }
 
+
+    [Test]
+    public void FirstChar_Last_Char()
+    {
+        string? strN = null, strE = "", strX = "Y -- Z";
+        Verify
+        (
+            () => strN.FirstChar().ShouldBe('\0'),
+            () => strN.FirstChar('#').ShouldBe('#'),
+            () => strE.FirstChar().ShouldBe('\0'),
+            () => strE.FirstChar('#').ShouldBe('#'),
+            () => strX.FirstChar().ShouldBe('Y'),
+            () => strN.LastChar().ShouldBe('\0'),
+            () => strN.LastChar('#').ShouldBe('#'),
+            () => strE.LastChar().ShouldBe('\0'),
+            () => strE.LastChar('#').ShouldBe('#'),
+            () => strX.LastChar().ShouldBe('Z')
+        );
+    }
+
+
     [Test]
     public void LastWord_basic() => Verify
     (
@@ -60,4 +81,39 @@ public class StringExtTest
         () => "word".LastWord().ShouldBe("word")
     );
 
+
+    [Test]
+    public void IsNotEmpty_IsEmpty()
+    {
+        string? strN = null, strE = "", strB = "   \t ", strX = "Something here";
+        Verify
+        (
+            () => strN.IsNotEmpty().ShouldBeFalse(),
+            () => strE.IsNotEmpty().ShouldBeFalse(),
+            () => strB.IsNotEmpty().ShouldBeTrue(),
+            () => strX.IsNotEmpty().ShouldBeTrue(),
+            () => strN.IsEmpty().ShouldBeTrue(),
+            () => strE.IsEmpty().ShouldBeTrue(),
+            () => strB.IsEmpty().ShouldBeFalse(),
+            () => strX.IsEmpty().ShouldBeFalse()
+        );
+    }
+
+
+    [Test]
+    public void Nullize_TrimNullize()
+    {
+        string? strN = null, strE = "", strB = " \t ", strX = "Something here";
+        Verify
+        (
+            () => strN.Nullize().ShouldBeNull(),
+            () => strE.Nullize().ShouldBeNull(),
+            () => strB.Nullize().ShouldBe(strB),
+            () => strX.Nullize().ShouldBe(strX),
+            () => strN.TrimNullize().ShouldBeNull(),
+            () => strE.TrimNullize().ShouldBeNull(),
+            () => strB.TrimNullize().ShouldBeNull(),
+            () => strX.TrimNullize().ShouldBe(strX)
+        );
+    }
 }
