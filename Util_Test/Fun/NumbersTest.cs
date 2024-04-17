@@ -2,8 +2,6 @@ using System;
 
 namespace Util.Fun;
 
-using static NumberConstants;
-
 
 [TestFixture]
 public class NumbersTest
