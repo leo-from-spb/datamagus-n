@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Test Appliance" pattern="file:Testing_Appliance/Assertions//*||file:Testing_Appliance/*.cs" />
+</component>
