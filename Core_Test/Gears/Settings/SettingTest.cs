@@ -5,7 +5,10 @@ namespace Core.Gears.Settings;
 
 public class SettingTest
 {
-    private class TestSettings : Settings { }
+    private class TestSettings : Settings
+    {
+        public TestSettings() : base("TestSettings") { }
+    }
 
     private readonly TestSettings ourSettings = new TestSettings();
 
