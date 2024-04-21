@@ -23,8 +23,14 @@ public static class CoreServiceMaster
     public static void Shutdown()
     {
         var mill = HardServiceMill.GetTheMillWhenInitialized();
-        mill?.ShutdownAllServices();
-        mill?.Dispose();
+        if (mill is not null)
+        {
+            var ss = ServiceMill.GetService<SettingService>();
+            ((LocalSettingService)ss).SaveAllSettings();
+            
+            mill.ShutdownAllServices();
+            mill.Dispose();
+        }
     }
 
     public static bool IsUp() => HardServiceMill.GetTheMillWhenInitialized() is not null;

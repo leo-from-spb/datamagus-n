@@ -1,7 +1,10 @@
 using System;
+using System.Drawing;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Core.Gears.Settings;
+using Core.Services;
 using Gui.Application.Workbenches;
 
 namespace Gui.Application.Main;
@@ -17,8 +20,16 @@ public partial class MainWindow : Window
         InitializeComponent(true, false); // don't attach the DevTools by default because it occupies the F12 key
         instance = this;
 
-        //Bounds = new Rect(0, 0, 860, 500);
-        //Position = new PixelPoint(-1000, 500);
+        var settingService    = ServiceMill.GetService<SettingService>();
+        var workspaceSettings = settingService.WorkspaceSettings;
+        var mainWindowPlace   = workspaceSettings.MainWindowPlace;
+        if (mainWindowPlace.HasValue)
+        {
+            var r = mainWindowPlace.Value;
+            Bounds = new Rect(0, 0, r.Width, r.Height);
+            Position = new PixelPoint(r.X, r.Y);
+        }
+
         SwitchToEasel();
 
         // if in the internal mode
@@ -86,6 +97,13 @@ public partial class MainWindow : Window
 
     private void Window_OnClosing(object? sender, WindowClosingEventArgs e)
     {
+        // save the current position
+        var settingService = ServiceMill.GetService<SettingService>();
+        settingService.WorkspaceSettings.MainWindowPlace =
+            new Rectangle(this.Position.X, this.Position.Y,
+                          (int)Math.Round(this.Bounds.Width), (int)Math.Round(this.Bounds.Height));
+
+        // deactivate all
         if (CurrentWorkbench != null)
         {
             CurrentWorkbench.Deactivate();
