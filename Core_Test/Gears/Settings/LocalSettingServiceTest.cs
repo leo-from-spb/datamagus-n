@@ -14,7 +14,7 @@ public class LocalSettingServiceTest
     public void Setup()
     {
         TempWorkspaceDir = new TempDirectory("Workspace-");
-        Environment.SetEnvironmentVariable(DataMagusEnvironmentVariables.EvarWorkspaceDir, TempWorkspaceDir.FullPath);
+        //Environment.SetEnvironmentVariable(DataMagusEnvironmentVariables.EvarWorkspaceDir, TempWorkspaceDir.FullPath);
     }
 
     [OneTimeTearDown]
@@ -29,6 +29,7 @@ public class LocalSettingServiceTest
     public void SaveAllSettings1()
     {
         var service = new LocalSettingService();
+        service.Sunrise();
         service.WorkspaceSettings.MainWindowPlace = new Rectangle(100, 200, 300, 400);
 
         service.SaveAllSettings();

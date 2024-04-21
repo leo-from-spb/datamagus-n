@@ -54,8 +54,8 @@ internal sealed class MacSystemSettings : RealSystemSettings
     public MacSystemSettings()
     {
         UserName              = Environment.UserName;
-        SystemPreferencesPath = $"/Users/{UserName}/Library/Preferences/DataMagus";
-        SystemWorkspacePath   = $"/Users/{UserName}/Library/Preferences/DataMagus";
+        SystemPreferencesPath = $"/Users/{UserName}/Library/Preferences";
+        SystemWorkspacePath   = $"/Users/{UserName}/Library/Application Support";
     }
 }
 
@@ -70,7 +70,7 @@ internal sealed class UnknownOperatingSystemSettings : RealSystemSettings
     public UnknownOperatingSystemSettings()
     {
         UserName              = Environment.UserName;
-        SystemPreferencesPath = $"{Environment.SpecialFolder.ApplicationData}/DataMagus";
-        SystemWorkspacePath   = $"{Environment.SpecialFolder.ApplicationData}/DataMagus";
+        SystemPreferencesPath = $"{Environment.SpecialFolder.ApplicationData}";
+        SystemWorkspacePath   = $"{Environment.SpecialFolder.ApplicationData}";
     }
 }
