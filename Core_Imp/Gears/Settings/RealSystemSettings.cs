@@ -1,22 +1,45 @@
 using System;
-using Util.Structures;
+using System.IO;
+using static Core.Stationery.DataMagusEnvironmentVariables;
 
 namespace Core.Gears.Settings;
 
 
 internal abstract class RealSystemSettings : SystemSettings
 {
-    public abstract string UserName             { get; init; }
-    public abstract string PersonalSettingsPath { get; init; }
+    public abstract string UserName              { get; init; }
+    public abstract string SystemPreferencesPath { get; init; }
+    public abstract string SystemWorkspacePath   { get; init; }
 
-    public Named<string?>[] ExportEntries() =>
-        new Named<string?>[]
-        {
-            UserName.WithName("UserName")!,
-            PersonalSettingsPath.WithName("PersonalSettingsPath")!
-        };
+    public string ActualPersonalSettingsPath { get; set; } = ".";
+    public string ActualComputerSettingsPath { get; set; } = ".";
 
-    public void ImportEntry(Named<string> entry, out string? error) =>
+    private const string DataMagusDirectoryName = "DataMagus";
+
+
+    internal void Setup()
+    {
+        string? evConfigDir    = Environment.GetEnvironmentVariable(EvarConfigDir);
+        string? evWorkspaceDir = Environment.GetEnvironmentVariable(EvarWorkspaceDir);
+
+        string baseConfigDir    = evConfigDir ?? SystemPreferencesPath;
+        string baseWorkspaceDir = evWorkspaceDir ?? SystemWorkspacePath;
+
+        ActualPersonalSettingsPath = Path.Combine(baseConfigDir, DataMagusDirectoryName);
+        ActualComputerSettingsPath = Path.Combine(baseWorkspaceDir, DataMagusDirectoryName);
+    }
+
+
+    public SettingPair[] ExportEntries() =>
+    [
+        new SettingPair(nameof(UserName), UserName),
+        new SettingPair(nameof(SystemPreferencesPath), SystemPreferencesPath),
+        new SettingPair(nameof(SystemWorkspacePath), SystemWorkspacePath),
+        new SettingPair(nameof(ActualPersonalSettingsPath), ActualPersonalSettingsPath),
+        new SettingPair(nameof(ActualComputerSettingsPath), ActualComputerSettingsPath)
+    ];
+
+    public void ImportEntry(SettingPair entry, out string? error) =>
         error = "SystemSettings cannot be imported";
 }
 
@@ -24,13 +47,15 @@ internal abstract class RealSystemSettings : SystemSettings
 
 internal sealed class MacSystemSettings : RealSystemSettings
 {
-    public override string UserName             { get; init; }
-    public override string PersonalSettingsPath { get; init; }
+    public override string UserName              { get; init; }
+    public override string SystemPreferencesPath { get; init; }
+    public override string SystemWorkspacePath   { get; init; }
 
     public MacSystemSettings()
     {
-        UserName             = Environment.UserName;
-        PersonalSettingsPath = $"/Users/{UserName}/Library/Preferences/DataMagus";
+        UserName              = Environment.UserName;
+        SystemPreferencesPath = $"/Users/{UserName}/Library/Preferences/DataMagus";
+        SystemWorkspacePath   = $"/Users/{UserName}/Library/Preferences/DataMagus";
     }
 }
 
@@ -38,12 +63,14 @@ internal sealed class MacSystemSettings : RealSystemSettings
 
 internal sealed class UnknownOperatingSystemSettings : RealSystemSettings
 {
-    public override string UserName             { get; init; }
-    public override string PersonalSettingsPath { get; init; }
+    public override string UserName              { get; init; }
+    public override string SystemPreferencesPath { get; init; }
+    public override string SystemWorkspacePath   { get; init; }
 
     public UnknownOperatingSystemSettings()
     {
-        UserName             = Environment.UserName;
-        PersonalSettingsPath = $"{Environment.SpecialFolder.ApplicationData}/DataMagus";
+        UserName              = Environment.UserName;
+        SystemPreferencesPath = $"{Environment.SpecialFolder.ApplicationData}/DataMagus";
+        SystemWorkspacePath   = $"{Environment.SpecialFolder.ApplicationData}/DataMagus";
     }
 }

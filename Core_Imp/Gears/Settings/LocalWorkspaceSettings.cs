@@ -1,5 +1,4 @@
 using System.Drawing;
-using Util.Structures;
 using static Core.Gears.Settings.SettingsConversion;
 
 namespace Core.Gears.Settings;
@@ -11,13 +10,12 @@ public class LocalWorkspaceSettings : WorkspaceSettings
     public Rectangle? MainWindowPlace { get; set; }
 
 
-    public Named<string?>[] ExportEntries() =>
-        new Named<string?>[]
-        {
-            ExportRectangle(MainWindowPlace).WithName("MainWindowPlace")
-        };
+    public SettingPair[] ExportEntries() =>
+    [
+        new SettingPair(nameof(MainWindowPlace), ExportRectangle(MainWindowPlace))
+    ];
 
-    public void ImportEntry(Named<string> entry, out string? error)
+    public void ImportEntry(SettingPair entry, out string? error)
     {
         string? str = entry.Thing;
         switch (entry.Name)

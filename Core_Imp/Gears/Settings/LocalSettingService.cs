@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using System.Text.RegularExpressions;
 using Util.Extensions;
-using Util.Structures;
 using Util.SystemStuff;
 using static Util.Fun.RegexFun;
 
@@ -16,11 +15,14 @@ internal class LocalSettingService : SettingService
 
     public LocalSettingService()
     {
-        SystemSettings = EnvironmentInfo.OS switch
-                         {
-                             OS.osMac => new MacSystemSettings(),
-                             _        => new UnknownOperatingSystemSettings()
-                         };
+        RealSystemSettings theSystemSettings = EnvironmentInfo.OS switch
+                                               {
+                                                   OS.osMac => new MacSystemSettings(),
+                                                   _        => new UnknownOperatingSystemSettings()
+                                               };
+        theSystemSettings.Setup();
+
+        SystemSettings = theSystemSettings;
         WorkspaceSettings = new LocalWorkspaceSettings();
     }
 
@@ -31,7 +33,7 @@ internal class LocalSettingService : SettingService
 
     private void SaveWorkspaceSettings()
     {
-        SaveSettings(WorkspaceSettings, SystemSettings.PersonalSettingsPath, "Workspace.ini");
+        SaveSettings(WorkspaceSettings, SystemSettings.ActualComputerSettingsPath, "Workspace.ini");
     }
 
     private void SaveSettings(AbstractSettings settings, string dirPath, string fileName)
@@ -55,7 +57,7 @@ internal class LocalSettingService : SettingService
 
     private void LoadWorkspaceSettings()
     {
-        LoadSettings(WorkspaceSettings, SystemSettings.PersonalSettingsPath, "Workspace.ini");
+        LoadSettings(WorkspaceSettings, SystemSettings.ActualComputerSettingsPath, "Workspace.ini");
     }
 
     private void LoadSettings(AbstractSettings settings, string dirPath, string fileName)
@@ -81,10 +83,9 @@ internal class LocalSettingService : SettingService
             {
                 string name  = m.Groups[1].Value;
                 string data  = m.Groups[2].Value;
-                var    entry = data.WithName(name);
+                var    entry = new SettingPair(name, data);
 
-                string? error = null;
-                settings.ImportEntry(entry, out error);
+                settings.ImportEntry(entry, out string? error);
                 if (error is not null) Console.Error.WriteLine($"Error on line {i+1}: {error}");
             }
         }

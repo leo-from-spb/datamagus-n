@@ -1,14 +1,25 @@
 using System.Drawing;
-using Util.Structures;
 
 namespace Core.Gears.Settings;
 
+/// <summary>
+/// Base class for all classes with settings.
+/// </summary>
 public interface AbstractSettings
 {
 
-    public Named<string?>[] ExportEntries();
+    /// <summary>
+    /// All settings entries, including with null or non-changed ones.
+    /// </summary>
+    /// <returns></returns>
+    public SettingPair[] ExportEntries();
 
-    public void ImportEntry(Named<string> entry, out string? error);
+    /// <summary>
+    /// Imports one entry.
+    /// </summary>
+    /// <param name="entry">the entry to import.</param>
+    /// <param name="error">null when success, the error text when error is occurred.</param>
+    public void ImportEntry(SettingPair entry, out string? error);
 
 }
 
@@ -16,8 +27,11 @@ public interface AbstractSettings
 
 public interface SystemSettings : AbstractSettings
 {
-    public string UserName             { get; }
-    public string PersonalSettingsPath { get; }
+    public string UserName                   { get; }
+    public string SystemPreferencesPath      { get; }
+    public string SystemWorkspacePath        { get; }
+    public string ActualPersonalSettingsPath { get; }
+    public string ActualComputerSettingsPath { get; }
 }
 
 

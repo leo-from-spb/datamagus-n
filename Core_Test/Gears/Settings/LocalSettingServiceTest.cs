@@ -1,10 +1,29 @@
+using System;
 using System.Drawing;
+using Core.Stationery;
+using Testing.Appliance.FileSystem;
 
 namespace Core.Gears.Settings;
 
 [TestFixture]
 public class LocalSettingServiceTest
 {
+    private TempDirectory TempWorkspaceDir;
+
+    [OneTimeSetUp]
+    public void Setup()
+    {
+        TempWorkspaceDir = new TempDirectory("Workspace-");
+        Environment.SetEnvironmentVariable(DataMagusEnvironmentVariables.EvarWorkspaceDir, TempWorkspaceDir.FullPath);
+    }
+
+    [OneTimeTearDown]
+    public void Down()
+    {
+        Environment.SetEnvironmentVariable(DataMagusEnvironmentVariables.EvarConfigDir, null);
+        TempWorkspaceDir.Dispose();
+    }
+
 
     [Test]
     public void SaveAllSettings1()
@@ -12,11 +31,8 @@ public class LocalSettingServiceTest
         var service = new LocalSettingService();
         service.WorkspaceSettings.MainWindowPlace = new Rectangle(100, 200, 300, 400);
 
-        if (false)
-        {
-            service.SaveAllSettings(); // TODO configure test path
-            service.LoadAllSettings(); // TODO configure test path
-        }
+        service.SaveAllSettings();
+        service.LoadAllSettings();
     }
 
 }
