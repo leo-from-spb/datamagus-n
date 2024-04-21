@@ -3,16 +3,16 @@ namespace Core.Services;
 
 
 [TestFixture]
-public class ServiceMasterTest
+public class ServiceMillTest
 {
 
-    private class TestServiceMaster : ServiceMaster
+    private class TestServiceMill : ServiceMill
     {
         private readonly MyTestServiceIntf myTestService = new MyTestServiceImpl();
 
-        public TestServiceMaster()
+        public TestServiceMill()
         {
-            theMaster = this;
+            theMill = this;
         }
 
         protected internal override S? FindService<S>()
@@ -36,7 +36,7 @@ public class ServiceMasterTest
     [Test]
     public void GetService()
     {
-        new TestServiceMaster();
+        new TestServiceMill();
         MyTestServiceIntf service = GetService<MyTestServiceIntf>();
         service.ShouldNotBeNull();
     }

@@ -4,17 +4,17 @@ using System.Diagnostics;
 namespace Core.Services;
 
 
-public abstract class ServiceMaster
+public abstract class ServiceMill
 {
 
-    protected static ServiceMaster? theMaster = null;
+    protected static ServiceMill? theMill = null;
 
 
     public static S GetService<S>()
         where S: class
     {
-        Debug.Assert(theMaster != null);
-        S? service = theMaster!.FindService<S>();
+        Debug.Assert(theMill != null);
+        S? service = theMill!.FindService<S>();
         if (service == null) throw new Exception("No service " + typeof(S).Name);
         return service;
     }

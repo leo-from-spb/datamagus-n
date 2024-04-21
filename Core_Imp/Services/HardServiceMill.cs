@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using Util.Extensions;
@@ -7,19 +8,40 @@ using Util.Extensions;
 namespace Core.Services;
 
 
-public class HardServiceMaster : ServiceMaster
+public class HardServiceMill : ServiceMill, IDisposable
 {
     private readonly List<object>             services          = new List<object>();
     private readonly Dictionary<Type, object> serviceDictionary = new Dictionary<Type, object>();
 
 
-    public HardServiceMaster()
+    public static HardServiceMill GetTheMill()
     {
-        ServiceMaster.theMaster = this;
+        var mill = theMill;
+        if (mill is null)
+        {
+            var thisMill = new HardServiceMill();
+            Debug.Assert(theMill == thisMill);
+            return thisMill;
+        }
+        else
+        {
+            if (theMill is HardServiceMill) return (HardServiceMill)theMill;
+            else throw new InvalidOperationException($"The current mill is already set up by another class: {theMill}");
+        }
+    }
+
+    public static HardServiceMill? GetTheMillWhenInitialized() =>
+        theMill as HardServiceMill;
+
+
+    public HardServiceMill()
+    {
+        ServiceMill.theMill = this;
     }
 
 
-    public void Register(object service)
+    public S Register<S>(S service)
+        where S: class
     {
         var serviceType = service.GetType();
         services.Add(service);
@@ -40,6 +62,8 @@ public class HardServiceMaster : ServiceMaster
                 serviceDictionary[i] = service;
             }
         }
+
+        return service;
     }
 
 
@@ -81,4 +105,14 @@ public class HardServiceMaster : ServiceMaster
 
     internal IReadOnlyList<object> ListAllServices() => services;
 
+
+    public void Dispose()
+    {
+        var mill = GetTheMillWhenInitialized();
+        if (mill is not null)
+        {
+            ShutdownAllServices();
+            theMill = null;
+        }
+    }
 }

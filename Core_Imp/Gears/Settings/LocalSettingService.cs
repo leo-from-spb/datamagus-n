@@ -13,20 +13,22 @@ internal class LocalSettingService : SettingService
     public SystemSettings    SystemSettings    { get; }
     public WorkspaceSettings WorkspaceSettings { get; }
 
-    public LocalSettingService()
+    internal LocalSettingService()
     {
-        RealSystemSettings theSystemSettings = EnvironmentInfo.OS switch
-                                               {
-                                                   OS.osMac => new MacSystemSettings(),
-                                                   _        => new UnknownOperatingSystemSettings()
-                                               };
-        theSystemSettings.Setup();
-
-        SystemSettings = theSystemSettings;
+        SystemSettings = EnvironmentInfo.OS switch
+                         {
+                             OS.osMac => new MacSystemSettings(),
+                             _        => new UnknownOperatingSystemSettings()
+                         };
         WorkspaceSettings = new LocalWorkspaceSettings();
     }
 
-    public void SaveAllSettings()
+    internal void Sunrise()
+    {
+        ((RealSystemSettings)SystemSettings).Setup();
+    }
+
+    internal void SaveAllSettings()
     {
         SaveWorkspaceSettings();
     }
@@ -50,7 +52,7 @@ internal class LocalSettingService : SettingService
     }
 
 
-    public void LoadAllSettings()
+    internal void LoadAllSettings()
     {
         LoadWorkspaceSettings();
     }

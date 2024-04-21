@@ -4,7 +4,7 @@ namespace Core.Services;
 
 
 [TestFixture]
-public class HardServiceMasterTest
+public class HardServiceMillTest
 {
 
     [Service]
@@ -27,7 +27,7 @@ public class HardServiceMasterTest
     [Test]
     public void GetByDirectClass()
     {
-        var hsm     = new HardServiceMaster();
+        var hsm     = new HardServiceMill();
         var service = new MyTestServiceImpl();
         hsm.Register(service);
         hsm.FindService<MyTestServiceImpl>().ShouldBeSameAs(service);
@@ -36,7 +36,7 @@ public class HardServiceMasterTest
     [Test]
     public void GetByBaseClass()
     {
-        var hsm     = new HardServiceMaster();
+        var hsm     = new HardServiceMill();
         var service = new MyTestServiceImpl();
         hsm.Register(service);
         hsm.FindService<MyTestBaseService>().ShouldBeSameAs(service);
@@ -45,7 +45,7 @@ public class HardServiceMasterTest
     [Test]
     public void GetByInterface()
     {
-        var hsm     = new HardServiceMaster();
+        var hsm     = new HardServiceMill();
         var service = new MyTestServiceImpl();
         hsm.Register(service);
         hsm.FindService<MyTestServiceIntf2>().ShouldBeSameAs(service);
@@ -55,7 +55,7 @@ public class HardServiceMasterTest
     [Test]
     public void Shutdown_NoMore()
     {
-        var hsm     = new HardServiceMaster();
+        var hsm     = new HardServiceMill();
         hsm.Register(new MyTestServiceImpl());
         hsm.Register(new MyTestServiceImpl2());
 
