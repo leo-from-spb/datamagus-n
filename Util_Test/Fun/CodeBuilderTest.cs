@@ -1,51 +1,53 @@
-using Util.Common.Fun;
+using System;
 
-namespace Util.Test.Fun;
+namespace Util.Fun;
 
 [TestFixture]
 public class CodeBuilderTest
 {
+    private readonly string nl = Environment.NewLine;
+
     [Test]
     public void Append_1Line()
     {
         CodeBuilder cb = new CodeBuilder();
         cb.Append("One_Line");
-        Assert.That(cb.Result, Is.EqualTo("One_Line\n"));
+        cb.Result.ShouldBe($"One_Line{nl}");
     }
     
     [Test]
     public void Append_3Lines()
     {
-        const string text   = "First_Line\nSecond_Line\nThird_Line";
-        const string result = "First_Line\nSecond_Line\nThird_Line\n";
+        string text   = $"First_Line{nl}Second_Line{nl}Third_Line";
+        string result = $"First_Line{nl}Second_Line{nl}Third_Line{nl}";
 
         CodeBuilder cb = new CodeBuilder();
         cb.Append(text);
-        Assert.That(cb.Result, Is.EqualTo(result));
+        cb.Result.ShouldBe(result);
     }
     
     [Test]
     public void Append_3LinesWithEOL()
     {
-        const string text   = "First_Line\nSecond_Line\nThird_Line\n";
-        const string result = "First_Line\nSecond_Line\nThird_Line\n";
+        string text   = $"First_Line{nl}Second_Line{nl}Third_Line{nl}";
+        string result = $"First_Line{nl}Second_Line{nl}Third_Line{nl}";
 
         CodeBuilder cb = new CodeBuilder();
         cb.Append(text);
-        Assert.That(cb.Result, Is.EqualTo(result));
+        cb.Result.ShouldBe(result);
     }
     
     [Test]
     public void Append_3LinesIndented()
     {
-        const string text   = "First_Line\nSecond_Line\nThird_Line";
-        const string result = "\tFirst_Line\n\tSecond_Line\n\tThird_Line\n";
+        string text   = $"First_Line{nl}Second_Line{nl}Third_Line";
+        string result = $"\tFirst_Line{nl}\tSecond_Line{nl}\tThird_Line{nl}";
 
         CodeBuilder cb = new CodeBuilder();
         cb.Indent();
         cb.Append(text);
         cb.Unindent();
-        Assert.That(cb.Result, Is.EqualTo(result));
+        cb.Result.ShouldBe(result);
     }
 
     [Test]
@@ -53,7 +55,7 @@ public class CodeBuilderTest
     {
         CodeBuilder cb = new CodeBuilder();
         cb.Phrase("AAA", "BBB", "CCC");
-        Assert.That(cb.Result, Is.EqualTo("AAA BBB CCC\n"));        
+        cb.Result.ShouldBe($"AAA BBB CCC{nl}");
     }
 
     [Test]
@@ -61,6 +63,6 @@ public class CodeBuilderTest
     {
         CodeBuilder cb = new CodeBuilder();
         cb.Phrase("AAA", null, "CCC", "DDD", null, null, "FFF", "GGG");
-        Assert.That(cb.Result, Is.EqualTo("AAA CCC DDD FFF GGG\n"));        
+        cb.Result.ShouldBe($"AAA CCC DDD FFF GGG{nl}");
     }
 }

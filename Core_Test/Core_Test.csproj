@@ -7,8 +7,8 @@
 
         <IsPackable>false</IsPackable>
         <IsTestProject>true</IsTestProject>
-        <RootNamespace>Util</RootNamespace>
-        <AssemblyName>Util.Test</AssemblyName>
+        <AssemblyName>Core.Test</AssemblyName>
+        <RootNamespace>Core</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -17,12 +17,12 @@
         <PackageReference Include="NUnit3TestAdapter" Version="4.2.1"/>
         <PackageReference Include="NUnit.Analyzers" Version="3.6.1"/>
         <PackageReference Include="coverlet.collector" Version="6.0.0"/>
-        <PackageReference Include="Shouldly" Version="4.2.1" />
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Core\Core.csproj" />
+      <ProjectReference Include="..\Core_Imp\Core_Imp.csproj" />
       <ProjectReference Include="..\Testing_Appliance\Testing_Appliance.csproj" />
-      <ProjectReference Include="..\Util\Util.csproj" />
     </ItemGroup>
 
 </Project>
