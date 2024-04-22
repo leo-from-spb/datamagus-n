@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using Util.SystemStuff;
 using static Core.Stationery.DataMagusEnvironmentVariables;
 
 namespace Core.Gears.Settings;
@@ -15,6 +16,17 @@ internal abstract class RealSystemSettings : SystemSettings
     public string ActualComputerSettingsPath { get; set; } = ".";
 
     private const string DataMagusDirectoryName = "DataMagus";
+
+
+    internal static RealSystemSettings InstantiateSystemSettingsForCurrentOS()
+    {
+        return EnvironmentInfo.OS switch
+               {
+                   OS.osMac     => new MacSystemSettings(),
+                   OS.osWindows => new WindowsSystemSettings(),
+                   _            => new UnknownOperatingSystemSettings()
+               };
+    }
 
 
     internal void Setup()
