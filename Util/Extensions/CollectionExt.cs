@@ -50,5 +50,19 @@ public static class CollectionExt
         b.Append(begin ? empty : suffix);
         return b.ToString();
     }
-    
+
+    /// <summary>
+    /// Checks whether this collection is empty.
+    /// </summary>
+    /// <param name="collection">the collection to check.</param>
+    /// <returns>true when empty.</returns>
+    public static bool IsEmpty<E>(this IReadOnlyCollection<E> collection) => collection.Count == 0;
+
+    /// <summary>
+    /// Checks whether this collection contains something (is not empty).
+    /// </summary>
+    /// <param name="collection">the collection to check.</param>
+    /// <returns>true when it is not empty.</returns>
+    public static bool IsNotEmpty<E>(this IReadOnlyCollection<E> collection) => collection.Count > 0;
+
 }
