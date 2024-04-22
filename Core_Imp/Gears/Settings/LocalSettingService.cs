@@ -17,8 +17,9 @@ internal class LocalSettingService : SettingService
     {
         SystemSettings = EnvironmentInfo.OS switch
                          {
-                             OS.osMac => new MacSystemSettings(),
-                             _        => new UnknownOperatingSystemSettings()
+                             OS.osMac     => new MacSystemSettings(),
+                             OS.osWindows => new WindowsSystemSettings(),
+                             _            => new UnknownOperatingSystemSettings()
                          };
         WorkspaceSettings = new LocalWorkspaceSettings();
     }

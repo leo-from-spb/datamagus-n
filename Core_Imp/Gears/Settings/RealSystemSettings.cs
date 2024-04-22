@@ -60,6 +60,21 @@ internal sealed class MacSystemSettings : RealSystemSettings
 }
 
 
+internal sealed class WindowsSystemSettings : RealSystemSettings
+{
+    public override string UserName              { get; init; }
+    public override string SystemPreferencesPath { get; init; }
+    public override string SystemWorkspacePath   { get; init; }
+
+    public WindowsSystemSettings()
+    {
+        UserName              = Environment.UserName;
+        SystemPreferencesPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        SystemWorkspacePath   = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+    }
+}
+
+
 
 internal sealed class UnknownOperatingSystemSettings : RealSystemSettings
 {
