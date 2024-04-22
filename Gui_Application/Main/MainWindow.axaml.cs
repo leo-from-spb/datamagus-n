@@ -26,7 +26,8 @@ public partial class MainWindow : Window
         if (mainWindowPlace.HasValue)
         {
             var r = mainWindowPlace.Value;
-            Bounds = new Rect(0, 0, r.Width, r.Height);
+            Width    = r.Width;
+            Height   = r.Height;
             Position = new PixelPoint(r.X, r.Y);
         }
 
