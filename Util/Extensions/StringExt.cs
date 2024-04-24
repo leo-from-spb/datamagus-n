@@ -59,6 +59,13 @@ public static class StringExt
 
 
     /// <summary>
+    /// Checks whether this substring is contained in the given string.
+    /// </summary>
+    /// <param name="substr">the substring to check.</param>
+    /// <param name="str">the string where to find the substring.</param>
+    public static bool IsIn(this string substr, [NotNullWhen(true)] string? str) => str is not null && str.Contains(substr);
+
+    /// <summary>
     /// Check whether this string is not empty (and not null).
     /// </summary>
     /// <param name="str">the string to check.</param>

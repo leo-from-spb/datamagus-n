@@ -24,6 +24,8 @@ internal abstract class RealSystemSettings : SystemSettings
                {
                    OS.osMac     => new MacSystemSettings(),
                    OS.osWindows => new WindowsSystemSettings(),
+                   OS.osUnix    => new UnixSystemSettings(),
+                   OS.osLinux   => new UnixSystemSettings(),
                    _            => new UnknownOperatingSystemSettings()
                };
     }
@@ -87,6 +89,22 @@ internal sealed class WindowsSystemSettings : RealSystemSettings
 }
 
 
+internal sealed class UnixSystemSettings : RealSystemSettings
+{
+    public override string UserName              { get; init; }
+    public override string SystemPreferencesPath { get; init; }
+    public override string SystemWorkspacePath   { get; init; }
+
+    public UnixSystemSettings()
+    {
+        UserName = Environment.UserName;
+        string homePath = Environment.GetEnvironmentVariable("HOME") ?? $"/home/{UserName}";
+
+        SystemPreferencesPath = homePath;
+        SystemWorkspacePath   = homePath;
+    }
+}
+
 
 internal sealed class UnknownOperatingSystemSettings : RealSystemSettings
 {
@@ -97,7 +115,7 @@ internal sealed class UnknownOperatingSystemSettings : RealSystemSettings
     public UnknownOperatingSystemSettings()
     {
         UserName              = Environment.UserName;
-        SystemPreferencesPath = $"{Environment.SpecialFolder.ApplicationData}";
-        SystemWorkspacePath   = $"{Environment.SpecialFolder.ApplicationData}";
+        SystemPreferencesPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        SystemWorkspacePath   = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
     }
 }
