@@ -14,6 +14,7 @@ public class TreesTest
           {
               { "Germany", ["Bayern", "NRW"] },
               { "Bayern", ["München", "Augsburg"] },
+              { "München", ["Laim", "Pasing"] },
               { "NRW", ["Köln", "Düsseldorf"] },
           };
 
@@ -25,7 +26,7 @@ public class TreesTest
         var list = 
             TraversDepthFirst("Germany", s => SimpleTree.Get(s, EmptyStringArray))
                .ToList();
-        List<string> expected = ["Germany", "Bayern", "München", "Augsburg", "NRW", "Köln", "Düsseldorf"];
+        List<string> expected = ["Germany", "Bayern", "München", "Laim", "Pasing", "Augsburg", "NRW", "Köln", "Düsseldorf"];
         list.ShouldBe(expected);
     }
     
@@ -35,7 +36,7 @@ public class TreesTest
         var list = 
             TraverseBreadthFirst("Germany", s => SimpleTree.Get(s, EmptyStringArray))
                .ToList();
-        List<string> expected = ["Germany", "Bayern", "NRW", "München", "Augsburg", "Köln", "Düsseldorf"];
+        List<string> expected = ["Germany", "Bayern", "NRW", "München", "Augsburg", "Köln", "Düsseldorf", "Laim", "Pasing"];
         list.ShouldBe(expected);
     }
     

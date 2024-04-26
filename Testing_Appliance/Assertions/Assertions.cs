@@ -21,13 +21,13 @@ public static class Assertions
 
     public static void ShouldContainAll<E>(this IReadOnlyCollection<E>? collection, params E[] expectedItems)
     {
-        if (collection is null) Fail($"Actual collection is null when expect a collection with the following items " + expectedItems.Describe());
+        if (collection is null) Fail("Actual collection is null when expect a collection with the following items " + expectedItems.Describe());
         CheckContainsAll("collection", collection, expectedItems);
     }
 
     public static void ShouldContainAll<E>(this IEnumerable<E>? enumerable, params E[] expectedItems)
     {
-        if (enumerable is null) Fail($"Actual collection is null when expect a collection with the following items " + expectedItems.Describe());
+        if (enumerable is null) Fail("Actual collection is null when expect a collection with the following items " + expectedItems.Describe());
         var set = enumerable.ToHashSet();
         CheckContainsAll("collection", set, expectedItems);
     }

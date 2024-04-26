@@ -25,7 +25,7 @@ public class HardServiceMill : ServiceMill, IDisposable
         }
         else
         {
-            if (theMill is HardServiceMill) return (HardServiceMill)theMill;
+            if (theMill is HardServiceMill hsm) return hsm;
             else throw new InvalidOperationException($"The current mill is already set up by another class: {theMill}");
         }
     }
@@ -36,7 +36,7 @@ public class HardServiceMill : ServiceMill, IDisposable
 
     public HardServiceMill()
     {
-        ServiceMill.theMill = this;
+        theMill = this;
     }
 
 

@@ -8,7 +8,7 @@ namespace Util.Fun;
 
 public class CodeBuilder
 {
-    private StringBuilder Buf = new StringBuilder();
+    private readonly StringBuilder Buf = new StringBuilder();
     
     
     // settings
@@ -18,9 +18,9 @@ public class CodeBuilder
     
     // state
 
-    public string CurrIndentation = "";
+    private string CurrIndentation = "";
 
-    public Stack<string> Indentations = new Stack<string>();
+    private Stack<string> Indentations = new Stack<string>();
 
     
     // Methods

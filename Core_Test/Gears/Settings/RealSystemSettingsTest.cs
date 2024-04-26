@@ -6,24 +6,30 @@ namespace Core.Gears.Settings;
 public class RealSystemSettingsTest
 {
 
-    private readonly RealSystemSettings service = RealSystemSettings.InstantiateSystemSettingsForCurrentOS();
+    private readonly RealSystemSettings settings = RealSystemSettings.InstantiateSystemSettingsForCurrentOS();
 
     [OneTimeSetUp]
     public void SetupService()
     {
-        service.Setup();
+        settings.Setup();
+    }
+
+    [Test]
+    public void UserNameExists()
+    {
+        settings.UserName.ShouldNotBeNullOrEmpty();
     }
 
     [Test]
     public void SystemPreferencesPath_Exists()
     {
-        Directory.Exists(service.SystemPreferencesPath).ShouldBeTrue();
+        Directory.Exists(settings.SystemPreferencesPath).ShouldBeTrue();
     }
 
     [Test]
     public void SystemWorkspacePath_Exists()
     {
-        Directory.Exists(service.SystemWorkspacePath).ShouldBeTrue();
+        Directory.Exists(settings.SystemWorkspacePath).ShouldBeTrue();
     }
 
 }

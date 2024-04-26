@@ -5,7 +5,7 @@ namespace Core.Stationery;
 /// <summary>
 /// Top-level information about the software.
 /// </summary>
-public class DataMagusInfo
+public static class DataMagusInfo
 {
     /// <summary>
     /// Current version.

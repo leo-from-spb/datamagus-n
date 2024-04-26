@@ -11,7 +11,7 @@ public static class ProjectStructure
     {
         var currDir = Directory.GetCurrentDirectory();
         var dir     = currDir;
-        while (!isOurProjectRootDir(dir))
+        while (!IsOurProjectRootDir(dir))
         {
             if (dir.Length < 3) throw new Exception($"Cannot find the project root directory when being in {currDir}");
             var parentDirInfo = Directory.GetParent(dir);
@@ -21,7 +21,7 @@ public static class ProjectStructure
         return dir;
     }
 
-    private static bool isOurProjectRootDir(string path)
+    private static bool IsOurProjectRootDir(string path)
     {
         return File.Exists($"{path}/DataMagus.sln");
     }
