@@ -11,6 +11,8 @@
         <entry key="Gui_Application/Main/AboutWindow.axaml" value="Gui_Application/Gui_Application.csproj" />
         <entry key="Gui_Application/Main/MainWindow.axaml" value="Gui_Application/Gui_Application.csproj" />
         <entry key="Gui_Application/MainWindow.axaml" value="Gui_Application/Gui_Application.csproj" />
+        <entry key="Gui_Application/Styles.axaml" value="Gui_Application/Gui_Application.csproj" />
+        <entry key="Gui_Application/Workbenches/EaselWorkbench.axaml" value="Gui_Application/Gui_Application.csproj" />
       </map>
     </option>
   </component>

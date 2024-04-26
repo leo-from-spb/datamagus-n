@@ -9,20 +9,17 @@
     <DockPanel>
         <ScrollViewer VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
                       HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-            <Canvas Name="Canva" IsHitTestVisible="True"
+            <Canvas Name="Canva" Classes="Canva"
+                    IsHitTestVisible="True"
                     RenderTransformOrigin="0,0"
-                    Background="OldLace"
                     KeyDown="HandleKeyDown"
                     PointerPressed="Canva_OnPointerPressed"
                     PointerWheelChanged="Canva_OnPointerWheelChanged"
                     UseLayoutRounding="True"
                     >
-                <Rectangle Name="PageWhiteSurface" ZIndex="-19"
-                           Fill="White"/>
-                <Path Name="PageGrid" ZIndex="-18"
-                      Stroke="WhiteSmoke" StrokeThickness="1"/>
-                <Rectangle Name="PageBorder" ZIndex="-16"
-                           Stroke="DarkGray" StrokeThickness="1"/>
+                <Rectangle Name="PageWhiteSurface" Classes="Paper" ZIndex="-19"/>
+                <Path Name="PageGrid" Classes="PaperGrid" ZIndex="-18" StrokeThickness="1"/>
+                <Rectangle Name="PageBorder" Classes="PaperBorder" ZIndex="-16" StrokeThickness="1"/>
             </Canvas>
         </ScrollViewer>
     </DockPanel>
