@@ -61,6 +61,9 @@ public partial class MainWindow : Window
             case (Key.F12, 0):
                 SwitchToExplorer();
                 break;
+            case (Key.F10, KeyModifiers.Alt | KeyModifiers.Shift):
+                ResetWindowPosition();
+                break;
             default:
                 return;
         }
@@ -94,6 +97,21 @@ public partial class MainWindow : Window
     private void ShowPositionInStatusLine()
     {
         StatusLine.Content = $"Position = {Position}; Bounds = {Bounds.Size}; ";
+    }
+
+    private void ResetWindowPosition()
+    {
+        PixelRect pwa = Screens.Primary?.WorkingArea ?? new PixelRect(0, 0, 1024, 768);
+
+        int x = pwa.X + (pwa.Width >> 3);
+        int y = pwa.Y + (pwa.Height >> 3);
+        int w = pwa.Width - (pwa.Width >> 2);
+        int h = pwa.Height - (pwa.Height >> 2);
+
+        this.Width    = w;
+        this.Height   = h;
+        this.Position = new PixelPoint(x, y);
+        this.Show();
     }
 
     private void Window_OnClosing(object? sender, WindowClosingEventArgs e)
