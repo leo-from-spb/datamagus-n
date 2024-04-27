@@ -10,6 +10,7 @@ public static class CoreServiceMaster
 
     public static void Sunrise()
     {
+        HardServiceMill.CreateServiceMill();
         var mill = HardServiceMill.GetTheMill();
 
         // instantiate and register all services

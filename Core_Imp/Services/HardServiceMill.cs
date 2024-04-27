@@ -14,20 +14,18 @@ public class HardServiceMill : ServiceMill, IDisposable
     private readonly Dictionary<Type, object> serviceDictionary = new Dictionary<Type, object>();
 
 
+    internal static void CreateServiceMill()
+    {
+        Debug.Assert(theMill is null, "The service mill is already created");
+        theMill = new HardServiceMill();
+    }
+
     public static HardServiceMill GetTheMill()
     {
         var mill = theMill;
-        if (mill is null)
-        {
-            var thisMill = new HardServiceMill();
-            Debug.Assert(theMill == thisMill);
-            return thisMill;
-        }
-        else
-        {
-            if (theMill is HardServiceMill hsm) return hsm;
-            else throw new InvalidOperationException($"The current mill is already set up by another class: {theMill}");
-        }
+        Debug.Assert(mill is not null, "The service mill is not created yet");
+        if (theMill is HardServiceMill hsm) return hsm;
+        else throw new InvalidOperationException($"The current mill is already set up by another class: {theMill}");
     }
 
     public static HardServiceMill? GetTheMillWhenInitialized() =>
@@ -77,7 +75,7 @@ public class HardServiceMill : ServiceMill, IDisposable
     }
 
 
-    protected internal override void ShutdownAllServices()
+    protected internal void ShutdownAllServices()
     {
         int n = services.Count;
         for (int i = n-1; i >= 0; i--)

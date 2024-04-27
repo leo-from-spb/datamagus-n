@@ -22,7 +22,5 @@ public abstract class ServiceMill
 
     protected internal abstract S? FindService<S>()
         where S : class;
-
-    protected internal abstract void ShutdownAllServices();
-
+    
 }

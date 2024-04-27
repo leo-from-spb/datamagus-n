@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Util.Fun;
 
@@ -21,6 +22,7 @@ public static class Trees
     }
     
     
+    [SuppressMessage("ReSharper", "FunctionRecursiveOnAllPaths")]
     public static IEnumerable<T> TraverseBreadthFirst<T>(T root, Func<T, IEnumerable<T>> children)
         where T: notnull
     {
