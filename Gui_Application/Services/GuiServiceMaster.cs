@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using Core.Interaction.Commands;
 using Core.Services;
 using Gui.Application.Interaction.Commands;
+using Gui.Application.Main;
 
 namespace Gui.Application.Services;
 
@@ -19,10 +20,14 @@ public static class GuiServiceMaster
         var theCommandRegistry = ServiceMill.GetService<CommandRegistry>();
 
         // instantiate and register all services
-        var theGuiCommands = mill.Register(new SimpleGuiCommands());
+        var theGuiCommands       = mill.Register(new SimpleGuiCommands());
+        var theKeyboardShortcuts = mill.Register(new KeyboardShortcuts());
+        var theMainMenu          = mill.Register(new MainMenu(theCommandRegistry, theKeyboardShortcuts, MainWindow.Instance));
 
         // setup
         theGuiCommands.Sunrise(theCommandRegistry);
+        theKeyboardShortcuts.Setup();
+        theMainMenu.SetupMenu();
     }
 
 }

@@ -58,33 +58,24 @@ public partial class MainWindow : Window
     {
         if (CurrentWorkbench != null) {
             CurrentWorkbench.HandleKeyDown(sender, e);
-            if (e.Handled) return;
+           if (e.Handled) return;
         }
-        switch (e.Key, e.KeyModifiers)
-        {
-            case (Key.F11, 0):
-                SwitchToEasel();
-                break;
-            case (Key.F12, 0):
-                SwitchToExplorer();
-                break;
-            case (Key.F10, KeyModifiers.Alt | KeyModifiers.Shift):
-                ResetWindowPosition();
-                break;
-            default:
-                return;
-        }
-        e.Handled = true;
+        //switch (e.Key, e.KeyModifiers)
+        //{
+        //    default:
+        //        return;
+        //}
+        //e.Handled = true;
     }
 
-    public void SwitchToEasel()
+    internal void SwitchToEasel()
     {
         Explorer.Deactivate();
         Easel.Activate();
         CurrentWorkbench = Easel;
     }
 
-    public void SwitchToExplorer()
+    internal void SwitchToExplorer()
     {
         Easel.Deactivate();
         Explorer.Activate();
@@ -106,7 +97,7 @@ public partial class MainWindow : Window
         StatusLine.Content = $"Position = {Position}; Bounds = {Bounds.Size}; ";
     }
 
-    private void ResetWindowPosition()
+    internal void ResetWindowPosition()
     {
         PixelRect pwa = Screens.Primary?.WorkingArea ?? new PixelRect(0, 0, 1024, 768);
 

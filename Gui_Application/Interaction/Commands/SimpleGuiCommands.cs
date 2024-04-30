@@ -13,7 +13,9 @@ internal class SimpleGuiCommands : MainCommands
     {
         // instantiate commands
         commandRegistry.NewBasicCommand(ShowAbout, "Show About", "About…", DoShowAbout);
-
+        commandRegistry.NewBasicCommand(ResetMainWindowPlace, "Reset Main Window Place", null, MainWindow.Instance.ResetWindowPosition);
+        commandRegistry.NewBasicCommand(SwitchToEasel, "Switch to Easel", null, DoSwitchToEasel);
+        commandRegistry.NewBasicCommand(SwitchToExplorer, "Switch to Explorer", null, DoSwitchToExplorer);
 
     }
 
@@ -29,4 +31,7 @@ internal class SimpleGuiCommands : MainCommands
         aboutWindow.ShowDialog(mainWindow);
     }
 
+    private void DoSwitchToEasel() => MainWindow.Instance.SwitchToEasel();
+
+    private void DoSwitchToExplorer() => MainWindow.Instance.SwitchToExplorer();
 }
