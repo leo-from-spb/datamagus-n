@@ -17,7 +17,12 @@ public partial class MainWindow : Window
 
     public MainWindow()
     {
+        #if DEBUG
         InitializeComponent(true, false); // don't attach the DevTools by default because it occupies the F12 key
+        #else
+        InitializeComponent(true);
+        #endif
+
         instance = this;
 
         var settingService    = ServiceMill.GetService<SettingService>();
@@ -33,8 +38,10 @@ public partial class MainWindow : Window
 
         SwitchToEasel();
 
-        // if in the internal mode
+        // if in the debug mode
+        #if DEBUG
         this.AttachDevTools(new KeyGesture(Key.F12, KeyModifiers.Control | KeyModifiers.Shift));
+        #endif
     }
 
     internal static MainWindow Instance
