@@ -14,17 +14,9 @@ public static class FileService
                                                         bool trim = false,
                                                         bool skipEmpty = false)
     {
-        string path;
-        if (basePath is not null)
-        {
-            path = Path.Combine(basePath, fileName);
-        }
-        else
-        {
-            path = fileName;
-        }
+        var path = basePath is not null ? Path.Combine(basePath, fileName) : fileName;
 
-        var    rawLines = File.ReadLines(path);
+        var rawLines = File.ReadLines(path);
         try
         {
             uint nr = 0;

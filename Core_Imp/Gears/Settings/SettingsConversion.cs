@@ -23,7 +23,7 @@ public static class SettingsConversion
         var m = RectangleRegex.Match(str);
         if (m.Success)
         {
-            int x = 0, y = 0, w = 0, h = 0;
+            int x, y = 0, w = 0, h = 0;
             bool ok = int.TryParse(m.Groups[1].Value, out x)
                    && int.TryParse(m.Groups[2].Value, out y)
                    && int.TryParse(m.Groups[3].Value, out w)

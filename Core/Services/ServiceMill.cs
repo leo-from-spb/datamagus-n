@@ -8,14 +8,14 @@ namespace Core.Services;
 public abstract class ServiceMill
 {
 
-    protected static ServiceMill? theMill = null;
+    private protected static ServiceMill? theMill = null;
 
 
     public static S GetService<S>()
         where S: class
     {
         Debug.Assert(theMill != null);
-        S? service = theMill!.FindService<S>();
+        S? service = theMill.FindService<S>();
         if (service == null)
         {
             var serviceType     = typeof(S);
@@ -30,7 +30,5 @@ public abstract class ServiceMill
 
     protected internal abstract S? FindService<S>()
         where S : class;
-
-    protected internal abstract void ShutdownAllServices();
 
 }

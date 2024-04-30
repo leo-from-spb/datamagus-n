@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using System.Text.RegularExpressions;
 using Util.Extensions;
-using Util.SystemStuff;
 using static Util.Fun.RegexFun;
 
 namespace Core.Gears.Settings;
@@ -15,11 +14,7 @@ internal class LocalSettingService : SettingService
 
     internal LocalSettingService()
     {
-        SystemSettings = EnvironmentInfo.OS switch
-                         {
-                             OS.osMac => new MacSystemSettings(),
-                             _        => new UnknownOperatingSystemSettings()
-                         };
+        SystemSettings    = RealSystemSettings.InstantiateSystemSettingsForCurrentOS();
         WorkspaceSettings = new LocalWorkspaceSettings();
     }
 

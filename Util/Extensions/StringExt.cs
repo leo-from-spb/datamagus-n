@@ -42,7 +42,7 @@ public static class StringExt
 
     public static char LastChar(this string? str, char empty = '\0')
     {
-        int n = str is not null ? str.Length : 0;
+        int n = str?.Length ?? 0;
         return n > 0 ? str![n - 1] : empty;
     }
 
@@ -51,12 +51,18 @@ public static class StringExt
     {
         int n = str.Length;
         if (n == 0) return str;
-        int k = n - 1;
-        for (int i = n - 1; k > 0; k--)
-            if (char.IsUpper(str[k])) return str[k..];
+        for (int i = n - 1; i > 0; i--)
+            if (char.IsUpper(str[i])) return str[i..];
         return str;
     }
 
+
+    /// <summary>
+    /// Checks whether this substring is contained in the given string.
+    /// </summary>
+    /// <param name="substr">the substring to check.</param>
+    /// <param name="str">the string where to find the substring.</param>
+    public static bool IsIn(this string substr, [NotNullWhen(true)] string? str) => str is not null && str.Contains(substr);
 
     /// <summary>
     /// Check whether this string is not empty (and not null).

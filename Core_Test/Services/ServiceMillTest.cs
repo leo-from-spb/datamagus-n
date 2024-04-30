@@ -10,9 +10,9 @@ public class ServiceMillTest
     {
         private readonly MyTestServiceIntf myTestService = new MyTestServiceImpl();
 
-        public TestServiceMill()
+        public static void CreateTestServiceMill()
         {
-            theMill = this;
+            theMill = new TestServiceMill();
         }
 
         protected internal override S? FindService<S>()
@@ -22,7 +22,7 @@ public class ServiceMillTest
             return null;
         }
 
-        protected internal override void ShutdownAllServices() { }
+        protected internal virtual void ShutdownAllServices() { }
     }
 
 
@@ -36,7 +36,7 @@ public class ServiceMillTest
     [Test]
     public void GetService()
     {
-        new TestServiceMill();
+        TestServiceMill.CreateTestServiceMill();
         MyTestServiceIntf service = GetService<MyTestServiceIntf>();
         service.ShouldNotBeNull();
     }
