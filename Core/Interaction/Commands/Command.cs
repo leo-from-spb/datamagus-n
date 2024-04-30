@@ -26,7 +26,9 @@ public abstract class Command : ICommand
 
     public abstract bool CanExecute(object? parameter);
 
-    public abstract void Execute(object? parameter);
+    public abstract void Execute();
+
+    public void Execute(object? parameter) => Execute();
 
     public abstract event EventHandler? CanExecuteChanged;
 
@@ -47,7 +49,7 @@ public class BasicCommand : Command
 
     public override bool CanExecute(object? parameter) => true;
 
-    public override void Execute(object? parameter) => BasicAction();
+    public override void Execute() => BasicAction();
 
     public override event EventHandler? CanExecuteChanged;
 }
@@ -87,7 +89,7 @@ public class ObjectCommand<O> : Command
 
     public override bool CanExecute(object? parameter) => ActiveStatus;
 
-    public override void Execute(object? parameter)
+    public override void Execute()
     {
         O obj = ObtainObject();
         if (obj is not null)

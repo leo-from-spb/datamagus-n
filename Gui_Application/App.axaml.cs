@@ -1,15 +1,16 @@
 using System;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Core.Interaction.Commands;
+using Core.Services;
 using Gui.Application.Main;
+using Gui.Application.Services;
 
 namespace Gui.Application;
 
 public partial class App : Avalonia.Application
 {
     private MainWindow? myMainWindow = null;
-
-    private AboutWindow? myAboutWindow = null;
 
     public override void Initialize()
     {
@@ -19,36 +20,24 @@ public partial class App : Avalonia.Application
 
     public override void OnFrameworkInitializationCompleted()
     {
-        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime applicationLifetime)
         {
-            this.myMainWindow  = new MainWindow();
-            desktop.MainWindow = myMainWindow;
+            CreateMainWindow(applicationLifetime);
         }
 
         base.OnFrameworkInitializationCompleted();
+
+        GuiServiceMaster.Sunrise();
     }
 
-
-    public void ShowAbout()
+    private void CreateMainWindow(IClassicDesktopStyleApplicationLifetime applicationLifetime)
     {
-        if (myMainWindow == null) return;
-        if (myAboutWindow != null) return;
-
-        myAboutWindow = new AboutWindow();
-        myAboutWindow.ShowDialog(myMainWindow);
-        myAboutWindow.Closed += OnAboutWindowClosed;
-
+        this.myMainWindow  = new MainWindow();
+        applicationLifetime.MainWindow = myMainWindow;
     }
 
-    private void ShowAboutMenuItem_OnClick(object? sender, EventArgs e)
-    {
-        ShowAbout();
-    }
 
-    private void OnAboutWindowClosed(object? sender, EventArgs e)
-    {
-        var aw = myAboutWindow;
-        myAboutWindow =  null;
-        if (aw != null) aw.Closed -= OnAboutWindowClosed;
-    }
+    private void ShowAboutMenuItem_OnClick(object? sender, EventArgs e) =>
+        ServiceMill.GetService<CommandRegistry>().Execute(MainCommands.ShowAbout);
+
 }

@@ -8,6 +8,13 @@ namespace Core.Interaction.Commands;
 [Service]
 public abstract class CommandRegistry
 {
+    public void Execute(string id)
+    {
+        var command = Find(id);
+        if (command is null) return; // TODO LOG
+        command.Execute();
+    }
+
     public abstract BasicCommand NewBasicCommand(string  id,
                                                  string  name,
                                                  string? menuItemName,

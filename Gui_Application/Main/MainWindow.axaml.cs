@@ -49,7 +49,7 @@ public partial class MainWindow : Window
         get
         {
             var i = instance;
-            if (i == null) throw new Exception("MainWindow is not initialized yet");
+            if (i is null) throw new Exception("MainWindow is not initialized yet");
             return i;
         }
     }
