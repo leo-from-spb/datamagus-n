@@ -10,10 +10,10 @@ namespace Model.Generation;
 
 internal class MetaProducer (MetaModel mm)
 {
-    private const string ModuleDirPath      = "./Model_Imp";
-    private const string ImmDirPath         = ModuleDirPath + "/Imm";
-    private const string ImmCommonFilePath  = ImmDirPath + "/ModelCommonImmImp.cs";
-    private const string ImmConceptFilePath = ImmDirPath + "/ModelConceptImmImp.cs";
+    private const string ModuleDirPath        = "./Model_Imp";
+    private const string ImmDirPath           = ModuleDirPath + "/_generated_";
+    private const string ImmCommonFilePath    = ImmDirPath + "/ModelCommonImmImp.cs";
+    private const string ImmConceptFilePath   = ImmDirPath + "/ModelConceptImmImp.cs";
     private const string ImmVisualityFilePath = ImmDirPath + "/ModelVisualityImmImp.cs";
 
 
