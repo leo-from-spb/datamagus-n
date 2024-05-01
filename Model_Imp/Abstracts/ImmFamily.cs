@@ -85,7 +85,7 @@ public class ImmNamingFamily<M> : ImmFamily<M>, NamingFamily<M>
     }
 
     public string[] GetAllNames() => matters
-                                    .Select(m => m.Name)
-                                    .Where(name => name is not null)
+                                    .Where(m => m.Name is not null)
+                                    .Select(m => m.Name!)
                                     .ToArray();
 }

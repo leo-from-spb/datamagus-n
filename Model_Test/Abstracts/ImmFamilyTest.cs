@@ -91,4 +91,21 @@ public class ImmFamilyTest
             a => a[2].ShouldBe("Rabbit C")
         );
     }
+
+
+    [Test]
+    public void GetAllNames_Partially()
+    {
+        var rabbitNoNameX = new ImmTestRabbit(999, null);
+        var rabbitNoNameY = new ImmTestRabbit(998, null);
+
+        var rabbitFamily = new ImmNamingFamily<TestRabbit>([rabbitA, rabbitNoNameX, rabbitNoNameY, rabbitC]);
+
+        string[] names = rabbitFamily.GetAllNames();
+        names.Verify(
+            a => a.Length.ShouldBe(2),
+            a => a[0].ShouldBe("Rabbit A"),
+            a => a[1].ShouldBe("Rabbit C")
+        );
+    }
 }

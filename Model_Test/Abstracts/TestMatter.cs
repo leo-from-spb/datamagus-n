@@ -40,7 +40,7 @@ public class ImmTestYard : ImmMatter, TestYard
 
 public class ImmTestRabbit : ImmNamedMatter, TestRabbit
 {
-    public ImmTestRabbit(uint id, string name) : base(id, name)
+    public ImmTestRabbit(uint id, string? name) : base(id, name)
     {
     }
 }
@@ -48,7 +48,7 @@ public class ImmTestRabbit : ImmNamedMatter, TestRabbit
 
 public class ImmTestGuineaPig : ImmNamedMatter, TestGuineaPig
 {
-    public ImmTestGuineaPig(uint id, string name) : base(id, name)
+    public ImmTestGuineaPig(uint id, string? name) : base(id, name)
     {
     }
 }

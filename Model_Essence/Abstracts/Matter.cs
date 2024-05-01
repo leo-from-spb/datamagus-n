@@ -34,7 +34,7 @@ public interface TermMatter : Matter
 /// </summary>
 public interface NamedMatter : Matter
 {
-    public string Name { get; }
+    public string? Name { get; }
 }
 
 
