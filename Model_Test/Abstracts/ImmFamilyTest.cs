@@ -3,6 +3,7 @@ using Shouldly;
 using Testing.Appliance.Assertions;
 using Util.Extensions;
 
+// ReSharper disable CoVariantArrayConversion
 namespace Model.Abstracts;
 
 
@@ -12,14 +13,14 @@ public class ImmFamilyTest
     private readonly ImmTestRabbit   rabbitA;
     private readonly ImmTestRabbit   rabbitB;
     private readonly ImmTestRabbit   rabbitC;
-    private readonly ImmTestRabbit[] rabbits;
+    private readonly ImmTestRabbit[] rabbitsABC;
 
     public ImmFamilyTest()
     {
         rabbitA = new ImmTestRabbit(1001, "Rabbit A");
         rabbitB = new ImmTestRabbit(1002, "Rabbit B");
         rabbitC = new ImmTestRabbit(1003, "Rabbit C");
-        rabbits = [rabbitA, rabbitB, rabbitC];
+        rabbitsABC = [rabbitA, rabbitB, rabbitC];
     }
 
 
@@ -27,7 +28,7 @@ public class ImmFamilyTest
     public void ById()
     {
 
-        var rabbitFamily = new ImmFamily<TestRabbit>(rabbits);
+        var rabbitFamily = ImmFamily<TestRabbit>.Of(rabbitsABC);
 
         rabbitFamily.Verify
         (
@@ -40,7 +41,7 @@ public class ImmFamilyTest
     [Test]
     public void GetAllIds()
     {
-        var rabbitFamily = new ImmFamily<TestRabbit>(rabbits);
+        var rabbitFamily = ImmFamily<TestRabbit>.Of(rabbitsABC);
         var ids          = rabbitFamily.GetAllIds();
 
         ids.JoinToString(func: x => x.ToString()).ShouldBe("1001, 1002, 1003");
@@ -50,7 +51,7 @@ public class ImmFamilyTest
     [Test]
     public void ToArray()
     {
-        var rabbitFamily = new ImmFamily<TestRabbit>(rabbits);
+        var rabbitFamily = ImmFamily<TestRabbit>.Of(rabbitsABC);
 
         TestRabbit[] arr = rabbitFamily.ToArray();
         arr.Verify(
@@ -65,7 +66,7 @@ public class ImmFamilyTest
     [Test]
     public void AsList()
     {
-        var rabbitFamily = new ImmFamily<TestRabbit>(rabbits);
+        var rabbitFamily = ImmFamily<TestRabbit>.Of(rabbitsABC);
 
         IReadOnlyList<TestRabbit> list = rabbitFamily.AsList();
         list.Verify(
@@ -80,7 +81,7 @@ public class ImmFamilyTest
     [Test]
     public void GetAllNames_All()
     {
-        var rabbitFamily = new ImmNamingFamily<TestRabbit>(rabbits);
+        var rabbitFamily = ImmNamingFamily<TestRabbit>.Of(rabbitsABC);
 
         string[] names = rabbitFamily.GetAllNames();
         names.Verify(
@@ -98,7 +99,7 @@ public class ImmFamilyTest
         var rabbitNoNameX = new ImmTestRabbit(999, null);
         var rabbitNoNameY = new ImmTestRabbit(998, null);
 
-        var rabbitFamily = new ImmNamingFamily<TestRabbit>([rabbitA, rabbitNoNameX, rabbitNoNameY, rabbitC]);
+        var rabbitFamily = ImmNamingFamily<TestRabbit>.Of(rabbitA, rabbitNoNameX, rabbitNoNameY, rabbitC);
 
         string[] names = rabbitFamily.GetAllNames();
         names.Verify(

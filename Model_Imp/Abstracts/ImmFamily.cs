@@ -8,13 +8,13 @@ namespace Model.Abstracts;
 /// Abstract immutable family.
 /// </summary>
 /// <typeparam name="M">matter type.</typeparam>
-public class ImmFamily<M> : Family<M> 
+public class ImmFamily<M> : Family<M>
     where M: class, Matter
 {
     private protected readonly M[] matters;
 
     
-    public static ImmFamily<M> of(params M[] matters) => new ImmFamily<M>(matters);
+    public static ImmFamily<M> Of(params M[] matters) => new ImmFamily<M>(matters);
 
     public ImmFamily(M[] matters)
     {
@@ -66,7 +66,7 @@ public class ImmFamily<M> : Family<M>
 public class ImmNamingFamily<M> : ImmFamily<M>, NamingFamily<M> 
     where M : class, NamedMatter
 {
-    public new static ImmNamingFamily<M> of(params M[] matters) => new ImmNamingFamily<M>(matters);
+    public new static ImmNamingFamily<M> Of(params M[] matters) => new ImmNamingFamily<M>(matters);
     
     public ImmNamingFamily(M[] matters) 
         : base(matters)
