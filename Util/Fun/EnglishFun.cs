@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 
-namespace Util.Common.Fun;
+namespace Util.Fun;
 
 public static class EnglishFun
 {

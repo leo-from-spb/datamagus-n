@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using Model.Essence.Abstracts;
-using Util.Common.Fun;
+using Util.Fun;
 
 namespace Model.Gen.Generation;
 

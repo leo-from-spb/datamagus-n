@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Model.Imp.Abstracts;
 using Shouldly;
 using Test.Appliance.Assertions;
-using Util.Common.Fun;
+using Util.Fun;
 
 namespace Model.Test.Abstracts;
 

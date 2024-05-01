@@ -1,6 +1,6 @@
-using static Util.Common.Geometry.Dimensions;
+using static Util.Geometry.Dimensions;
 
-namespace Util.Common.Geometry;
+namespace Util.Geometry;
 
 /// <summary>
 /// Rectangle.

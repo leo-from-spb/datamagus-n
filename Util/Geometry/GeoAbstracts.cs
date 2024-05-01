@@ -1,6 +1,7 @@
+using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Util.Common.Geometry;
+namespace Util.Geometry;
 
 /// <summary>
 /// Geometric Point.

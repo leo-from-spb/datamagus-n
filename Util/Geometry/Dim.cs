@@ -1,8 +1,9 @@
+using System;
 using System.Diagnostics;
 using System.Globalization;
 using static System.Math;
 
-namespace Util.Common.Geometry;
+namespace Util.Geometry;
 
 /// <summary>
 /// Geometric dimension.

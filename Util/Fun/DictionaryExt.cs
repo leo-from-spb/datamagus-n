@@ -1,4 +1,6 @@
-namespace Util.Common.Fun;
+using System.Collections.Generic;
+
+namespace Util.Fun;
 
 
 /// <summary>

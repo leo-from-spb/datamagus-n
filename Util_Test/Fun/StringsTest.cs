@@ -1,6 +1,8 @@
+using Util.Fun;
+
 namespace Util.Test.Fun;
 
-using static Common.Fun.Strings;
+using static Strings;
 
 
 [TestFixture]

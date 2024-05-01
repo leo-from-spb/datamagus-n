@@ -1,5 +1,5 @@
-using Util.Common.Fun;
-using static Util.Common.Fun.NumberConstants;
+using Util.Fun;
+using static Util.Fun.NumberConstants;
 
 namespace Util.Test.Fun;
 

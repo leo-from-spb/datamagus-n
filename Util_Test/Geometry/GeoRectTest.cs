@@ -1,8 +1,8 @@
-using Util.Common.Geometry;
+using Util.Geometry;
 using static NUnit.Framework.Assert;
-using static Util.Common.Geometry.Dimensions;
-using static Util.Common.Geometry.GeoAbstracts;
-using static Util.Common.Geometry.Unit;
+using static Util.Geometry.Dimensions;
+using static Util.Geometry.GeoAbstracts;
+using static Util.Geometry.Unit;
 
 namespace Util.Test.Geometry;
 

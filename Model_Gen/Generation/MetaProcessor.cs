@@ -2,7 +2,7 @@ using System;
 using System.Collections.Immutable;
 using System.Diagnostics;
 using Model.Essence.Abstracts;
-using Util.Common.Fun;
+using Util.Fun;
 
 namespace Model.Gen.Generation;
 

@@ -1,5 +1,5 @@
-using Util.Common.Geometry;
-using static Util.Common.Geometry.Dimensions;
+using Util.Geometry;
+using static Util.Geometry.Dimensions;
 
 namespace Util.Test.Geometry;
 

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Util.Common.Fun;
+using Util.Fun;
 
 namespace Model.Gen.Generation;
 

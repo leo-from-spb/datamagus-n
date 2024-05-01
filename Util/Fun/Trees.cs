@@ -1,4 +1,7 @@
-namespace Util.Common.Fun;
+using System;
+using System.Collections.Generic;
+
+namespace Util.Fun;
 
 public static class Trees
 {
