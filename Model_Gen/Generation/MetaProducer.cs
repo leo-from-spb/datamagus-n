@@ -5,7 +5,7 @@ using System.Linq;
 using Util.Extensions;
 using Util.Fun;
 
-namespace Model.Gen.Generation;
+namespace Model.Generation;
 
 
 internal class MetaProducer (MetaModel mm)
@@ -46,12 +46,11 @@ internal class MetaProducer (MetaModel mm)
         cb.Append("""
                   using System.Collections.Generic;
                   using System.Linq;
-                  using Model.Essence.Abstracts;
-                  using Model.Essence.Concept;
-                  using Model.Essence.Visuality;
-                  using Model.Imp.Abstracts;
+                  using Model.Abstracts;
+                  using Model.Concept;
+                  using Model.Visuality;
                   
-                  namespace Model.Imp.Imm;
+                  namespace Model.Imm;
                   """);
         cb.EmptyLine();
 

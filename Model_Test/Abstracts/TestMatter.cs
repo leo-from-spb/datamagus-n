@@ -1,7 +1,4 @@
-using Model.Essence.Abstracts;
-using Model.Imp.Abstracts;
-
-namespace Model.Test.Abstracts;
+namespace Model.Abstracts;
 
 
 public interface TestYard : MediumMatter

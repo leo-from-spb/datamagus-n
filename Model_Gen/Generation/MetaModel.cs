@@ -4,7 +4,7 @@ using System.Diagnostics;
 using Util.Extensions;
 using Util.Fun;
 
-namespace Model.Gen.Generation;
+namespace Model.Generation;
 
 internal class MetaModel
 {

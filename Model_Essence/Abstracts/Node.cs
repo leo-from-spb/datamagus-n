@@ -1,4 +1,4 @@
-namespace Model.Essence.Abstracts;
+namespace Model.Abstracts;
 
 /// <summary>
 /// Abstract Tree Node.

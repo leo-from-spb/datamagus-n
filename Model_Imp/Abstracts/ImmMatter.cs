@@ -1,6 +1,4 @@
-using Model.Essence.Abstracts;
-
-namespace Model.Imp.Abstracts;
+namespace Model.Abstracts;
 
 public abstract class ImmMatter : Matter
 {

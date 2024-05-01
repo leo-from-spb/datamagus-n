@@ -1,7 +1,6 @@
-using Model.Imp.Abstracts;
 using static NUnit.Framework.Assert;
 
-namespace Model.Test.Abstracts;
+namespace Model.Abstracts;
 
 [TestFixture]
 public class MatterTest

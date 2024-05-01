@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Model.Essence.Abstracts;
+namespace Model.Abstracts;
 
 /// <summary>
 /// Family of similar matters.

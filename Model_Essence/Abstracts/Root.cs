@@ -1,7 +1,7 @@
-using Model.Essence.Concept;
-using Model.Essence.Visuality;
+using Model.Concept;
+using Model.Visuality;
 
-namespace Model.Essence.Abstracts;
+namespace Model.Abstracts;
 
 /// <summary>
 /// Project Root.

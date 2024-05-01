@@ -1,4 +1,4 @@
-namespace Model.Essence.Abstracts;
+namespace Model.Abstracts;
 
 /// <summary>
 /// Matter — an abstract model element.

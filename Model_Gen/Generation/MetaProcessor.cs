@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Immutable;
 using System.Diagnostics;
-using Model.Essence.Abstracts;
+using Model.Abstracts;
 using Util.Extensions;
 
-namespace Model.Gen.Generation;
+namespace Model.Generation;
 
 internal class MetaProcessor (MetaModel mm)
 {

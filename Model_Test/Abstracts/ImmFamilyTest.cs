@@ -1,10 +1,9 @@
 using System.Collections.Generic;
-using Model.Imp.Abstracts;
 using Shouldly;
 using Testing.Appliance.Assertions;
 using Util.Extensions;
 
-namespace Model.Test.Abstracts;
+namespace Model.Abstracts;
 
 
 [TestFixture]

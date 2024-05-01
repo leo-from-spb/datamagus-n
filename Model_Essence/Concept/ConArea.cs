@@ -1,6 +1,6 @@
-using Model.Essence.Abstracts;
+using Model.Abstracts;
 
-namespace Model.Essence.Concept;
+namespace Model.Concept;
 
 /// <summary>
 /// Conceptual Area — can be either a ConModel or ConSubjArea.

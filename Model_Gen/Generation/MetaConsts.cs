@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Model.Gen.Generation;
+namespace Model.Generation;
 
 internal static class MetaConsts
 {

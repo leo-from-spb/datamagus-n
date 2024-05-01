@@ -1,6 +1,6 @@
-using Model.Essence.Abstracts;
+using Model.Abstracts;
 
-namespace Model.Essence.Visuality;
+namespace Model.Visuality;
 
 
 /// <summary>

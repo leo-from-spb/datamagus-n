@@ -4,7 +4,8 @@
         <TargetFramework>net8.0</TargetFramework>
         <LangVersion>12</LangVersion>
         <Nullable>enable</Nullable>
-        <RootNamespace>Model.Essence</RootNamespace>
+        <RootNamespace>Model</RootNamespace>
+        <AssemblyName>Model.Essence</AssemblyName>
     </PropertyGroup>
 
 </Project>

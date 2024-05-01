@@ -1,7 +1,7 @@
 ﻿using System;
-using Model.Gen.Generation;
+using Model.Generation;
 
-namespace Model.Gen;
+namespace Model;
 
 internal static class ModelGenerator
 {

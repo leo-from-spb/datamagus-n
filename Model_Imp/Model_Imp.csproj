@@ -4,12 +4,19 @@
         <TargetFramework>net8.0</TargetFramework>
         <LangVersion>12</LangVersion>
         <Nullable>enable</Nullable>
-        <RootNamespace>Model.Imp</RootNamespace>
+        <RootNamespace>Model</RootNamespace>
+        <AssemblyName>Model.Imp</AssemblyName>
     </PropertyGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Model_Essence\Model_Essence.csproj" />
       <ProjectReference Include="..\Util\Util.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="Imm\ModelConceptImmImp.cs" />
+      <Compile Remove="Imm\ModelCommonImmImp.cs" />
+      <Compile Remove="Imm\ModelVisualityImmImp.cs" />
     </ItemGroup>
 
 </Project>

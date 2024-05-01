@@ -1,4 +1,4 @@
-namespace Model.Essence.Abstracts;
+namespace Model.Abstracts;
 
 
 public interface AbSegment : NamedMediumMatter
