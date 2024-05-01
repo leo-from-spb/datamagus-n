@@ -21,6 +21,7 @@
     <ItemGroup>
       <ProjectReference Include="..\Model_Essence\Model_Essence.csproj" />
       <ProjectReference Include="..\Model_Imp\Model_Imp.csproj" />
+      <ProjectReference Include="..\Test_Appliance\Test_Appliance.csproj" />
       <ProjectReference Include="..\Util_Common\Util_Common.csproj" />
     </ItemGroup>
 
