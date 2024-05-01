@@ -10,7 +10,7 @@ namespace Model.Imp.Abstracts;
 /// </summary>
 /// <typeparam name="M">matter type.</typeparam>
 public class ImmFamily<M> : Family<M> 
-    where M: Matter
+    where M: class, Matter
 {
     private protected readonly M[] matters;
 
@@ -22,18 +22,50 @@ public class ImmFamily<M> : Family<M>
         this.matters = matters;
     }
 
-    
+    public bool IsNotEmpty => matters.Length > 0;
+    public bool IsEmpty    => matters.Length == 0;
+    public int  Count      => matters.Length;
+
+    public M? ById(uint id)
+    {
+        foreach (var matter in matters)
+            if (matter.Id == id)
+                return matter;
+        return null;
+    }
+
+    public uint[] GetAllIds()
+    {
+        int    n   = matters.Length;
+        uint[] arr = new uint[n];
+
+        for (int i = 0; i < n; i++) arr[i] = matters[i].Id;
+        return arr;
+    }
+
+    public M[] ToArray()
+    {
+        int n   = matters.Length;
+        M[] arr = new M[n];
+        matters.CopyTo(arr, 0);
+        return arr;
+    }
+
+    public IReadOnlyList<M> AsList()
+    {
+        return matters.AsReadOnly();
+    }
+
     public IEnumerator<M> GetEnumerator() => matters.AsEnumerable().GetEnumerator();
 
     IEnumerator IEnumerable.GetEnumerator() => matters.GetEnumerator();
 
-    public int Count => matters.Length;
 }
 
 
 
 public class ImmNamingFamily<M> : ImmFamily<M>, NamingFamily<M> 
-    where M : NamedMatter
+    where M : class, NamedMatter
 {
     public new static ImmNamingFamily<M> of(params M[] matters) => new ImmNamingFamily<M>(matters);
     
@@ -51,4 +83,9 @@ public class ImmNamingFamily<M> : ImmFamily<M>, NamingFamily<M>
             return default(M?);
         }
     }
+
+    public string[] GetAllNames() => matters
+                                    .Select(m => m.Name)
+                                    .Where(name => name is not null)
+                                    .ToArray();
 }
