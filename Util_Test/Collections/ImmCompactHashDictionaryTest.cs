@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Testing.Appliance.Assertions;
 
 namespace Util.Collections;
 
@@ -13,7 +15,7 @@ public class ImmCompactHashDictionaryTest
         const long k = 1234567890L;
         const long v = 9876543210L;
 
-        var entries    = new KeyValuePair<long, long>[] { new KeyValuePair<long, long>(k, v) };
+        var entries    = new KeyValuePair<long, long>[] { kvp<long, long>(k, v) };
         var dictionary = new ImmCompactHashDictionary<long,long>(entries);
 
         long x = dictionary.Get(k);
@@ -34,7 +36,7 @@ public class ImmCompactHashDictionaryTest
         {
             long k     = rnd.Next(100000000) * 10L + i;
             long v     = rnd.NextInt64(100000000000);
-            var  entry = new KeyValuePair<long,long>(k, v);
+            var  entry = kvp<long,long>(k, v);
             entries[i] = entry;
         }
 
@@ -73,7 +75,7 @@ public class ImmCompactHashDictionaryTest
         {
             long k     = rnd.Next(10000000) * 1000L + i;
             long v     = rnd.NextInt64(100000000000);
-            var  entry = new KeyValuePair<long,long>(k, v);
+            var  entry = kvp<long,long>(k, v);
             entries[i] = entry;
         }
 
@@ -107,4 +109,51 @@ public class ImmCompactHashDictionaryTest
             d => d.Get("labuda", "nothing").ShouldBe("nothing")
         );
     }
+
+
+    [Test]
+    public void Keys()
+    {
+        var dictionary = prepareSimpleDictionary3();
+        dictionary.Keys.Verify
+        (
+            ks => ks.ShouldContainAll(1001uL, 2002ul, 3003ul),
+            ks => ks.ToArray().ShouldContainAll(1001uL, 2002ul, 3003ul),
+            ks => ks.Count.ShouldBe(3)
+        );
+    }
+
+    [Test]
+    public void Values()
+    {
+        var dictionary = prepareSimpleDictionary3();
+        dictionary.Values.Verify
+        (
+            vs => vs.ShouldContainAll("einz", "zwei", "drei"),
+            vs => vs.ToArray().ShouldContainAll("einz", "zwei", "drei"),
+            vs => vs.Count.ShouldBe(3)
+        );
+    }
+
+    [Test]
+    public void Entries()
+    {
+        var dictionary = prepareSimpleDictionary3();
+        dictionary.Entries.Verify
+        (
+            entries => entries.ShouldContainAll(kvp(1001uL, "einz"), kvp(2002uL, "zwei"), kvp(3003uL, "drei")),
+            entries => entries.ToArray().ShouldContainAll(kvp(1001uL, "einz"), kvp(2002uL, "zwei"), kvp(3003uL, "drei")),
+            entries => entries.Count.ShouldBe(3)
+        );
+    }
+
+    private static ImmCompactHashDictionary<ulong, string> prepareSimpleDictionary3()
+    {
+        var entries    = new[] { kvp(1001uL, "einz"), kvp(2002uL, "zwei"), kvp(3003uL, "drei") };
+        var dictionary = new ImmCompactHashDictionary<ulong,string>(entries);
+        return dictionary;
+    }
+
+
+    private static KeyValuePair<K,V> kvp<K,V>(K key, V value) => new KeyValuePair<K,V>(key, value);
 }
