@@ -2,4 +2,5 @@
 riderModule.iml
 /_ReSharper.Caches/
 DataMagus.sln.DotSettings.user
+BenchmarkDotNet.Artifacts
 yonder
