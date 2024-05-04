@@ -64,9 +64,9 @@ public class ImmHashMapBenchmark
 
 
     [Benchmark]
-    public void Create_Basic_ImmCompactHashDictionary()
+    public void Create_Basic_ImmCompactHashDictionary1()
     {
-        new ImmCompactHashDictionary<ulong,ulong>(BasicPairs);
+        new ImmCompactHashDictionary1<ulong,ulong>(BasicPairs);
     }
 
     [Benchmark]
@@ -83,10 +83,10 @@ public class ImmHashMapBenchmark
 
 
     [Benchmark]
-    public void Create_Hazke_ImmCompactHashDictionary()
+    public void Create_Hazke_ImmCompactHashDictionary1()
     {
         HashCounter = 0uL;
-        new ImmCompactHashDictionary<Hazke,ulong>(HazkePairs);
+        new ImmCompactHashDictionary1<Hazke,ulong>(HazkePairs);
 
         if (!HashCounterReported_Compact)
         {
@@ -123,11 +123,11 @@ public class ImmHashMapBenchmark
 
 
     [Benchmark]
-    public void General_Basic_ImmCompactHashDictionary()
+    public void General_Basic_ImmCompactHashDictionary1()
     {
         Random rnd = new Random();
 
-        var dictionary = new ImmCompactHashDictionary<ulong,ulong>(BasicPairs);
+        var dictionary = new ImmCompactHashDictionary1<ulong,ulong>(BasicPairs);
 
         for (int i = 0; i < Tries; i++)
         {

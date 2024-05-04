@@ -6,7 +6,7 @@ using Testing.Appliance.Assertions;
 namespace Util.Collections;
 
 [TestFixture]
-public class ImmCompactHashDictionaryTest
+public class ImmCompactHashDictionary1Test
 {
 
     [Test]
@@ -16,7 +16,7 @@ public class ImmCompactHashDictionaryTest
         const long v = 9876543210L;
 
         var entries    = new KeyValuePair<long, long>[] { kvp<long, long>(k, v) };
-        var dictionary = new ImmCompactHashDictionary<long,long>(entries);
+        var dictionary = new ImmCompactHashDictionary1<long,long>(entries);
 
         long x = dictionary.Get(k);
         x.ShouldBe(v);
@@ -40,7 +40,7 @@ public class ImmCompactHashDictionaryTest
             entries[i] = entry;
         }
 
-        var dictionary = new ImmCompactHashDictionary<long,long>(entries);
+        var dictionary = new ImmCompactHashDictionary1<long,long>(entries);
 
         dictionary.Verify
         (
@@ -79,7 +79,7 @@ public class ImmCompactHashDictionaryTest
             entries[i] = entry;
         }
 
-        var dictionary = new ImmCompactHashDictionary<long,long>(entries);
+        var dictionary = new ImmCompactHashDictionary1<long,long>(entries);
 
         foreach (var e in entries)
         {
@@ -99,7 +99,7 @@ public class ImmCompactHashDictionaryTest
                           new(null, "null entry")
                       };
 
-        var dictionary = new ImmCompactHashDictionary<string?,string?>(entries);
+        var dictionary = new ImmCompactHashDictionary1<string?,string?>(entries);
 
         dictionary.Verify
         (
@@ -147,10 +147,10 @@ public class ImmCompactHashDictionaryTest
         );
     }
 
-    private static ImmCompactHashDictionary<ulong, string> prepareSimpleDictionary3()
+    private static ImmCompactHashDictionary1<ulong, string> prepareSimpleDictionary3()
     {
         var entries    = new[] { kvp(1001uL, "einz"), kvp(2002uL, "zwei"), kvp(3003uL, "drei") };
-        var dictionary = new ImmCompactHashDictionary<ulong,string>(entries);
+        var dictionary = new ImmCompactHashDictionary1<ulong,string>(entries);
         return dictionary;
     }
 

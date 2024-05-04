@@ -7,7 +7,7 @@ using System.Linq;
 namespace Util.Collections;
 
 
-public class ImmCompactHashDictionary<K,V> : IReadOnlyDictionary<K,V>
+public class ImmCompactHashDictionary1<K,V> : IReadOnlyDictionary<K,V>
 {
 
     private const uint BusyBit       = 0x40000000u;  // bit 30
@@ -36,10 +36,10 @@ public class ImmCompactHashDictionary<K,V> : IReadOnlyDictionary<K,V>
     private static readonly EqualityComparer<K> comparer = EqualityComparer<K>.Default;
 
 
-    public ImmCompactHashDictionary(KeyValuePair<K, V>[] pairs)
+    public ImmCompactHashDictionary1(KeyValuePair<K, V>[] pairs)
         : this(pairs, pairs.Length) { }
 
-    private ImmCompactHashDictionary(IEnumerable<KeyValuePair<K,V>> pairs, int size)
+    private ImmCompactHashDictionary1(IEnumerable<KeyValuePair<K,V>> pairs, int size)
     {
         uint n  = (uint)size;
         entries = new KeyValuePair<K,V>[n];
@@ -164,9 +164,9 @@ public class ImmCompactHashDictionary<K,V> : IReadOnlyDictionary<K,V>
 
     private class KeySet : IReadOnlyCollection<K>
     {
-        private readonly ImmCompactHashDictionary<K, V> D;
+        private readonly ImmCompactHashDictionary1<K, V> D;
 
-        internal KeySet(ImmCompactHashDictionary<K, V> dictionary) => D = dictionary;
+        internal KeySet(ImmCompactHashDictionary1<K, V> dictionary) => D = dictionary;
 
         IEnumerator IEnumerable.GetEnumerator() => D.entries.Select(e => e.Key).GetEnumerator();
 
@@ -180,9 +180,9 @@ public class ImmCompactHashDictionary<K,V> : IReadOnlyDictionary<K,V>
 
     private class ValueCollection : IReadOnlyCollection<V>
     {
-        private readonly ImmCompactHashDictionary<K, V> D;
+        private readonly ImmCompactHashDictionary1<K, V> D;
 
-        internal ValueCollection(ImmCompactHashDictionary<K, V> dictionary) => D = dictionary;
+        internal ValueCollection(ImmCompactHashDictionary1<K, V> dictionary) => D = dictionary;
 
         IEnumerator IEnumerable.GetEnumerator() => D.entries.Select(e => e.Value).GetEnumerator();
 
