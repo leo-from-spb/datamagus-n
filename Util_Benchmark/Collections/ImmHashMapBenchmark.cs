@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Threading;
 using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Configs;
 
 namespace Util.Collections;
 
 [MemoryDiagnoser]
 //[SimpleJob(launchCount: 1, warmupCount: 5, iterationCount: 5, invocationCount:200, id: "QuickJob")]
+[GroupBenchmarksBy(BenchmarkLogicalGroupRule.ByCategory), CategoriesColumn]
 public class ImmHashMapBenchmark
 {
     private const int N = 4000;
@@ -63,32 +65,32 @@ public class ImmHashMapBenchmark
     }
 
 
-    [Benchmark]
+    [BenchmarkCategory("Create_Basic"), Benchmark(Baseline = true)]
     public void Create_Basic_ImmCompactHashDictionary1()
     {
         new ImmCompactHashDictionary1<ulong,ulong>(BasicPairs);
     }
 
-    [Benchmark]
+    [BenchmarkCategory("Create_Basic"), Benchmark]
     public void Create_Basic_ImmCompactHashDictionary()
     {
         new ImmCompactHashDictionary<ulong,ulong>(BasicPairs);
     }
 
-    [Benchmark]
+    [BenchmarkCategory("Create_Basic"), Benchmark]
     public void Create_Basic_ImmutableDictionary()
     {
         ImmutableDictionary.CreateRange(BasicPairs);
     }
 
-    [Benchmark]
+    [BenchmarkCategory("Create_Basic"), Benchmark]
     public void Create_Basic_RegularDictionary()
     {
         new Dictionary<ulong,ulong>(BasicPairs);
     }
 
 
-    [Benchmark]
+    [BenchmarkCategory("Create_Hazke"), Benchmark(Baseline = true)]
     public void Create_Hazke_ImmCompactHashDictionary1()
     {
         HashCounter = 0uL;
@@ -101,7 +103,7 @@ public class ImmHashMapBenchmark
         }
     }
 
-    [Benchmark]
+    [BenchmarkCategory("Create_Hazke"), Benchmark]
     public void Create_Hazke_ImmCompactHashDictionary()
     {
         HashCounter = 0uL;
@@ -114,7 +116,7 @@ public class ImmHashMapBenchmark
         }
     }
 
-    [Benchmark]
+    [BenchmarkCategory("Create_Hazke"), Benchmark]
     public void Create_Hazke_ImmutableDictionary()
     {
         HashCounter = 0uL;
@@ -127,7 +129,7 @@ public class ImmHashMapBenchmark
         }
     }
 
-    [Benchmark]
+    [BenchmarkCategory("Create_Hazke"), Benchmark]
     public void Create_Hazke_RegularDictionary()
     {
         HashCounter = 0uL;
@@ -141,7 +143,7 @@ public class ImmHashMapBenchmark
     }
 
 
-    [Benchmark]
+    [BenchmarkCategory("General"), Benchmark(Baseline = true)]
     public void General_Basic_ImmCompactHashDictionary1()
     {
         Random rnd = new Random();
@@ -155,7 +157,7 @@ public class ImmHashMapBenchmark
         }
     }
 
-    [Benchmark]
+    [BenchmarkCategory("General"), Benchmark]
     public void General_Basic_ImmCompactHashDictionary()
     {
         Random rnd = new Random();
@@ -169,7 +171,7 @@ public class ImmHashMapBenchmark
         }
     }
 
-    [Benchmark]
+    [BenchmarkCategory("General"), Benchmark]
     public void General_Basic_ImmutableDictionary()
     {
         Random rnd = new Random();
@@ -183,7 +185,7 @@ public class ImmHashMapBenchmark
         }
     }
 
-    [Benchmark]
+    [BenchmarkCategory("General"), Benchmark]
     public void General_Basic_RegularDictionary()
     {
         Random rnd = new Random();
