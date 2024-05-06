@@ -5,9 +5,33 @@ using Testing.Appliance.Assertions;
 
 namespace Util.Collections;
 
-[TestFixture]
-public class ImmCompactHashDictionaryTest
+
+public abstract class ImmHashDictionaryTest
 {
+
+    [TestFixture]
+    public sealed class ImmCompactHashDictionaryTest : ImmHashDictionaryTest
+    {
+        protected override ImmDictionary<K,V> MakeDictionary<K,V>(KeyValuePair<K,V>[] entries)
+        {
+            return new ImmCompactHashDictionary<K,V>(entries);
+        }
+
+    }
+
+    [TestFixture]
+    public sealed class ImmStableHashDictionaryTest : ImmHashDictionaryTest
+    {
+        protected override ImmDictionary<K,V> MakeDictionary<K,V>(KeyValuePair<K,V>[] entries)
+        {
+            return new ImmStableHashDictionary<K,V>(entries);
+        }
+
+    }
+
+
+    protected abstract ImmDictionary<K, V> MakeDictionary<K, V>(KeyValuePair<K, V>[] entries);
+
 
     [Test]
     public void Basic_1()
@@ -16,7 +40,7 @@ public class ImmCompactHashDictionaryTest
         const long v = 9876543210L;
 
         var entries    = new KeyValuePair<long, long>[] { kvp<long, long>(k, v) };
-        var dictionary = new ImmCompactHashDictionary<long,long>(entries);
+        var dictionary = MakeDictionary(entries);
 
         var f = dictionary.Find(k);
         f.Ok.ShouldBeTrue();
@@ -43,7 +67,7 @@ public class ImmCompactHashDictionaryTest
             entries[i] = entry;
         }
 
-        var dictionary = new ImmCompactHashDictionary<long,long>(entries);
+        var dictionary = MakeDictionary(entries);
 
         dictionary.Verify
         (
@@ -82,7 +106,7 @@ public class ImmCompactHashDictionaryTest
             entries[i] = entry;
         }
 
-        var dictionary = new ImmCompactHashDictionary<long,long>(entries);
+        var dictionary = MakeDictionary(entries);
 
         foreach (var e in entries)
         {
@@ -103,7 +127,7 @@ public class ImmCompactHashDictionaryTest
                           new(null, "null entry")
                       };
 
-        var dictionary = new ImmCompactHashDictionary<string?,string?>(entries);
+        var dictionary = MakeDictionary(entries);
 
         dictionary.Verify
         (
@@ -151,10 +175,10 @@ public class ImmCompactHashDictionaryTest
         );
     }
 
-    private static ImmCompactHashDictionary<ulong, string> prepareSimpleDictionary3()
+    private ImmDictionary<ulong, string> prepareSimpleDictionary3()
     {
         var entries    = new[] { kvp(1001uL, "einz"), kvp(2002uL, "zwei"), kvp(3003uL, "drei") };
-        var dictionary = new ImmCompactHashDictionary<ulong,string>(entries);
+        var dictionary = MakeDictionary(entries);
         return dictionary;
     }
 

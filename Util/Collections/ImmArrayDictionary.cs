@@ -50,6 +50,26 @@ public abstract class ImmArrayDictionary<K,V> : ImmDictionary<K,V>
             : new ArraySegment<KeyValuePair<K, V>>(EntriesArray, Offset, N);
     }
 
+    protected ImmArrayDictionary(KeyValuePair<K, V>[] array, bool toCopy)
+    {
+        N = array.Length;
+
+        if (toCopy)
+        {
+            EntriesArray = new KeyValuePair<K, V> [N];
+            Array.Copy(array, EntriesArray, N);
+        }
+        else
+        {
+            EntriesArray = array;
+        }
+
+        Offset = 0;
+        Limit  = N;
+        Exact  = true;
+
+        EntriesSegment = new ArraySegment<KeyValuePair<K, V>>(EntriesArray);
+    }
 
     protected ImmArrayDictionary(int n)
     {

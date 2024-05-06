@@ -8,7 +8,7 @@ using BenchmarkDotNet.Configs;
 namespace Util.Collections;
 
 [MemoryDiagnoser]
-//[SimpleJob(launchCount: 1, warmupCount: 5, iterationCount: 5, invocationCount:200, id: "QuickJob")]
+[SimpleJob(launchCount: 1, warmupCount: 5, iterationCount: 5, invocationCount:200, id: "QuickJob")]
 [GroupBenchmarksBy(BenchmarkLogicalGroupRule.ByCategory), CategoriesColumn]
 public class ImmHashMapBenchmark
 {
@@ -78,6 +78,12 @@ public class ImmHashMapBenchmark
     }
 
     [BenchmarkCategory("Create_Basic"), Benchmark]
+    public void Create_Basic_ImmStableHashDictionary()
+    {
+        new ImmStableHashDictionary<ulong,ulong>(BasicPairs);
+    }
+
+    [BenchmarkCategory("Create_Basic"), Benchmark]
     public void Create_Basic_ImmutableDictionary()
     {
         ImmutableDictionary.CreateRange(BasicPairs);
@@ -112,6 +118,19 @@ public class ImmHashMapBenchmark
         if (!HashCounterReported_Compact)
         {
             Console.WriteLine($"Create_Hazke_ImmCompactHashDictionary used hash {HashCounter} times.");
+            HashCounterReported_Compact = true;
+        }
+    }
+
+    [BenchmarkCategory("Create_Hazke"), Benchmark]
+    public void Create_Hazke_ImmStableHashDictionary()
+    {
+        HashCounter = 0uL;
+        new ImmStableHashDictionary<Hazke,ulong>(HazkePairs);
+
+        if (!HashCounterReported_Compact)
+        {
+            Console.WriteLine($"Create_Hazke_ImmStableHashDictionary used hash {HashCounter} times.");
             HashCounterReported_Compact = true;
         }
     }
@@ -163,6 +182,20 @@ public class ImmHashMapBenchmark
         Random rnd = new Random();
 
         var dictionary = new ImmCompactHashDictionary<ulong,ulong>(BasicPairs);
+
+        for (int i = 0; i < Tries; i++)
+        {
+            ulong key = (i & 1) == 0 ? BasicPairs[i % N].Key : (ulong)rnd.NextInt64(10001000000);
+            dictionary.Find(key);
+        }
+    }
+
+    [BenchmarkCategory("General"), Benchmark]
+    public void General_Basic_ImmStableHashDictionary()
+    {
+        Random rnd = new Random();
+
+        var dictionary = new ImmStableHashDictionary<ulong,ulong>(BasicPairs);
 
         for (int i = 0; i < Tries; i++)
         {
