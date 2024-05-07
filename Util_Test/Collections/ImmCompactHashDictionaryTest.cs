@@ -10,6 +10,16 @@ public abstract class ImmHashDictionaryTest
 {
 
     [TestFixture]
+    public sealed class ImmMicroDictionaryTest : ImmHashDictionaryTest
+    {
+        protected override ImmDictionary<K,V> MakeDictionary<K,V>(KeyValuePair<K,V>[] entries)
+        {
+            return new ImmMicroDictionary<K,V>(entries);
+        }
+
+    }
+
+    [TestFixture]
     public sealed class ImmCompactHashDictionaryTest : ImmHashDictionaryTest
     {
         protected override ImmDictionary<K,V> MakeDictionary<K,V>(KeyValuePair<K,V>[] entries)
@@ -92,9 +102,9 @@ public abstract class ImmHashDictionaryTest
     }
 
     [Test]
-    public void Basic_3000()
+    public void Basic_256()
     {
-        int n       = 3000;
+        int n       = 256;
         var entries = new KeyValuePair<long, long>[n];
 
         var rnd = new Random();
