@@ -21,7 +21,7 @@ public class ImmHashMapBenchmark
     private static bool HashCounterReported_Compact, HashCounterReported_Dotnet;
 
 
-    private readonly struct Hazke
+    private readonly record struct Hazke
     {
         public readonly ulong X;
 
