@@ -75,7 +75,7 @@ public sealed class ImmCompactHashDictionary<K,V> : ImmArrayDictionary<K,V>
     }
 
 
-    private int FindIndex(K key)
+    protected override int FindEntryIndex(K key)
     {
         int  k = HashIndexOf(key, (uint)links.Length);
         uint x = links[k];
@@ -93,34 +93,8 @@ public sealed class ImmCompactHashDictionary<K,V> : ImmArrayDictionary<K,V>
 
     private static int HashIndexOf(K key, uint n)
     {
-        #nullable disable
-        int h = comparer.GetHashCode(key);
-        #nullable restore
-        unchecked
-        {
-            return (int)(((uint)h) % n);
-        }
+        uint h = HashOf(key);
+        return unchecked((int)(h % n));
     }
 
-
-    public override bool ContainsKey(K key) => FindIndex(key) >= 0;
-
-    public override Found<V> Find(K key)
-    {
-        int index = FindIndex(key);
-        #nullable disable
-        V   value  = index >= 0 ? EntriesArray[index].Value : default(V);
-        var result = new Found<V>(index >= 0, value);
-        #nullable restore
-        return result;
-    }
-
-    public override V Get(K key,
-                          #nullable disable
-                          V noValue = default(V))
-                          #nullable restore
-    {
-        int index = FindIndex(key);
-        return index >= 0 ? EntriesArray[index].Value : noValue;
-    }
 }

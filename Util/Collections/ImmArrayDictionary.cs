@@ -84,6 +84,35 @@ public abstract class ImmArrayDictionary<K,V> : ImmDictionary<K,V>
         EntriesSegment = new ArraySegment<KeyValuePair<K, V>>(EntriesArray);
     }
 
+    /// <summary>
+    /// Finds an index of the entry in the <see cref="EntriesArray"/>.
+    /// The index should be between <see cref="Offset"/> and <see cref="Limit"/>.
+    /// </summary>
+    /// <param name="key">a key to find the index for.</param>
+    /// <returns>found index, or <see cref="int.MinValue"/> when the key is not found.</returns>
+    protected abstract int FindEntryIndex(K key);
+
+    public override bool ContainsKey(K key) => FindEntryIndex(key) >= 0;
+
+    public override Found<V> Find(K key)
+    {
+        int index = FindEntryIndex(key);
+        #nullable disable
+        V   value  = index >= 0 ? EntriesArray[index].Value : default(V);
+        var result = new Found<V>(index >= 0, value);
+        #nullable restore
+        return result;
+    }
+
+    public override V Get(K key,
+                          #nullable disable
+                          V noValue = default(V))
+                          #nullable restore
+    {
+        int index = FindEntryIndex(key);
+        return index >= 0 ? EntriesArray[index].Value : noValue;
+    }
+
 
     public override int  Count      => N;
     public override bool IsNotEmpty => true;

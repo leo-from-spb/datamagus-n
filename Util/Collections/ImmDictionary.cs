@@ -17,6 +17,11 @@ public abstract class ImmDictionary<K,V> : IReadOnlyDictionary<K,V>
     protected static readonly EqualityComparer<K> comparer = EqualityComparer<K>.Default;
 
     /// <summary>
+    /// Calculates hash code of a given key.
+    /// </summary>
+    protected static uint HashOf(K key) => key is not null ? unchecked((uint)key.GetHashCode()) : 0u;
+
+    /// <summary>
     /// Finds the value associated with the given key.
     /// </summary>
     /// <param name="key">key to find.</param>
