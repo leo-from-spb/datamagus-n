@@ -24,10 +24,10 @@ public sealed class ImmCompactHashDictionary<K,V> : ImmArrayDictionary<K,V>
     private readonly uint[] links;
 
 
-    public ImmCompactHashDictionary(KeyValuePair<K, V>[] pairs)
-        : this(pairs, pairs.Length) { }
+    public ImmCompactHashDictionary(KeyValuePair<K, V>[] entries)
+        : this(entries, entries.Length) { }
 
-    private ImmCompactHashDictionary(IEnumerable<KeyValuePair<K, V>> pairs, int size)
+    internal ImmCompactHashDictionary(IEnumerable<KeyValuePair<K, V>> pairs, int size)
         : base(size)
     {
         uint n = (uint)size;

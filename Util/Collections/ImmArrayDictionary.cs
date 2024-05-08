@@ -115,8 +115,8 @@ public abstract class ImmArrayDictionary<K,V> : ImmDictionary<K,V>
 
 
     public override int  Count      => N;
-    public override bool IsNotEmpty => true;
-    public override bool IsEmpty    => false;
+    public override bool IsNotEmpty => N > 0;
+    public override bool IsEmpty    => N == 0;
 
     public override IEnumerator<KeyValuePair<K, V>> GetEnumerator() => EntriesSegment.GetEnumerator();
 

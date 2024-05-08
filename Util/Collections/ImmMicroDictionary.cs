@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Util.Collections;
 
@@ -10,7 +11,13 @@ namespace Util.Collections;
 public sealed class ImmMicroDictionary<K,V> : ImmArrayDictionary<K,V>
 {
     public ImmMicroDictionary(KeyValuePair<K,V>[] array)
-        : base(array, toCopy: true) { }
+        : this(array, toCopy: true) { }
+
+    public ImmMicroDictionary(IEnumerable<KeyValuePair<K,V>> entries)
+        : this(entries.ToArray(), toCopy: false) { }
+
+    internal ImmMicroDictionary(KeyValuePair<K,V>[] array, bool toCopy)
+        : base(array, toCopy) { }
 
 
     protected override int FindEntryIndex(K key)
