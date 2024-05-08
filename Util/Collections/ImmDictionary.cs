@@ -9,7 +9,7 @@ namespace Util.Collections;
 /// </summary>
 /// <typeparam name="K">type of key.</typeparam>
 /// <typeparam name="V">type of value.</typeparam>
-public abstract class ImmDictionary<K,V> : IReadOnlyDictionary<K,V>
+public abstract class ImmDictionary<K,V> : RDictionary<K,V>
 {
     /// <summary>
     /// The Key comparer.

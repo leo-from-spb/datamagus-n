@@ -27,6 +27,23 @@ public static class Imm
                };
     }
 
+    /// <summary>
+    /// Creates a dictionary of one key-value pair.
+    /// </summary>
+    public static ImmOrderArrayDictionary<K, V> Dictionary<K, V>(K key, V value)
+    {
+        var a = new KeyValuePair<K, V>[] { new(key, value) };
+        return new ImmMicroDictionary<K, V>(a);
+    }
+
+    /// <summary>
+    /// Creates a dictionary of two key-value pairs.
+    /// </summary>
+    public static ImmOrderArrayDictionary<K, V> Dictionary<K, V>(K key1, V value1, K key2, V value2)
+    {
+        var a = new KeyValuePair<K, V>[] { new(key1, value1), new(key2, value2) };
+        return new ImmMicroDictionary<K, V>(a);
+    }
 
 
 

@@ -80,4 +80,43 @@ public class ImmTest
         );
     }
 
+
+    [Test]
+    public void R_InterfaceMethods()
+    {
+        ROrderDictionary<ulong, string> dictionary =
+            Imm.Dictionary<ulong, string>(26uL, "Not 42", 42uL, "This is 42");
+        dictionary.Verify
+        (
+            d => d[0].Key.ShouldBe(26uL),
+            d => d[1].Key.ShouldBe(42uL),
+            d => d.Find(26uL).Item.ShouldBe("Not 42"),
+            d => d.Get(26uL).ShouldBe("Not 42"),
+            d => d[26uL].ShouldBe("Not 42"),
+            d => d[42uL].ShouldBe("This is 42"),
+            d => d.ContainsKey(26uL).ShouldBeTrue(),
+            d => d.Count.ShouldBe(2),
+            d => d.IsNotEmpty.ShouldBeTrue(),
+            d => d.IsEmpty.ShouldBeFalse(),
+            d => d.Keys.ShouldContain(26uL),
+            d => d.Values.ShouldContain("Not 42"),
+            d => d.Entries.ShouldNotBeEmpty()
+        );
+    }
+
+    [Test]
+    public void I_InterfaceMethods_IReadOnlyDictionary()
+    {
+        IReadOnlyDictionary<ulong, string> dictionary = Imm.Dictionary<ulong, string>(26uL, "Not 42");
+        dictionary.Verify
+        (
+            d => d.TryGetValue(26uL, out _).ShouldBeTrue(),
+            d => d[26uL].ShouldBe("Not 42"),
+            d => d.ContainsKey(26uL).ShouldBeTrue(),
+            d => d.Count.ShouldBe(1),
+            d => d.Keys.ShouldContain(26uL),
+            d => d.Values.ShouldContain("Not 42"),
+            d => d.GetEnumerator().Dispose()
+        );
+    }
 }

@@ -8,7 +8,7 @@ namespace Util.Collections;
 /// </summary>
 /// <typeparam name="K">type of key.</typeparam>
 /// <typeparam name="V">type of value.</typeparam>
-public sealed class ImmMicroDictionary<K,V> : ImmArrayDictionary<K,V>
+public sealed class ImmMicroDictionary<K,V> : ImmOrderArrayDictionary<K,V>
 {
     public ImmMicroDictionary(KeyValuePair<K,V>[] array)
         : this(array, toCopy: true) { }

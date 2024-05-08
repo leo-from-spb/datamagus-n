@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Util.Collections;
 
 
-public class ImmEmptyDictionary<K,V> : ImmDictionary<K,V>
+public class ImmEmptyDictionary<K,V> : ImmDictionary<K,V>, ROrderDictionary<K,V>
 {
     /// <summary>
     /// The empty dictionary.
@@ -22,6 +22,9 @@ public class ImmEmptyDictionary<K,V> : ImmDictionary<K,V>
     /// </summary>
     internal ImmEmptyDictionary() {}
 
+
+    public KeyValuePair<K, V> At(int index) =>
+        throw new IndexOutOfRangeException($"Attempted tp get by index {index} from an empty dictionary");
 
     public override Found<V> Find(K key) => NothingFound;
 

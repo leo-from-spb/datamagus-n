@@ -5,7 +5,7 @@ using System.Linq;
 namespace Util.Collections;
 
 
-public sealed class ImmStableHashDictionary<K,V> : ImmArrayDictionary<K,V>
+public sealed class ImmStableHashDictionary<K,V> : ImmOrderArrayDictionary<K,V>
 {
 
     private const uint BusyBit       = 0x40000000u;  // bit 30
@@ -126,7 +126,7 @@ public sealed class ImmStableHashDictionary<K,V> : ImmArrayDictionary<K,V>
         return unchecked(h % m);
     }
 
-
+    
     private static readonly LinkEntry ZeroLinkEntry = new LinkEntry { Link = 0u, TargetIndex = 0 };
 
 }
