@@ -21,6 +21,7 @@ public static class Imm
         int n = originalDictionary.Count;
         return n switch
                {
+                   0    => ImmEmptyDictionary<K, V>.Empty,
                    <= 4 => new ImmMicroDictionary<K, V>(originalDictionary),
                    _    => new ImmCompactHashDictionary<K, V>(originalDictionary, n)
                };

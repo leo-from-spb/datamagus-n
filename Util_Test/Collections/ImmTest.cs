@@ -16,7 +16,7 @@ public class ImmTest
         (
             d => d.IsEmpty.ShouldBeTrue(),
             d => d.Count.ShouldBe(0),
-            d => d.ShouldBeOfType<ImmMicroDictionary<ulong, string>>()
+            d => d.ShouldBeOfType<ImmEmptyDictionary<ulong, string>>()
         );
     }
 
