@@ -6,7 +6,16 @@ namespace Model.Abstracts;
 /// </summary>
 public interface Matter : Node
 {
+    /// <summary>
+    /// Identifier of this element.
+    /// This identifier is unique within the model.
+    /// </summary>
     uint Id { get; }
+
+    /// <summary>
+    /// The version of this element.
+    /// </summary>
+    uint Version { get; }
 }
 
 

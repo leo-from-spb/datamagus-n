@@ -13,20 +13,31 @@ public class MatterTest
     }
 
     [Test]
+    public void IdAndVersion()
+    {
+        var matter = new ImmTestRabbit(26u, 42u, "Test Rabbit");
+        matter.Verify
+        (
+            m => m.Id.ShouldBe(26u),
+            m => m.Version.ShouldBe(42u)
+        );
+    }
+
+    [Test]
     public void Yard()
     {
-        var r1 = new ImmTestRabbit(11, "Rabbit A");
-        var r2 = new ImmTestRabbit(12, "Rabbit B");
-        var r3 = new ImmTestRabbit(13, "Rabbit C");
+        var r1 = new ImmTestRabbit(11, 1, "Rabbit A");
+        var r2 = new ImmTestRabbit(12, 1, "Rabbit B");
+        var r3 = new ImmTestRabbit(13, 1, "Rabbit C");
         var rabbits = ImmNamingFamily<ImmTestRabbit>.Of(r1, r2, r3);
         
-        var p1 = new ImmTestGuineaPig(31, "Pig A");
-        var p2 = new ImmTestGuineaPig(32, "Pig B");
-        var p3 = new ImmTestGuineaPig(33, "Pig C");
-        var p4 = new ImmTestGuineaPig(34, "Pig D");
+        var p1 = new ImmTestGuineaPig(31, 1, "Pig A");
+        var p2 = new ImmTestGuineaPig(32, 1, "Pig B");
+        var p3 = new ImmTestGuineaPig(33, 1, "Pig C");
+        var p4 = new ImmTestGuineaPig(34, 1, "Pig D");
         var pigs = ImmNamingFamily<ImmTestGuineaPig>.Of(p1, p2, p3, p4);
 
-        var yard = new ImmTestYard(1, rabbits, pigs);
+        var yard = new ImmTestYard(1, 1, rabbits, pigs);
         
         yard.Verify
         (

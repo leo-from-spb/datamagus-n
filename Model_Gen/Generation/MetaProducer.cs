@@ -90,7 +90,7 @@ internal class MetaProducer (MetaModel mm)
             select $"IEnumerable<{f.Child.IntfName}> {f.FamilyVarName}";
         var propertyParameters =
             from p in m.AllProperties.Values
-            where p.ProName != "Id"
+            where p.ProName != "Id" && p.ProName != "Version"
             select $"{p.ProTypeName} {p.ProVarName}";
         var familyAssignments =
             from f in m.AllFamilies.Values
@@ -108,10 +108,10 @@ internal class MetaProducer (MetaModel mm)
         assignments.AddRange(familyAssignments);
         assignments.AddRange(propertyAssignments);
         
-        var baseConstructorParameters = m.HasName ? "id, name" : "id";
+        var baseConstructorParameters = m.HasName ? "id, version, name" : "id, version";
         cb.Append($"""
                    // Constructor \\
-                   public {m.Imm.ClassName}(uint id,
+                   public {m.Imm.ClassName}(uint id, uint version,
                        {parameters.JoinToString(",\n    ")})
                        : base ({baseConstructorParameters}) 
                    {'{'}

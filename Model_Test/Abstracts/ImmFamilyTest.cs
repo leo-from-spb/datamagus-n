@@ -17,9 +17,9 @@ public class ImmFamilyTest
 
     public ImmFamilyTest()
     {
-        rabbitA = new ImmTestRabbit(1001, "Rabbit A");
-        rabbitB = new ImmTestRabbit(1002, "Rabbit B");
-        rabbitC = new ImmTestRabbit(1003, "Rabbit C");
+        rabbitA = new ImmTestRabbit(1001, 1, "Rabbit A");
+        rabbitB = new ImmTestRabbit(1002, 1, "Rabbit B");
+        rabbitC = new ImmTestRabbit(1003, 1, "Rabbit C");
         rabbitsABC = [rabbitA, rabbitB, rabbitC];
     }
 
@@ -96,8 +96,8 @@ public class ImmFamilyTest
     [Test]
     public void GetAllNames_Partially()
     {
-        var rabbitNoNameX = new ImmTestRabbit(999, null);
-        var rabbitNoNameY = new ImmTestRabbit(998, null);
+        var rabbitNoNameX = new ImmTestRabbit(999, 1, null);
+        var rabbitNoNameY = new ImmTestRabbit(998, 1, null);
 
         var rabbitFamily = ImmNamingFamily<TestRabbit>.Of(rabbitA, rabbitNoNameX, rabbitNoNameY, rabbitC);
 
