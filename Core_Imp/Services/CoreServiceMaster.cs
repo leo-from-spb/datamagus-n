@@ -22,6 +22,7 @@ public static class CoreServiceMaster
 
         // set up the services
         theSettingsService.Sunrise();
+        theCommandRegistry.Sunrise();
     }
 
 

@@ -45,11 +45,16 @@ public class BasicCommand : Command
         BasicAction = basicAction;
     }
 
-    public override bool CanExecute(object? parameter) => true;
+    internal void Setup()
+    {
+        CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+    }
 
-    public override void Execute(object? parameter) => BasicAction();
+    public sealed override bool CanExecute(object? parameter) => true;
 
-    public override event EventHandler? CanExecuteChanged;
+    public sealed override void Execute(object? parameter) => BasicAction();
+
+    public sealed override event EventHandler? CanExecuteChanged;
 }
 
 
@@ -80,7 +85,7 @@ public class ObjectCommand<O> : Command
         if (oldStatus != newStatus)
         {
             ActiveStatus = newStatus;
-            CanExecuteChanged?.Invoke(this, new EventArgs());
+            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanExecute)));
         }
     }

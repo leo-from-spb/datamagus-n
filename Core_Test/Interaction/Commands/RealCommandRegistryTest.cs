@@ -11,7 +11,8 @@ public class RealCommandRegistryTest
     [Test]
     public void Basic()
     {
-        CommandRegistry registry = new RealCommandRegistry();
+        RealCommandRegistry registry = new RealCommandRegistry();
+        registry.Sunrise();
 
         var cmdA = registry.NewBasicCommand("A", "Cmd A", null, DoNothing);
         var cmdB = registry.NewObjectCommand<long>("B", "Cmd B", null, () => 42L, DoNothing<long>);
