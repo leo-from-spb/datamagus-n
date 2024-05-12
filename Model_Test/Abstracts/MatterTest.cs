@@ -1,3 +1,4 @@
+using System.Linq;
 using Shouldly;
 using Testing.Appliance.Assertions;
 
@@ -24,6 +25,16 @@ public class MatterTest
     }
 
     [Test]
+    public void Matter_Families()
+    {
+        var rabbits    = ImmNamingFamily<ImmTestRabbit>.Empty();
+        var guineaPigs = ImmNamingFamily<ImmTestGuineaPig>.Empty();
+
+        var yard = new ImmTestYard(1, 1, rabbits, guineaPigs);
+        yard.Families.ShouldContainAll(rabbits, guineaPigs);
+    }
+
+    [Test]
     public void Yard()
     {
         var r1 = new ImmTestRabbit(11, 1, "Rabbit A");
@@ -46,7 +57,8 @@ public class MatterTest
             y => y.Rabbits["Rabbit A"].ShouldBeSameAs(r1),
             y => y.Rabbits["Rabbit B"].ShouldBeSameAs(r2),
             y => y.GuineaPigs["Pig A"].ShouldBeSameAs(p1),
-            y => y.GuineaPigs["Pig D"].ShouldBeSameAs(p4)
+            y => y.GuineaPigs["Pig D"].ShouldBeSameAs(p4),
+            y => y.AllInnerMatters.Count().ShouldBe(7)
         );
     }
 }

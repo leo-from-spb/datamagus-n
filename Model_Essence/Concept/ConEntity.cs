@@ -13,5 +13,6 @@ public interface ConEntity : NamedMediumMatter
 
 public interface ConAttribute : NamedTermMatter
 {
-    
+    [MatterProperty]
+    string? ContentType { get; }
 }

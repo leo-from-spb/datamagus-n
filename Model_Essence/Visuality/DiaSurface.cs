@@ -9,7 +9,7 @@ namespace Model.Visuality;
 public interface DiaSurface : AbSection
 {
 
-
+    Family<DiaShape> Shapes { get; }
 
 }
 

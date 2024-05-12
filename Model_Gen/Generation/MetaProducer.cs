@@ -76,6 +76,7 @@ internal class MetaProducer (MetaModel mm)
         cb.Phrase("public", classModifier, "class", m.Imm.ClassName, ":", m.Imm.BaseClassName + ",", m.IntfName);
         cb.Block("{", "}", () =>
                            {
+                               produceLocalVariablesOnTop(cb, m);
                                produceImmMatterConstructor(cb, m);
                                produceImmMatterFamilies(cb, m);
                                produceImmMatterProperties(cb, m);
@@ -83,9 +84,19 @@ internal class MetaProducer (MetaModel mm)
         cb.EmptyLine();
     }
 
+    private void produceLocalVariablesOnTop(CodeBuilder cb, MetaMatter m)
+    {
+        if (m.IsMedium && m.IsConcrete)
+        {
+            cb.Phrase("private readonly Family<Matter>[] families;");
+            cb.Phrase("public override IReadOnlyList<Family<Matter>> Families => families;");
+            cb.EmptyLine();
+        }
+    }
+
     private void produceImmMatterConstructor(CodeBuilder cb, MetaMatter m)
     {
-        var familyParameters = 
+        var familyParameters =
             from f in m.AllFamilies.Values
             select $"IEnumerable<{f.Child.IntfName}> {f.FamilyVarName}";
         var propertyParameters =
@@ -94,12 +105,12 @@ internal class MetaProducer (MetaModel mm)
             select $"{p.ProTypeName} {p.ProVarName}";
         var familyAssignments =
             from f in m.AllFamilies.Values
-            select $"    this.{f.FamilyVarName} = new Imm{f.FamilyTypeName}<{f.Child.IntfName}>({f.FamilyVarName}.ToArray());";
+            select $"this.{f.FamilyVarName} = new Imm{f.FamilyTypeName}<{f.Child.IntfName}>({f.FamilyVarName}.ToArray());";
         var propertyAssignments =
             from p in m.AllProperties.Values
             where !p.ImplementedInMatter
-            select $"    this.{p.ProName} = {p.ProVarName};";
-        
+            select $"this.{p.ProName} = {p.ProVarName};";
+
         var parameters = new List<string>();
         parameters.AddRange(familyParameters);
         parameters.AddRange(propertyParameters);
@@ -107,18 +118,23 @@ internal class MetaProducer (MetaModel mm)
         var assignments = new List<string>();
         assignments.AddRange(familyAssignments);
         assignments.AddRange(propertyAssignments);
-        
+
+        var realConstructorParameters = m.HasName ? "uint id, uint version, string? name," : "uint id, uint version,";
         var baseConstructorParameters = m.HasName ? "id, version, name" : "id, version";
-        cb.Append($"""
-                   // Constructor \\
-                   public {m.Imm.ClassName}(uint id, uint version,
-                       {parameters.JoinToString(",\n    ")})
-                       : base ({baseConstructorParameters}) 
-                   {'{'}
-                   {assignments.JoinToString("\n")}    
-                   {'}'}    
-                   """);
-        
+        var thisFamilies              = m.AllFamilies.Keys.Select(name => "this." + name.Decap()).JoinToString();
+
+        cb.Phrase(@"// Constructor \\");
+        cb.Phrase("public", m.Imm.ClassName, "(" + realConstructorParameters);
+        cb.Indent();
+        for (var i = 0; i < parameters.Count; i++) cb.Phrase(parameters[i] + (i < parameters.Count - 1 ? "," : ")"));
+        cb.Phrase(": base(", baseConstructorParameters, ")");
+        cb.Unindent();
+        cb.Phrase("{");
+        cb.Indent();
+        assignments.ForEach(a => cb.Phrase(a));
+        if (m.IsMedium && m.IsConcrete) cb.Phrase("families = new Family<Matter>[] {", thisFamilies, "};");
+        cb.Unindent();
+        cb.Phrase("}");
     }
 
     private void produceImmMatterFamilies(CodeBuilder cb, MetaMatter m)
@@ -136,7 +152,7 @@ internal class MetaProducer (MetaModel mm)
             cb.Append($"public {iTypeStr} {f.FamilyName} => {f.FamilyVarName};");
         }
     }
-    
+
     private void produceImmMatterProperties(CodeBuilder cb, MetaMatter m)
     {
         cb.EmptyLine();

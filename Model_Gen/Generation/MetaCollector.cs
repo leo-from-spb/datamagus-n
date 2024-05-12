@@ -17,8 +17,8 @@ internal class MetaCollector (MetaModel mm)
     internal void CollectMetaData()
     {
         HandleInterface(matterType, false, 0);
-        HandleInterface(typeof(NamedMediumMatter), true, 0);
-        HandleInterface(typeof(NamedTermMatter), true, 0);
+        HandleInterface(typeof(NamedMediumMatter), false, 0);
+        HandleInterface(typeof(NamedTermMatter), false, 0);
         HandleInterface(typeof(Root), true, 0);
         
         mm.Matters.Sort((m1, m2) => (byte)(m1.SegmKind) - (byte)(m2.SegmKind));
@@ -48,6 +48,7 @@ internal class MetaCollector (MetaModel mm)
             var proEntries =
                 from p in intf.GetProperties()
                 where p.MemberType == MemberTypes.Property
+                   && p.GetCustomAttribute<MatterPropertyAttribute>() != null
                    && !p.PropertyType.IsAssignableTo(familyType)
                 select p;
             foreach (var pe in proEntries) 

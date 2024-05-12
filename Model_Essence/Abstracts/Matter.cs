@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Model.Abstracts;
 
 /// <summary>
@@ -16,6 +18,11 @@ public interface Matter : Node
     /// The version of this element.
     /// </summary>
     uint Version { get; }
+
+    /// <summary>
+    /// All inner matters, in a stable order.
+    /// </summary>
+    IEnumerable<Matter> AllInnerMatters { get; }
 }
 
 
@@ -25,7 +32,10 @@ public interface Matter : Node
 /// </summary>
 public interface MediumMatter : Matter
 {
-    
+    /// <summary>
+    /// All families, in order when they're declared.
+    /// </summary>
+    IReadOnlyList<Family<Matter>> Families { get; }
 }
 
 
@@ -34,7 +44,7 @@ public interface MediumMatter : Matter
 /// </summary>
 public interface TermMatter : Matter
 {
-    
+
 }
 
 

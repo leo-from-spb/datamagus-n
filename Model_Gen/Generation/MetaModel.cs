@@ -58,8 +58,8 @@ internal class MetaMatter
     internal MetaMatter? BaseMatter;
 
     private static byte matterOrderCounter = 0;
-    
-    
+
+
     internal class MetaImm (MetaMatter matter)
     {
         internal readonly MetaMatter Matter        = matter;

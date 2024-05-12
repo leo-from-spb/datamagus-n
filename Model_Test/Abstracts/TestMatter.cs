@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Model.Abstracts;
 
 
@@ -21,7 +23,7 @@ public interface TestGuineaPig : NamedTermMatter
 
 
 
-public class ImmTestYard : ImmMatter, TestYard
+public class ImmTestYard : ImmMediumMatter, TestYard
 {
     public /*Imm*/NamingFamily<TestRabbit> Rabbits { get; }
     public /*Imm*/NamingFamily<TestGuineaPig> GuineaPigs { get; }
@@ -33,10 +35,11 @@ public class ImmTestYard : ImmMatter, TestYard
         GuineaPigs = guineaPigs;
     }
 
+    public override IReadOnlyList<Family<Matter>> Families => new Family<Matter>[] { Rabbits, GuineaPigs };
 }
 
 
-public class ImmTestRabbit : ImmNamedMatter, TestRabbit
+public class ImmTestRabbit : ImmNamedTermMatter, TestRabbit
 {
     public ImmTestRabbit(uint id, uint version, string? name) : base(id, version, name)
     {
@@ -44,7 +47,7 @@ public class ImmTestRabbit : ImmNamedMatter, TestRabbit
 }
 
 
-public class ImmTestGuineaPig : ImmNamedMatter, TestGuineaPig
+public class ImmTestGuineaPig : ImmNamedTermMatter, TestGuineaPig
 {
     public ImmTestGuineaPig(uint id, uint version, string? name) : base(id, version, name)
     {

@@ -34,9 +34,9 @@ internal class MetaProcessor (MetaModel mm)
         
         foreach (var m in mm.Matters)
         {
-            m.IsMedium = m.OwnFamilies.Count > 0;
+            m.IsMedium = m.Intf.IsAssignableTo(typeof(MediumMatter));
             m.HasName  = m.AllBaseIntfs.Contains(namedMatterType);
-            
+
             // select the base type
             var baseMatter = m.HasName 
                 ? m.IsMedium ? baseNamedMediumMatter : baseNamedTermMatter 
@@ -88,6 +88,10 @@ internal class MetaProcessor (MetaModel mm)
                 p.ImplementedInMatter      = m.IntfName.IsIn(ManualImplementedMatters);
             }
             
+            bool hasChildren = m.AllFamilies.IsNotEmpty();
+            if (m.IsConcrete && m.IsMedium != hasChildren)
+                Console.Error.WriteLine($"Matter {m.Name} families: {m.AllFamilies.Count}, but IsMedium: {m.IsMedium}");
+
             // Imm
             m.Imm.ManuallyImplemented = m.Name.IsIn(ManualImplementedMatters);
             m.Imm.ClassName           = "Imm" + m.IntfName;

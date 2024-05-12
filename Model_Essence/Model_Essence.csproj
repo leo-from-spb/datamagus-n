@@ -8,4 +8,8 @@
         <AssemblyName>Model.Essence</AssemblyName>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Util\Util.csproj" />
+    </ItemGroup>
+
 </Project>

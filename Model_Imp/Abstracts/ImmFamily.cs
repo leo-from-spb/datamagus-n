@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -67,7 +68,9 @@ public class ImmNamingFamily<M> : ImmFamily<M>, NamingFamily<M>
     where M : class, NamedMatter
 {
     public new static ImmNamingFamily<M> Of(params M[] matters) => new ImmNamingFamily<M>(matters);
-    
+
+    public new static ImmNamingFamily<M> Empty() => new ImmNamingFamily<M>(Array.Empty<M>());
+
     public ImmNamingFamily(M[] matters) 
         : base(matters)
     {

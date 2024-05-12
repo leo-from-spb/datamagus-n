@@ -29,6 +29,7 @@ public interface ConModel : ConArea, AbSegment
 /// </summary>
 public interface ConSubjArea : ConArea, AbSection
 {
+    [MatterProperty]
     public string Prefix { get; }
 
 
