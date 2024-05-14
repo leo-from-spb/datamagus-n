@@ -1,9 +1,26 @@
+using System;
 using System.Collections.Generic;
 
 namespace Util.Collections;
 
 public static class Imm
 {
+
+    /// <summary>
+    /// Empty list and set.
+    /// </summary>
+    /// <typeparam name="T">element type</typeparam>
+    /// <returns>the empty instance.</returns>
+    public static ROrderSet<T> EmptySet<T>() => ImmEmptySet<T>.Instance;
+
+    /// <summary>
+    /// Empty list and sorted set.
+    /// </summary>
+    /// <typeparam name="T">element type</typeparam>
+    /// <returns>the empty instance.</returns>
+    public static RSortedSet<T> EmptySortedSet<T>() where T : IComparable<T> => ImmEmptySortedSet<T>.Instance;
+
+
 
     /// <summary>
     /// Creates an immutables dictionary with entries from the given <paramref name="originalDictionary"/>, with a copy of all its entries.

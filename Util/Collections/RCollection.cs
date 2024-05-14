@@ -1,82 +1,76 @@
-using System.Collections.Generic;
+using System;
 
 namespace Util.Collections;
 
-
 /// <summary>
-/// Base readable collection interface.
+/// Base collection interface with invariant type.
 /// </summary>
-/// <typeparam name="T">element type.</typeparam>
-public interface RCollection<out T> : IReadOnlyCollection<T>
+/// <typeparam name="T">element type (invariant).</typeparam>
+public interface RCollection<T> : LCollection<T>
 {
-    /// <summary>
-    /// Count of items.
-    /// </summary>
-    public new int Count { get; }
 
     /// <summary>
-    /// Whether this collection has at least one item.
+    /// Checks whether this collection contains the given element.
+    /// The complexity of this operation depends on the implementation;
+    /// in non-set implementations ic could be <i>O(n)</i>.
     /// </summary>
-    public bool IsNotEmpty { get; }
+    /// <param name="element">the element to find.</param>
+    /// <returns>true, when the given element presents in this collection.</returns>
+    public bool Contains(T element);
 
-    /// <summary>
-    /// Whether this collection is empty.
-    /// </summary>
-    public bool IsEmpty { get; }
 }
 
 
 /// <summary>
-/// List of items.
+/// List of elements.
 /// </summary>
-/// <typeparam name="T">element type.</typeparam>
-public interface RList<T> : RCollection<T>, IReadOnlyList<T>
+/// <typeparam name="T">element type (invariant).</typeparam>
+public interface RList<T> : RCollection<T>, LList<T>
 {
-    /// <summary>
-    /// Item at the given index.
-    /// </summary>
-    /// <param name="index"></param>
-    public T At(int index);
 
     /// <summary>
-    /// Item at the given index.
+    /// Finds the index of the first occurance of the given element.
     /// </summary>
-    /// <param name="index"></param>
-    public new T this [int index] => At(index);
+    /// <param name="element">the element to look for.</param>
+    /// <param name="notFound">the pseudo-index, returned when the element is not found.</param>
+    /// <returns>the index of the element, or the pseudo-index when the element is not found.</returns>
+    public int IndexOf(T element, int notFound = int.MinValue);
 
     /// <summary>
-    /// The first item.
+    /// Finds the index of the last occurance of the given element.
     /// </summary>
-    /// <exception cref="IndexOutOfRangeException">when this collection is empty.</exception>
-    public T First { get; }
+    /// <param name="element">the element to look for.</param>
+    /// <param name="notFound">the pseudo-index, returned when the element is not found.</param>
+    /// <returns>the index of the element, or the pseudo-index when the element is not found.</returns>
+    public int LastIndexOf(T element, int notFound = int.MinValue);
 
-    /// <summary>
-    /// The last item.
-    /// </summary>
-    /// <exception cref="IndexOutOfRangeException">when this collection is empty.</exception>
-    public T Last { get; }
-
-    /// <summary>
-    /// Finds the index of the first occurance of the given item.
-    /// </summary>
-    /// <param name="item">the item to find.</param>
-    /// <param name="notFound">the pseudo-index, returned when the item is not found.</param>
-    /// <returns>the index of the item, or the pseudo-index when the item is not found.</returns>
-    public int IndexOf(T item, int notFound = int.MinValue);
 }
+
 
 
 /// <summary>
-/// Set of items.
+/// Set of elements.
 /// </summary>
 /// <typeparam name="T">element type.</typeparam>
-public interface RSet<T> : RCollection<T> //, IReadOnlySet<T>
+public interface RSet<T> : RCollection<T>, LSet<T>; //, IReadOnlySet<T>
+
+
+/// <summary>
+/// A set where the elements stay in a stable predicted order.
+/// </summary>
+/// <typeparam name="T">element type.</typeparam>
+public interface ROrderSet<T> : RSet<T>, RList<T>, LOrderSet<T>;
+
+
+/// <summary>
+/// A set of elements, that are sorted using the native (type-default) order.
+/// </summary>
+/// <typeparam name="T">element type.</typeparam>
+public interface RSortedSet<T> : ROrderSet<T>, LSortedSet<T>
+    where T : IComparable<T>
 {
-    /// <summary>
-    /// Checks whether the given item is in this set.
-    /// </summary>
-    /// <param name="item">the item to find.</param>
-    /// <returns></returns>
-    public /*new*/ bool Contains(T item);
+
+
 
 }
+
