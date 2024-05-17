@@ -12,8 +12,6 @@ namespace Util.Collections;
 /// <typeparam name="T">element type.</typeparam>
 public abstract class ImmArrayCollection<T> : ImmCollection<T>
 {
-    protected static readonly EqualityComparer<T> Eqr = EqualityComparer<T>.Default;
-
     protected readonly T[] Elements;
     protected readonly int N;
 
