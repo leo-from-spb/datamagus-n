@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -13,29 +14,65 @@ namespace Util.Collections;
 public abstract class ImmArrayCollection<T> : ImmCollection<T>
 {
     protected readonly T[] Elements;
+    protected readonly int Offset;
+    protected readonly int Limit;
     protected readonly int N;
+
+    protected readonly ArraySegment<T> ElementsSegment;
 
 
     internal ImmArrayCollection(T[] elements, bool copy)
     {
+        N = elements.Length;
+
         if (copy)
         {
-            N = elements.Length;
             Elements = new T[N];
             elements.CopyTo(Elements, 0);
         }
         else
         {
             Elements = elements;
-            N        = elements.Length;
+        }
+
+        ElementsSegment = Elements;
+        Offset          = 0;
+        Limit           = N;
+    }
+
+    internal ImmArrayCollection(T[] elements, int offset, int limit, bool copy)
+    {
+        Debug.Assert(limit <= elements.Length);
+        Debug.Assert(offset <= limit);
+        N = limit - offset;
+
+        if (copy)
+        {
+            Elements = new T[N];
+            Array.Copy(elements, offset, Elements, 0, N);
+            ElementsSegment = Elements;
+            Offset          = 0;
+            Limit           = N;
+        }
+        else
+        {
+            Elements        = elements;
+            ElementsSegment = new ArraySegment<T>(Elements, offset, N);
+            Offset          = offset;
+            Limit           = limit;
         }
     }
 
     internal ImmArrayCollection(int n)
     {
-        this.Elements = new T[n];
-        this.N        = n;
+        Elements = new T[n];
+        N        = n;
+        Offset   = 0;
+        Limit    = n;
+
+        ElementsSegment = Elements;
     }
+
 
 
     public override int  Count      => N;
@@ -44,21 +81,22 @@ public abstract class ImmArrayCollection<T> : ImmCollection<T>
 
     public override bool Contains(T element)
     {
-        foreach (T e in Elements)
-            if (Eqr.Equals(e, element))
+        for (int i = Offset; i < Limit; i++)
+            if (Eqr.Equals(Elements[i], element))
                 return true;
+
         return false;
     }
 
     public override bool Contains(Predicate<T> predicate)
     {
-        foreach (T e in Elements)
-            if (predicate(e))
+        for (int i = Offset; i < Limit; i++)
+            if (predicate(Elements[i]))
                 return true;
         return false;
     }
 
-    public override IEnumerator<T> GetEnumerator() => Elements.AsEnumerable().GetEnumerator();
+    public override IEnumerator<T> GetEnumerator() => ElementsSegment.GetEnumerator();
 
     public override string ToString()
     {
@@ -78,8 +116,9 @@ public abstract class ImmArrayCollection<T> : ImmCollection<T>
         b.Append(parens, 0, 1);
 
         bool was = false;
-        foreach (T e in Elements)
+        for (int i = Offset; i < Limit; i++)
         {
+            T e = Elements[i];
             b.Append(e is not null ? e.ToString() : "null");
             if (was) b.Append(", ");
             else was = true;
@@ -106,50 +145,54 @@ public sealed class ImmList<T> : ImmArrayCollection<T>, RList<T>
         : base(elements, copy)
     { }
 
+    internal ImmList(T[] elements, int offset, int limit, bool copy)
+        : base(elements, offset, limit, copy)
+    { }
+
 
     public T First => N > 0
-        ? Elements[0]
+        ? Elements[Offset]
         : throw new IndexOutOfRangeException($"Attempted to get the first element from an empty list");
 
     public T Last => N > 0
-        ? Elements[N - 1]
+        ? Elements[Limit - 1]
         : throw new IndexOutOfRangeException($"Attempted to get the last element from an empty list");
 
     public T At(int index) => 0 <= index && index < N
-        ? Elements[index]
+        ? Elements[Offset + index]
         : throw new IndexOutOfRangeException($"Attempted to get the element {index} from a list of {N} elements");
 
     public T this[int index] => At(index);
 
     public int IndexOf(T element, int notFound = Int32.MinValue)
     {
-        for (int i = 0; i < N; i++)
+        for (int i = Offset; i < Limit; i++)
             if (Eqr.Equals(Elements[i], element))
-                return i;
+                return i - Offset;
         return notFound;
     }
 
     public int LastIndexOf(T element, int notFound = Int32.MinValue)
     {
-        for (int i = N - 1; i >= 0; i--)
+        for (int i = Limit - 1; i >= Offset; i--)
             if (Eqr.Equals(Elements[i], element))
-                return i;
+                return i - Offset;
         return notFound;
     }
 
     public int IndexOf(Predicate<T> predicate, int notFound = Int32.MinValue)
     {
-        for (int i = 0; i < N; i++)
+        for (int i = Offset; i < Limit; i++)
             if (predicate(Elements[i]))
-                return i;
+                return i - Offset;
         return notFound;
     }
 
     public int LastIndexOf(Predicate<T> predicate, int notFound = Int32.MinValue)
     {
-        for (int i = N - 1; i >= 0; i--)
+        for (int i = Limit - 1; i >= Offset; i--)
             if (predicate(Elements[i]))
-                return i;
+                return i - Offset;
         return notFound;
     }
 }
