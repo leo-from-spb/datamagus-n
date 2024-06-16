@@ -131,10 +131,10 @@ public abstract class ConstArrayCollection<T> : ConstBaseCollection<T>
 
 
 /// <summary>
-/// Immutable list.
+/// Constant (immutable) list.
 /// </summary>
 /// <typeparam name="T">element type.</typeparam>
-public class ConstArrayList<T> : ConstArrayCollection<T>, RList<T>
+public class ConstArrayList<T> : ConstArrayCollection<T>, ImmList<T>
 {
 
     public ConstArrayList(IEnumerable<T> elements)
@@ -198,11 +198,22 @@ public class ConstArrayList<T> : ConstArrayCollection<T>, RList<T>
 }
 
 
-
-public class ConstArraySortedSet<T> : ConstArrayList<T>, RSortedSet<T>
+/// <summary>
+/// Constant (immutable) sorted set.
+/// All elements are uniquely sorted.
+/// </summary>
+/// <typeparam name="T">element type (invariant).</typeparam>
+public class ConstArraySortedSet<T> : ConstArrayList<T>, ImmSortedSet<T>
     where T : IComparable<T>
 {
 
+    /// <summary>
+    /// Constructs a set of already sorted and deduplicated elements.
+    /// </summary>
+    /// <param name="elements">already sorted and deduplicated elements.</param>
+    /// <param name="offset">offset in the array.</param>
+    /// <param name="limit">limit in the array.</param>
+    /// <param name="copy">whether should this constructor make its own copy.</param>
     internal ConstArraySortedSet(T[] elements, int offset, int limit, bool copy)
         : base(elements, offset, limit, copy)
     { }
@@ -218,6 +229,5 @@ public class ConstArraySortedSet<T> : ConstArrayList<T>, RSortedSet<T>
         int index = Array.BinarySearch<T>(Elements, Offset, N, element);
         return index >= 0 ? index : notFound;
     }
-    
 
 }
