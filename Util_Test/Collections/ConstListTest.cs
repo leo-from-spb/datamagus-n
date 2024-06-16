@@ -5,13 +5,13 @@ namespace Util.Collections;
 
 
 [TestFixture]
-public class ImmListTest
+public class ConstListTest
 {
 
     [Test, Order(10)]
     public void Basic()
     {
-        ImmList<uint> list = new ImmList<uint>(new uint[] { 26u, 13u, 88u, 74u });
+        ConstArrayList<uint> list = new ConstArrayList<uint>(new uint[] { 26u, 13u, 88u, 74u });
         list.Verify
         (
             l => l.IsNotEmpty.ShouldBeTrue(),
@@ -27,7 +27,7 @@ public class ImmListTest
     [Test, Order(11)]
     public void Basic_R()
     {
-        RList<uint> list = new ImmList<uint>(new uint[] { 26u, 13u, 88u, 74u });
+        RList<uint> list = new ConstArrayList<uint>(new uint[] { 26u, 13u, 88u, 74u });
         list.Verify
         (
             l => l.IsNotEmpty.ShouldBeTrue(),
@@ -43,7 +43,7 @@ public class ImmListTest
     [Test, Order(12)]
     public void Basic_L()
     {
-        LList<uint> list = new ImmList<uint>(new uint[] { 26u, 13u, 88u, 74u });
+        LList<uint> list = new ConstArrayList<uint>(new uint[] { 26u, 13u, 88u, 74u });
         list.Verify
         (
             l => l.IsNotEmpty.ShouldBeTrue(),
@@ -59,7 +59,7 @@ public class ImmListTest
     [Test, Order(30)]
     public void Search()
     {
-        ImmList<uint> list = new ImmList<uint>(new uint[] { 1u, 44u, 3u, 44u, 5u });
+        ConstArrayList<uint> list = new ConstArrayList<uint>(new uint[] { 1u, 44u, 3u, 44u, 5u });
         list.Verify
         (
             l => l.IndexOf(44u).ShouldBe(1),
@@ -74,7 +74,7 @@ public class ImmListTest
     [Test, Order(31)]
     public void Search_R()
     {
-        RList<uint> list = new ImmList<uint>(new uint[] { 1u, 44u, 3u, 44u, 5u });
+        RList<uint> list = new ConstArrayList<uint>(new uint[] { 1u, 44u, 3u, 44u, 5u });
         list.Verify
         (
             l => l.IndexOf(44u).ShouldBe(1),
@@ -89,7 +89,7 @@ public class ImmListTest
     [Test, Order(32)]
     public void Search_L()
     {
-        LList<uint> list = new ImmList<uint>(new uint[] { 1u, 44u, 3u, 44u, 5u });
+        LList<uint> list = new ConstArrayList<uint>(new uint[] { 1u, 44u, 3u, 44u, 5u });
         list.Verify
         (
             l => l.IndexOf(x => x == 44u).ShouldBe(1),
@@ -101,7 +101,7 @@ public class ImmListTest
     [Test, Order(40)]
     public void Search_notFound()
     {
-        ImmList<uint> list = new ImmList<uint>(new uint[] { 1u, 22u, 333u, 4444u });
+        ConstArrayList<uint> list = new ConstArrayList<uint>(new uint[] { 1u, 22u, 333u, 4444u });
         list.Verify
         (
             l => l.IndexOf(100u).ShouldBeNegative(),
@@ -120,7 +120,7 @@ public class ImmListTest
     [Test, Order(41)]
     public void Search_notFound_R()
     {
-        RList<uint> list = new ImmList<uint>(new uint[] { 1u, 22u, 333u, 4444u });
+        RList<uint> list = new ConstArrayList<uint>(new uint[] { 1u, 22u, 333u, 4444u });
         list.Verify
         (
             l => l.IndexOf(100u).ShouldBeNegative(),
@@ -139,7 +139,7 @@ public class ImmListTest
     [Test, Order(42)]
     public void Search_notFound_L()
     {
-        LList<uint> list = new ImmList<uint>(new uint[] { 1u, 22u, 333u, 4444u });
+        LList<uint> list = new ConstArrayList<uint>(new uint[] { 1u, 22u, 333u, 4444u });
         list.Verify
         (
             l => l.IndexOf(x => x == 200u).ShouldBeNegative(),
@@ -155,7 +155,7 @@ public class ImmListTest
     public void Segment()
     {
         uint[]        array = [11u, 22u, 33u, 44u, 55u, 66u, 77u, 88u];
-        ImmList<uint> list  = new ImmList<uint>(array, 2, 6, false);
+        ConstArrayList<uint> list  = new ConstArrayList<uint>(array, 2, 6, false);
         list.Verify
         (
             l => l.Count.ShouldBe(4),
@@ -172,7 +172,7 @@ public class ImmListTest
     public void Segment_Search()
     {
         uint[]        array = [11u, 22u, 33u, 44u, 55u, 66u, 77u, 88u];
-        ImmList<uint> list  = new ImmList<uint>(array, 2, 6, false);
+        ConstArrayList<uint> list  = new ConstArrayList<uint>(array, 2, 6, false);
         list.Verify
         (
             l => l.IndexOf(11u).ShouldBeNegative(),
@@ -215,7 +215,7 @@ public class ImmListTest
     {
         uint[] array = [11u, 22u, 33u, 44u, 55u, 66u, 77u, 88u];
 
-        IEnumerable<uint> list = new ImmList<uint>(array, 2, 6, false);
+        IEnumerable<uint> list = new ConstArrayList<uint>(array, 2, 6, false);
 
         string iterated = list.JoinToString(func: x => x.ToString());
 

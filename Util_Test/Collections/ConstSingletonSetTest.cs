@@ -4,13 +4,13 @@ namespace Util.Collections;
 
 
 [TestFixture]
-public class ImmSingletonSetTest
+public class ConstSingletonSetTest
 {
 
     [Test]
     public void SingletonSet_Basic()
     {
-        var sing = new ImmSingletonSortedSet<ulong>(26uL);
+        var sing = new ConstSingletonSortedSet<ulong>(26uL);
 
         sing.Verify
         (
@@ -36,7 +36,7 @@ public class ImmSingletonSetTest
     [Test]
     public void SingletonSet_Basic_R()
     {
-        ROrderSet<ulong> sing = new ImmSingletonSortedSet<ulong>(26uL);
+        ROrderSet<ulong> sing = new ConstSingletonSortedSet<ulong>(26uL);
 
         sing.Verify
         (
@@ -62,7 +62,7 @@ public class ImmSingletonSetTest
     [Test]
     public void SingletonSet_WhenNotFound()
     {
-        ROrderSet<ulong> sing = new ImmSingletonSet<ulong>(42uL);
+        ROrderSet<ulong> sing = new ConstSingletonSet<ulong>(42uL);
 
         sing.Verify
         (
@@ -75,7 +75,7 @@ public class ImmSingletonSetTest
     [Test]
     public void SingletonSet_Enumerate()
     {
-        IEnumerable<ulong> sing = new ImmSingletonSortedSet<ulong>(1000uL);
+        IEnumerable<ulong> sing = new ConstSingletonSortedSet<ulong>(1000uL);
 
         List<ulong> result = new List<ulong>();
 

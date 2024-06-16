@@ -32,6 +32,40 @@ public static class Assertions
         CheckContainsAll("collection", set, expectedItems);
     }
 
+    public static void ShouldContainExactly<E>(this IReadOnlyList<E>? list, params E[] expectedItems)
+    {
+        if (list is null) Fail("Actual list is null when expected a list of the following items " + expectedItems.Describe());
+        if (list.IsEmpty() && expectedItems.IsNotEmpty()) Fail("Actual list is empty when expected a list of the following items " + expectedItems.Describe());
+        int  n  = list.Count;
+        int  l  = expectedItems.Length;
+        bool ok = n == l;
+        if (ok)
+        {
+            var comparer = EqualityComparer<E>.Default;
+            for (int i = 0; i < n; i++)
+            {
+                ok = comparer.Equals(list[i], expectedItems[i]);
+                if (ok) break;
+            }
+        }
+
+        if (!ok)
+        {
+            string expectString = expectedItems.JoinToString(func: x => $"{x}");
+            string actualString = list.JoinToString(func: x => $"{x}");
+            string ns           = n != l ? $"{n} " : "";
+            string message =
+                $"Expected the list containing {l} specified items\n"
+              + $"but got one ({list.GetType().Name}) contains {ns}items that don't match the expected ones.\n"
+              + $"-------- Given items ----------\n"
+              + $"{actualString}\n"
+              + $"-------- Expected items -------\n"
+              + $"{expectString}\n"
+              + $"-------------------------------";
+            Fail(message);
+        }
+    }
+
     private static void CheckContainsAll<E>(string collectionWord, IReadOnlyCollection<E>? collection, E[] expectedItems)
     {
         if (collection is null) Fail($"Actual {collectionWord} is null when expect a {collectionWord} with the following items: " + expectedItems.Describe());

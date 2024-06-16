@@ -2,13 +2,48 @@ namespace Util.Collections;
 
 
 [TestFixture]
-public class ImmEmptySetTest
+public class ConstEmptySetTest
 {
 
     [Test]
-    public void EmptyListSet_Basic()
+    public void EmptyListSet_Basic_L()
     {
-        ROrderSet<ulong> empty = ImmEmptySet<ulong>.Instance;
+        LOrderSet<ulong> empty = ConstEmptySet<ulong>.Instance;
+
+        empty.Verify
+        (
+            e => e.IsEmpty.ShouldBeTrue(),
+            e => e.IsNotEmpty.ShouldBeFalse(),
+            e => e.Count.ShouldBe(0),
+            e => e.Contains(_ => true).ShouldBeFalse(),
+            e => e.IndexOf(_ => true).ShouldBeNegative(),
+            e => e.LastIndexOf(_ => true).ShouldBeNegative()
+        );
+    }
+
+    [Test]
+    public void EmptyListSet_Basic_R()
+    {
+        ROrderSet<ulong> empty = ConstEmptySet<ulong>.Instance;
+
+        empty.Verify
+        (
+            e => e.IsEmpty.ShouldBeTrue(),
+            e => e.IsNotEmpty.ShouldBeFalse(),
+            e => e.Count.ShouldBe(0),
+            e => e.Contains(0uL).ShouldBeFalse(),
+            e => e.Contains(_ => true).ShouldBeFalse(),
+            e => e.IndexOf(26uL).ShouldBeNegative(),
+            e => e.IndexOf(_ => true).ShouldBeNegative(),
+            e => e.LastIndexOf(26uL).ShouldBeNegative(),
+            e => e.LastIndexOf(_ => true).ShouldBeNegative()
+        );
+    }
+
+    [Test]
+    public void EmptyListSet_Basic_Imm()
+    {
+        ImmOrderSet<ulong> empty = ConstEmptySet<ulong>.Instance;
 
         empty.Verify
         (
@@ -27,7 +62,7 @@ public class ImmEmptySetTest
     [Test]
     public void EmptyListSet_WhenNotFound()
     {
-        ROrderSet<ulong> empty = ImmEmptySet<ulong>.Instance;
+        ROrderSet<ulong> empty = ConstEmptySet<ulong>.Instance;
 
         empty.Verify
         (
@@ -41,7 +76,7 @@ public class ImmEmptySetTest
     [Test]
     public void EmptySortedSet_Basic()
     {
-        RSortedSet<ulong> empty = ImmEmptySortedSet<ulong>.Instance;
+        RSortedSet<ulong> empty = ConstEmptySortedSet<ulong>.Instance;
 
         empty.Verify
         (
@@ -60,7 +95,7 @@ public class ImmEmptySetTest
     [Test]
     public void EmptySortedSet_WhenNotFound()
     {
-        RSortedSet<ulong> empty = ImmEmptySortedSet<ulong>.Instance;
+        RSortedSet<ulong> empty = ConstEmptySortedSet<ulong>.Instance;
 
         empty.Verify
         (

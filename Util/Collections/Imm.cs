@@ -1,24 +1,36 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Util.Collections;
 
 public static class Imm
 {
 
+    public static ConstArraySortedSet<T> ToImmSortedSet<T>(IEnumerable<T> elements)
+        where T : IComparable<T>
+    {
+        T[] array = elements.ToArray();
+        ImmAlg.SortUnique(array, out int n);
+        if (n < array.Length / 2)
+            Array.Resize(ref array, n);
+        return new ConstArraySortedSet<T>(array, 0, n, false);
+    }
+
+
     /// <summary>
     /// Empty list and set.
     /// </summary>
     /// <typeparam name="T">element type</typeparam>
     /// <returns>the empty instance.</returns>
-    public static ROrderSet<T> EmptySet<T>() => ImmEmptySet<T>.Instance;
+    public static ROrderSet<T> EmptySet<T>() => ConstEmptySet<T>.Instance;
 
     /// <summary>
     /// Empty list and sorted set.
     /// </summary>
     /// <typeparam name="T">element type</typeparam>
     /// <returns>the empty instance.</returns>
-    public static RSortedSet<T> EmptySortedSet<T>() where T : IComparable<T> => ImmEmptySortedSet<T>.Instance;
+    public static RSortedSet<T> EmptySortedSet<T>() where T : IComparable<T> => ConstEmptySortedSet<T>.Instance;
 
 
 

@@ -8,10 +8,10 @@ namespace Util.Collections;
 
 
 /// <summary>
-/// Array-based immutable collection.
+/// Constant (immutable) array-based collection.
 /// </summary>
 /// <typeparam name="T">element type.</typeparam>
-public abstract class ImmArrayCollection<T> : ImmCollection<T>
+public abstract class ConstArrayCollection<T> : ConstBaseCollection<T>
 {
     protected readonly T[] Elements;
     protected readonly int Offset;
@@ -21,7 +21,7 @@ public abstract class ImmArrayCollection<T> : ImmCollection<T>
     protected readonly ArraySegment<T> ElementsSegment;
 
 
-    internal ImmArrayCollection(T[] elements, bool copy)
+    internal ConstArrayCollection(T[] elements, bool copy)
     {
         N = elements.Length;
 
@@ -40,7 +40,7 @@ public abstract class ImmArrayCollection<T> : ImmCollection<T>
         Limit           = N;
     }
 
-    internal ImmArrayCollection(T[] elements, int offset, int limit, bool copy)
+    internal ConstArrayCollection(T[] elements, int offset, int limit, bool copy)
     {
         Debug.Assert(limit <= elements.Length);
         Debug.Assert(offset <= limit);
@@ -63,7 +63,7 @@ public abstract class ImmArrayCollection<T> : ImmCollection<T>
         }
     }
 
-    internal ImmArrayCollection(int n)
+    internal ConstArrayCollection(int n)
     {
         Elements = new T[n];
         N        = n;
@@ -134,18 +134,18 @@ public abstract class ImmArrayCollection<T> : ImmCollection<T>
 /// Immutable list.
 /// </summary>
 /// <typeparam name="T">element type.</typeparam>
-public sealed class ImmList<T> : ImmArrayCollection<T>, RList<T>
+public class ConstArrayList<T> : ConstArrayCollection<T>, RList<T>
 {
 
-    public ImmList(IEnumerable<T> elements)
+    public ConstArrayList(IEnumerable<T> elements)
         : base(elements.ToArray(), false)
     { }
 
-    internal ImmList(T[] elements, bool copy)
+    internal ConstArrayList(T[] elements, bool copy)
         : base(elements, copy)
     { }
 
-    internal ImmList(T[] elements, int offset, int limit, bool copy)
+    internal ConstArrayList(T[] elements, int offset, int limit, bool copy)
         : base(elements, offset, limit, copy)
     { }
 
@@ -164,7 +164,7 @@ public sealed class ImmList<T> : ImmArrayCollection<T>, RList<T>
 
     public T this[int index] => At(index);
 
-    public int IndexOf(T element, int notFound = Int32.MinValue)
+    public virtual int IndexOf(T element, int notFound = Int32.MinValue)
     {
         for (int i = Offset; i < Limit; i++)
             if (Eqr.Equals(Elements[i], element))
@@ -172,7 +172,7 @@ public sealed class ImmList<T> : ImmArrayCollection<T>, RList<T>
         return notFound;
     }
 
-    public int LastIndexOf(T element, int notFound = Int32.MinValue)
+    public virtual int LastIndexOf(T element, int notFound = Int32.MinValue)
     {
         for (int i = Limit - 1; i >= Offset; i--)
             if (Eqr.Equals(Elements[i], element))
@@ -195,4 +195,29 @@ public sealed class ImmList<T> : ImmArrayCollection<T>, RList<T>
                 return i - Offset;
         return notFound;
     }
+}
+
+
+
+public class ConstArraySortedSet<T> : ConstArrayList<T>, RSortedSet<T>
+    where T : IComparable<T>
+{
+
+    internal ConstArraySortedSet(T[] elements, int offset, int limit, bool copy)
+        : base(elements, offset, limit, copy)
+    { }
+
+    public override int IndexOf(T element, int notFound = Int32.MinValue)
+    {
+        int index = Array.BinarySearch<T>(Elements, Offset, N, element);
+        return index >= 0 ? index : notFound;
+    }
+
+    public override int LastIndexOf(T element, int notFound = Int32.MinValue)
+    {
+        int index = Array.BinarySearch<T>(Elements, Offset, N, element);
+        return index >= 0 ? index : notFound;
+    }
+    
+
 }
