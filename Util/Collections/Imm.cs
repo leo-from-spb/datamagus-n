@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Util.Collections.ConstImp;
 
 namespace Util.Collections;
 
@@ -12,14 +13,16 @@ public static class Imm
     /// </summary>
     /// <typeparam name="T">element type</typeparam>
     /// <returns>the empty instance.</returns>
-    public static ImmOrderSet<T> EmptySet<T>() => ConstEmptySet<T>.Instance;
+    public static ImmOrderSet<T> EmptySet<T>()
+        => ConstEmptySet<T>.Instance;
 
     /// <summary>
     /// Empty list and sorted set.
     /// </summary>
     /// <typeparam name="T">element type</typeparam>
     /// <returns>the empty instance.</returns>
-    public static ImmSortedSet<T> EmptySortedSet<T>() where T : IComparable<T> => ConstEmptySortedSet<T>.Instance;
+    public static ImmSortedSet<T> EmptySortedSet<T>() where T : IComparable<T>
+        => ConstEmptySortedSet<T>.Instance;
 
 
     /// <summary>
@@ -38,13 +41,8 @@ public static class Imm
     /// <param name="elements">elements.</param>
     /// <typeparam name="T">element type.</typeparam>
     /// <returns>list of given elements.</returns>
-    public static ImmList<T> ToImmList<T>(this Span<T> elements) =>
-        elements.Length switch
-        {
-            0 => ConstEmptySet<T>.Instance,
-            1 => new ConstSingletonSet<T>(elements[0]),
-            _ => new ConstArrayList<T>(elements.ToArray(), false)
-        };
+    public static ImmList<T> ToImmList<T>(this Span<T> elements)
+        => ConstFactory.MakeList(elements);
 
     /// <summary>
     /// Returns a list of given elements, preserving the order.
@@ -52,13 +50,32 @@ public static class Imm
     /// <param name="elements">elements.</param>
     /// <typeparam name="T">element type.</typeparam>
     /// <returns>list of given elements.</returns>
-    public static ImmList<T> ToImmList<T>(this ReadOnlySpan<T> elements) =>
-        elements.Length switch
-        {
-            0 => ConstEmptySet<T>.Instance,
-            1 => new ConstSingletonSet<T>(elements[0]),
-            _ => new ConstArrayList<T>(elements.ToArray(), false)
-        };
+    public static ImmList<T> ToImmList<T>(this ReadOnlySpan<T> elements)
+        => ConstFactory.MakeList(elements);
+
+    /// <summary>
+    /// Returns a list of given elements, preserving the order.
+    /// </summary>
+    /// <param name="elements">elements.</param>
+    /// <typeparam name="T">element type.</typeparam>
+    /// <returns>list of given elements.</returns>
+    public static ImmList<T> ToImmList<T>(this IReadOnlyCollection<T> elements)
+    {
+        if (elements is ImmList<T> il) return il;
+        return ConstFactory.MakeList(elements);
+    }
+
+    /// <summary>
+    /// Returns a list of given elements, preserving the order.
+    /// </summary>
+    /// <param name="elements">elements.</param>
+    /// <typeparam name="T">element type.</typeparam>
+    /// <returns>list of given elements.</returns>
+    public static ImmList<T> ToImmList<T>(this IEnumerable<T> elements)
+    {
+        if (elements is ImmList<T> il) return il;
+        return ConstFactory.MakeList(elements);
+    }
 
 
     /// <summary>
@@ -79,14 +96,7 @@ public static class Imm
     /// <returns>sorted set of given elements.</returns>
     public static ImmSortedSet<T> ToImmSortedSet<T>(this Span<T> elements)
         where T: IComparable<T>
-    {
-        int n = elements.Length;
-        if (n == 0) return ConstEmptySortedSet<T>.Instance;
-        if (n == 1) return new ConstSingletonSortedSet<T>(elements[0]);
-
-        T[] array = elements.ToArray(); // copies elements into a new array
-        return MakeSortedSet(array);
-    }
+        => ConstFactory.MakeSortedSet(elements);
 
     /// <summary>
     /// Sorts the given elements, remove duplicates, and return a sorted set.
@@ -95,15 +105,8 @@ public static class Imm
     /// <typeparam name="T">element type.</typeparam>
     /// <returns>sorted set of given elements.</returns>
     public static ImmSortedSet<T> ToImmSortedSet<T>(this ReadOnlySpan<T> elements)
-        where T: IComparable<T>
-    {
-        int n = elements.Length;
-        if (n == 0) return ConstEmptySortedSet<T>.Instance;
-        if (n == 1) return new ConstSingletonSortedSet<T>(elements[0]);
-
-        T[] array = elements.ToArray(); // copies elements into a new array
-        return MakeSortedSet(array);
-    }
+        where T : IComparable<T>
+        => ConstFactory.MakeSortedSet(elements);
 
     /// <summary>
     /// Collects the given elements into an array, sort them and remove duplicates,
@@ -117,19 +120,9 @@ public static class Imm
     {
         if (elements is ImmSortedSet<T> iss) return iss;
         T[] array = elements.ToArray();
-        return MakeSortedSet(array);
+        return ConstFactory.MakeSortedSetUsingCopiedArray(array);
     }
 
-    private static ImmSortedSet<T> MakeSortedSet<T>(T[] array)
-        where T : IComparable<T>
-    {
-        int n = array.Length;
-        if (n == 0) return ConstEmptySortedSet<T>.Instance;
-        if (n == 1) return new ConstSingletonSortedSet<T>(array[0]);
-        ImmAlg.SortUnique(array, out n);
-        if (n == 1) return new ConstSingletonSortedSet<T>(array[0]);
-        return new ConstArraySortedSet<T>(array, 0, n, false);
-    }
 
 
 

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Util.Collections.ConstImp;
 using Util.Extensions;
 
 namespace Util.Collections;
@@ -25,7 +26,9 @@ public class ImmTest
     [Test] public void ListOf_Basic_0_Empty() => ListOf_Basic_0_Verify(Imm.EmptySet<ulong>());
     [Test] public void ListOf_Basic_0_Array() => ListOf_Basic_0_Verify(Imm.ListOf(emptyArrayOfULong));
     [Test] public void ListOf_Basic_0_Param() => ListOf_Basic_0_Verify(Imm.ListOf<ulong>());
-    [Test] public void ListOf_Basic_0_Span()  => ListOf_Basic_0_Verify(new Span<ulong>().ToImmList());
+    [Test] public void ListOf_Basic_0_MSpan() => ListOf_Basic_0_Verify(new Span<ulong>().ToImmList());
+    [Test] public void ListOf_Basic_0_IEnum() => ListOf_Basic_0_Verify(new Empties.EmptyEnumerable<ulong>().ToImmList());
+    [Test] public void ListOf_Basic_0_EColl() => ListOf_Basic_0_Verify(new Empties.EmptyCollection<ulong>().ToImmList());
 
     private static void ListOf_Basic_0_Verify(ImmList<ulong> list) =>
         list.Verify
@@ -39,6 +42,7 @@ public class ImmTest
     [Test] public void ListOf_Basic_1_Param() => ListOf_Basic_1_Verify(Imm.ListOf(26uL));
     [Test] public void ListOf_Basic_1_MSpan() => ListOf_Basic_1_Verify(singletonArray_26.AsSpan().ToImmList());
     [Test] public void ListOf_Basic_1_RSpan() => ListOf_Basic_1_Verify(singletonArray_26.AsReadOnlySpan().ToImmList());
+    [Test] public void ListOf_Basic_1_Coll1() => ListOf_Basic_1_Verify(new List<ulong>(singletonArray_26).ToImmList());
 
     private static void ListOf_Basic_1_Verify(ImmList<ulong> list) =>
         list.Verify
@@ -54,6 +58,8 @@ public class ImmTest
     [Test] public void ListOf_Basic_3_Param() => ListOf_Basic_3_Verify(Imm.ListOf(26uL, 44uL, 74uL));
     [Test] public void ListOf_Basic_3_MSpan() => ListOf_Basic_3_Verify(basicArray_26_44_74.AsSpan().ToImmList());
     [Test] public void ListOf_Basic_3_RSpan() => ListOf_Basic_3_Verify(basicArray_26_44_74.AsReadOnlySpan().ToImmList());
+    [Test] public void ListOf_Basic_3_IEnum() => ListOf_Basic_3_Verify((basicArray_26_44_74 as IEnumerable<ulong>).ToImmList());
+    [Test] public void ListOf_Basic_3_Coll3() => ListOf_Basic_3_Verify(new List<ulong>(basicArray_26_44_74).ToImmList());
 
     private static void ListOf_Basic_3_Verify(ImmList<ulong> list) =>
         list.Verify

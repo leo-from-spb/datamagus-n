@@ -1,4 +1,4 @@
-namespace Util.Collections;
+namespace Util.Collections.ConstImp;
 
 
 [TestFixture]

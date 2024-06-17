@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 
-namespace Util.Collections;
+namespace Util.Collections.ConstImp;
 
-public static class ImmAlg
+
+internal static class ConstCollectionAlgorithm
 {
 
-    public static void SortUnique<T>(T[] array, out int newLength)
+    internal static void SortUnique<T>(T[] array, out int newLength)
     {
         int n = array.Length;
         if (n < 2)

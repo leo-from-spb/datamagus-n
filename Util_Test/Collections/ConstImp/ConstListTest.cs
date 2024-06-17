@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Util.Extensions;
 
-namespace Util.Collections;
+namespace Util.Collections.ConstImp;
 
 
 [TestFixture]

@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
-namespace Util.Collections;
+namespace Util.Collections.ConstImp;
 
 
 /// <summary>
@@ -138,6 +138,10 @@ public class ConstArrayList<T> : ConstArrayCollection<T>, ImmList<T>
 {
 
     public ConstArrayList(IEnumerable<T> elements)
+        : base(elements.ToArray(), false)
+    { }
+
+    public ConstArrayList(IReadOnlyCollection<T> elements)
         : base(elements.ToArray(), false)
     { }
 
