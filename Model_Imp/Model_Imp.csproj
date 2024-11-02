@@ -14,11 +14,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Remove="Imm\ModelConceptImmImp.cs" />
-      <Compile Remove="Imm\ModelCommonImmImp.cs" />
-      <Compile Remove="Imm\ModelVisualityImmImp.cs" />
-      <Compile Remove="_generated_\ModelConceptImmImp.cs" />
-      <Compile Remove="_generated_\ModelCommonImmImp.cs" />
     </ItemGroup>
 
 </Project>
