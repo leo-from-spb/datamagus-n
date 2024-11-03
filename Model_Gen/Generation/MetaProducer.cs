@@ -32,15 +32,15 @@ internal class MetaProducer (MetaModel mm)
     }
 
 
-    internal void produceCode()
+    internal void ProduceCode()
     {
-        produceImmutableClasses(SegmentKind.soCommon, ImmCommonFilePath);
-        produceImmutableClasses(SegmentKind.soConcept, ImmConceptFilePath);
-        produceImmutableClasses(SegmentKind.soVisuality, ImmVisualityFilePath);
+        ProduceImmutableClasses(SegmentKind.soCommon, ImmCommonFilePath);
+        ProduceImmutableClasses(SegmentKind.soConcept, ImmConceptFilePath);
+        ProduceImmutableClasses(SegmentKind.soVisuality, ImmVisualityFilePath);
     }
 
 
-    private void produceImmutableClasses(SegmentKind segmentKind, string filePath)
+    private void ProduceImmutableClasses(SegmentKind segmentKind, string filePath)
     {
         CodeBuilder cb = new CodeBuilder();
         cb.Append("""
@@ -62,13 +62,13 @@ internal class MetaProducer (MetaModel mm)
 
         foreach (var matter in segmentMatters)
         {
-            produceImmMatter(cb, matter);
+            ProduceImmMatter(cb, matter);
         }
         
         WriteFile(filePath, cb.Result);
     }
 
-    private void produceImmMatter(CodeBuilder cb, MetaMatter m)
+    private void ProduceImmMatter(CodeBuilder cb, MetaMatter m)
     {
         string classModifier = m.IsConcrete ? "sealed" : "abstract";
         cb.EmptyLine();
@@ -76,15 +76,15 @@ internal class MetaProducer (MetaModel mm)
         cb.Phrase("public", classModifier, "class", m.Imm.ClassName, ":", m.Imm.BaseClassName + ",", m.IntfName);
         cb.Block("{", "}", () =>
                            {
-                               produceLocalVariablesOnTop(cb, m);
-                               produceImmMatterConstructor(cb, m);
-                               produceImmMatterFamilies(cb, m);
-                               produceImmMatterProperties(cb, m);
+                               ProduceLocalVariablesOnTop(cb, m);
+                               ProduceImmMatterConstructor(cb, m);
+                               ProduceImmMatterFamilies(cb, m);
+                               ProduceImmMatterProperties(cb, m);
                            });
         cb.EmptyLine();
     }
 
-    private void produceLocalVariablesOnTop(CodeBuilder cb, MetaMatter m)
+    private void ProduceLocalVariablesOnTop(CodeBuilder cb, MetaMatter m)
     {
         if (m.IsMedium && m.IsConcrete)
         {
@@ -94,7 +94,7 @@ internal class MetaProducer (MetaModel mm)
         }
     }
 
-    private void produceImmMatterConstructor(CodeBuilder cb, MetaMatter m)
+    private void ProduceImmMatterConstructor(CodeBuilder cb, MetaMatter m)
     {
         var familyParameters =
             from f in m.AllFamilies.Values
@@ -137,8 +137,9 @@ internal class MetaProducer (MetaModel mm)
         cb.Phrase("}");
     }
 
-    private void produceImmMatterFamilies(CodeBuilder cb, MetaMatter m)
+    private void ProduceImmMatterFamilies(CodeBuilder cb, MetaMatter m)
     {
+        if (m.AllFamilies.IsEmpty()) return;
         cb.EmptyLine();
         cb.Phrase(@"// Families \\");        
         foreach (var f in m.AllFamilies.Values)
@@ -153,7 +154,7 @@ internal class MetaProducer (MetaModel mm)
         }
     }
 
-    private void produceImmMatterProperties(CodeBuilder cb, MetaMatter m)
+    private void ProduceImmMatterProperties(CodeBuilder cb, MetaMatter m)
     {
         cb.EmptyLine();
         cb.Phrase(@"// Properties \\");        

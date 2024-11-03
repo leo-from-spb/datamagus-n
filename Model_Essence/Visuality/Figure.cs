@@ -12,6 +12,9 @@ public interface DiaFigure : TermMatter
 public interface DiaShape : DiaFigure
 {
     [MatterProperty]
+    int LayerOrder { get; }
+
+    [MatterProperty]
     string? Color { get; }
 }
 

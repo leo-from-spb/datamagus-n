@@ -24,7 +24,7 @@ internal static class ModelGenerator
             Console.WriteLine($"\t{m}");
         }
         
-        mp.produceCode();
+        mp.ProduceCode();
         
     }
     

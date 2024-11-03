@@ -32,6 +32,11 @@ public interface DiaTemplate : DiaSurface
 /// </summary>
 public interface DiaPage : DiaSurface
 {
-
+    /// <summary>
+    /// Number of the page.
+    /// Zero means no number.
+    /// </summary>
+    [MatterProperty]
+    ushort PageNr { get; }
 
 }
