@@ -79,6 +79,7 @@ internal class MetaProducer (MetaModel mm)
                                ProduceLocalVariablesOnTop(cb, m);
                                ProduceImmMatterConstructor(cb, m);
                                ProduceImmMatterFamilies(cb, m);
+                               ProduceImmMatterRefrences(cb, m);
                                ProduceImmMatterProperties(cb, m);
                            });
         cb.EmptyLine();
@@ -99,6 +100,9 @@ internal class MetaProducer (MetaModel mm)
         var familyParameters =
             from f in m.AllFamilies.Values
             select $"IEnumerable<{f.Child.IntfName}> {f.FamilyVarName}";
+        var refParameters =
+            from r in m.AllRefs.Values
+            select $"{r.InnerTypeSpec} {r.RefLowName}";
         var propertyParameters =
             from p in m.AllProperties.Values
             where p.ProName != "Id" && p.ProName != "Version"
@@ -106,6 +110,9 @@ internal class MetaProducer (MetaModel mm)
         var familyAssignments =
             from f in m.AllFamilies.Values
             select $"this.{f.FamilyVarName} = new Imm{f.FamilyTypeName}<{f.Child.IntfName}>({f.FamilyVarName}.ToArray());";
+        var refAssignments =
+            from r in m.AllRefs.Values
+            select $"this.{r.RefName} = new Imm{r.RefWord}<{r.TargetMatter.IntfName}>({r.RefLowName});";
         var propertyAssignments =
             from p in m.AllProperties.Values
             where !p.ImplementedInMatter
@@ -113,10 +120,12 @@ internal class MetaProducer (MetaModel mm)
 
         var parameters = new List<string>();
         parameters.AddRange(familyParameters);
+        parameters.AddRange(refParameters);
         parameters.AddRange(propertyParameters);
 
         var assignments = new List<string>();
         assignments.AddRange(familyAssignments);
+        assignments.AddRange(refAssignments);
         assignments.AddRange(propertyAssignments);
 
         var realConstructorParameters = m.HasName ? "uint id, uint version, string? name," : "uint id, uint version,";
@@ -130,10 +139,12 @@ internal class MetaProducer (MetaModel mm)
         cb.Phrase(": base(", baseConstructorParameters, ")");
         cb.Unindent();
         cb.Phrase("{");
+
         cb.Indent();
         assignments.ForEach(a => cb.Phrase(a));
         if (m.IsMedium && m.IsConcrete) cb.Phrase("families = new Family<Matter>[] {", thisFamilies, "};");
         cb.Unindent();
+
         cb.Phrase("}");
     }
 
@@ -154,8 +165,33 @@ internal class MetaProducer (MetaModel mm)
         }
     }
 
+    private void ProduceImmMatterRefrences(CodeBuilder cb, MetaMatter m)
+    {
+        cb.EmptyLine();
+        cb.Phrase(@"// References \\");
+
+        if (!m.AllRefs.IsEmpty())
+        {
+            foreach (var r in m.AllRefs.Values)
+            {
+                var implType = (r.Poly ? "ImmPolyRef" : "ImmMonoRef") + '<' + r.TargetMatter.IntfName + '>';
+                var intfType = (r.Poly ? "PolyRef" : "MonoRef") + '<' + r.TargetMatter.IntfName + '>';
+                cb.Phrase("public", implType, r.RefName, "{ get; }");
+                cb.Phrase(intfType, r.Matter.IntfName + '.' + r.RefName, "=>", r.RefName + ";");
+            }
+            cb.EmptyLine();
+            var refNames = m.AllRefs.Values.JoinToString(r => r.RefName);
+            cb.Phrase("public override IReadOnlyList<Ref<Matter>> AllRefs => new Ref<Matter>[] {", refNames, "};");
+        }
+        else
+        {
+            cb.Phrase("public override IReadOnlyList<Ref<Matter>> AllRefs => AbstractConsts.NoRefs;");
+        }
+    }
+
     private void ProduceImmMatterProperties(CodeBuilder cb, MetaMatter m)
     {
+        if (m.AllProperties.IsEmpty()) return;
         cb.EmptyLine();
         cb.Phrase(@"// Properties \\");        
         foreach (var p in m.AllProperties.Values)

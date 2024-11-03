@@ -71,7 +71,20 @@ internal class MetaProcessor (MetaModel mm)
                     m.AllFamilies[f.FamilyName] = f;
                 }
             }
-            
+
+            // references
+            foreach (var bm in m.BaseMatters)
+            {
+                foreach (var r in bm.OwnRefs)
+                {
+                    m.AllRefs[r.RefName] = r;
+                }
+            }
+            foreach (var r in m.OwnRefs)
+            {
+                m.AllRefs[r.RefName] = r;
+            }
+
             // properties
             foreach (var bm in m.BaseMatters)
             {

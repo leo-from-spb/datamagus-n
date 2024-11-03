@@ -13,7 +13,9 @@ internal class MetaCollector (MetaModel mm)
 
     private readonly Type matterType = typeof(Matter);
     private readonly Type familyType = typeof(Family<Matter>);
-    
+    private readonly Type refType = typeof(Ref<Matter>);
+    private readonly Type polyRefType = typeof(PolyRef<Matter>);
+
     internal void CollectMetaData()
     {
         HandleInterface(matterType, false, 0);
@@ -45,11 +47,20 @@ internal class MetaCollector (MetaModel mm)
             foreach (var fe in familyEntries) 
                 HandleFamily(m, fe, level);
 
+            var refEntries =
+                from r in intf.GetProperties()
+                where r.MemberType == MemberTypes.Property
+                   && r.PropertyType.IsAssignableTo(refType)
+                select r;
+            foreach (var pe in refEntries)
+                HandleRef(m, pe);
+
             var proEntries =
                 from p in intf.GetProperties()
                 where p.MemberType == MemberTypes.Property
                    && p.GetCustomAttribute<MatterPropertyAttribute>() != null
                    && !p.PropertyType.IsAssignableTo(familyType)
+                   && !p.PropertyType.IsAssignableTo(refType)
                 select p;
             foreach (var pe in proEntries) 
                 HandleProperty(m, pe);
@@ -79,6 +90,18 @@ internal class MetaCollector (MetaModel mm)
         Debug.Assert(child is not null);
         var family = new MetaFamily(parent, child, propType, prop.Name);
         parent.AddFamily(family);
+    }
+
+    private void HandleRef(MetaMatter m, PropertyInfo prop)
+    {
+        var refName         = prop.Name;
+        var refPropType     = prop.PropertyType;
+        var refTargetIntf   = refPropType.GenericTypeArguments[0];
+        var refTargetMatter = mm.Intfs[refTargetIntf];
+        Debug.Assert(refTargetMatter is not null);
+        var poly = refPropType.IsAssignableTo(polyRefType);
+        var r    = new MetaRef(m, refName, poly, refTargetMatter);
+        m.OwnRefs.Add(r);
     }
 
     private void HandleProperty(MetaMatter m, PropertyInfo prop)

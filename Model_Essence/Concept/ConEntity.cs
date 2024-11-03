@@ -13,6 +13,8 @@ public interface ConEntity : NamedMediumMatter
 
 public interface ConAttribute : NamedTermMatter
 {
+    MonoRef<ConDomain> Domain { get; }
+
     [MatterProperty]
     string? ContentType { get; }
 }

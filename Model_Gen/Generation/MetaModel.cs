@@ -48,8 +48,10 @@ internal class MetaMatter
     internal readonly List<MetaMatter>                 BaseMatters         = [];
     internal readonly HashSet<MetaFamily>              OwnFamilies         = [];
     internal readonly Dictionary<string, MetaFamily>   AllFamilies         = [];
-    internal readonly HashSet<MetaProperty>            OwnProperties       = [];
-    internal readonly Dictionary<string, MetaProperty> AllProperties       = [];
+    internal readonly List<MetaRef>                    OwnRefs             = [];
+    internal readonly Dictionary<string, MetaRef>      AllRefs             = [];
+    internal readonly HashSet<MetaProperty>            OwnProperties = [];
+    internal readonly Dictionary<string, MetaProperty> AllProperties = [];
     
     internal readonly MetaImm Imm;
 
@@ -136,6 +138,27 @@ internal class MetaFamily
 
     internal MetaFamily cloneFor(MetaMatter inheritor) =>
         new MetaFamily(inheritor, Child, FamilyType, FamilyName, false);
+}
+
+
+internal class MetaRef
+{
+    internal readonly MetaMatter Matter;
+    internal readonly string     RefName;
+    internal          string     RefLowName => RefName.Decap();
+    internal readonly bool       Poly;
+    internal readonly MetaMatter TargetMatter;
+
+    public MetaRef(MetaMatter matter, string refName, bool poly, MetaMatter targetMatter)
+    {
+        Matter       = matter;
+        RefName      = refName;
+        Poly         = poly;
+        TargetMatter = targetMatter;
+    }
+
+    internal string RefWord       => Poly ? "PolyRef" : "MonoRef";
+    internal string InnerTypeSpec => Poly ? "IReadOnlyList<uint>" : "uint";
 }
 
 

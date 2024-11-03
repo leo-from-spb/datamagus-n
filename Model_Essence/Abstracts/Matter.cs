@@ -23,6 +23,11 @@ public interface Matter : Node
     /// All inner matters, in a stable order.
     /// </summary>
     IEnumerable<Matter> AllInnerMatters { get; }
+
+    /// <summary>
+    /// All references, including empty.
+    /// </summary>
+    IReadOnlyList<Ref<Matter>> AllRefs { get; }
 }
 
 

@@ -8,6 +8,7 @@ namespace Model.Concept;
 public interface ConArea : NamedMediumMatter
 {
 
+    public NamingFamily<ConDomain> Domains { get; }
     public NamingFamily<ConEntity> Entities { get; }
 
 }

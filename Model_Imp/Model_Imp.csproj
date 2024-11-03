@@ -16,4 +16,8 @@
     <ItemGroup>
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="_generated_\ModelConceptImmImp.cs" />
+    </ItemGroup>
+
 </Project>
