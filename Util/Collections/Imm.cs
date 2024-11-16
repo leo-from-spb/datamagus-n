@@ -9,7 +9,6 @@ namespace Util.Collections;
 /// </summary>
 public static class Imm
 {
-
     /// <summary>
     /// Create a snapshot of this array.
     /// </summary>
@@ -26,4 +25,18 @@ public static class Imm
     /// <returns>the snapshot.</returns>
     public static ImmList<E> ToImmList<E>(this IReadOnlyCollection<E> collection) => new ImmList<E>(collection.ToArray(), false);
 
+    /// <summary>
+    /// Creates an immutable set of the given set, preserving the original order.
+    /// <br/>
+    /// The original set must use the default equality comparer, otherwise the behavior of the set is not predictable.
+    /// </summary>
+    /// <param name="set">the original set.</param>
+    /// <typeparam name="E">type of elements.</typeparam>
+    /// <returns>new set.</returns>
+    public static ImmSet<E> ToImmSet<E>(this IReadOnlySet<E> set)
+    {
+        int n = set.Count;
+        E[] array = set.ToArray();
+        return n <= 3 ? new ImmMiniSet<E>(array, false) : new ImmHashSet<E>(array, false);
+    }
 }
