@@ -77,6 +77,29 @@ public class ImmHashSetTest
     }
 
     [Test]
+    public void ThousandViaImmWithDuplicates()
+    {
+        ulong[] array = new ulong[3000];
+        for (uint i = 0; i < 1000; i++)
+        {
+            ulong v = 3uL * (i + 1) * (i + 1) | 0x8000_0000_0000_0000uL;
+            array[i] = array[1000+i] = array[2000+i] = v;
+        }
+        IReadOnlyList<ulong> list3000 = array.ToList();
+
+        ImmSet<ulong> set = list3000.ToImmSet();
+
+        for (int i = 0; i < 1000; i++)
+        {
+            ulong x = array[i];
+            int index1 = set.IndexOf(x);
+            int index2 = set.LastIndexOf(x);
+            index1.ShouldBe(i);
+            index2.ShouldBe(i);
+        }
+    }
+
+    [Test]
     public void Million()
     {
         ulong[] array = new ulong[1000000];
