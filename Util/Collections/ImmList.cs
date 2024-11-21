@@ -131,7 +131,7 @@ public class ImmList<E> : IReadOnlyList<E>
     /// Checks whether the given item presents in the list.
     /// </summary>
     /// <param name="item">the item to check.</param>
-    public bool Contains(E item) => IndexOf(item) != -1;
+    public virtual bool Contains(E item) => IndexOf(item) != -1;
 
     /// <summary>
     /// Returns a slice of this list.

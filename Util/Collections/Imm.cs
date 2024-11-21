@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -69,6 +70,58 @@ public static class Imm
         return array.Length <= 3
             ? new ImmMiniSet<E>(array, false)
             : new ImmHashSet<E>(array, false);
+    }
+
+
+    /// <summary>
+    /// Creates an immutable copy of this sorted set..
+    /// </summary>
+    /// <param name="sourceSet">source set of elements.</param>
+    /// <typeparam name="E">type of elements.</typeparam>
+    /// <returns>the created immutable sorted set.</returns>
+    public static ImmSortSet<E> ToImmSortSet<E>(this SortedSet<E> sourceSet)
+        where E : IComparable<E>
+    {
+        if (sourceSet.Count == 0) return ImmSortSet<E>.Empty;
+
+        E[] array = sourceSet.ToArray();
+        return new ImmSortSet<E>(array, false);
+    }
+
+    /// <summary>
+    /// Creates an immutable sorted set of elements from the given collection.
+    /// Elements are sorted and deduplicated, so the order is NOT preserved.
+    /// </summary>
+    /// <param name="collection">source elements.</param>
+    /// <typeparam name="E">type of elements.</typeparam>
+    /// <returns>the created immutable sorted set.</returns>
+    public static ImmSortSet<E> ToImmSortSet<E>(this IReadOnlyCollection<E> collection)
+        where E : IComparable<E>
+    {
+        if (collection.Count == 0) return ImmSortSet<E>.Empty;
+        if (collection is ImmSortSet<E> iss) return iss;
+        if (collection is SortedSet<E> ss) return ss.ToImmSortSet();
+
+        ArraySegment<E> a = collection.SortAndDeduplicate();
+        if (a.Count == 0) return ImmSortSet<E>.Empty;
+        return new ImmSortSet<E>(a);
+    }
+
+    /// <summary>
+    /// Creates an immutable sorted set of elements from the given collection.
+    /// Elements are sorted and deduplicated, so the order is NOT preserved.
+    /// </summary>
+    /// <param name="elements">source elements.</param>
+    /// <typeparam name="E">type of elements.</typeparam>
+    /// <returns>the created immutable sorted set.</returns>
+    public static ImmSortSet<E> ToImmSortSet<E>(this IEnumerable<E> elements)
+        where E : IComparable<E>
+    {
+        if (elements is IReadOnlyCollection<E> collection) return ToImmSortSet<E>(collection);
+
+        ArraySegment<E> a = elements.SortAndDeduplicate();
+        if (a.Count == 0) return ImmSortSet<E>.Empty;
+        return new ImmSortSet<E>(a);
     }
 
 }
