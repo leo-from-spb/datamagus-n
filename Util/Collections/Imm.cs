@@ -124,4 +124,22 @@ public static class Imm
         return new ImmSortSet<E>(a);
     }
 
+
+    /// <summary>
+    /// Creates an immutable copy of this set.
+    /// The order of the entries is preserved.
+    /// </summary>
+    /// <param name="dictionary">source entries.</param>
+    /// <returns>the created immutable set.</returns>
+    public static ImmDictionary<K,V> ToImmDict<K,V>(this IDictionary<K,V> dictionary)
+    {
+        int n = dictionary.Count;
+        if (n == 0)
+            return ImmZeroDictionary<K,V>.Instance;
+
+        var array = dictionary.ToArray();
+        return n <= 3
+            ? new ImmMiniDictionary<K,V>(array)
+            : new ImmHashDictionary<K,V>(array);
+    }
 }
