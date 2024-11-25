@@ -40,7 +40,7 @@ internal static class HashTableLogic
             K    key = keyGet(data[i]);
             uint k   = HashIndexOf(key, M, comparer);
 
-            while ((ht[k].Link & HashTableEntry.HasNextBit) != 0u) k = ht[k].Link & HashTableEntry.NextIndexBits;
+            while (ht[k].HasNext) k = ht[k].Link & HashTableEntry.NextIndexBits;
 
             while (ht[j].Link != 0u) j++;
 
@@ -58,16 +58,18 @@ internal static class HashTableLogic
         uint           M = (uint)hashTable.Length;
         uint           k = HashIndexOf(key, M, comparer);
         HashTableEntry e = hashTable[k];
-        if ((e.Link & HashTableEntry.ContinueBit) != 0) return -1;
+        if (e.IsContinue) return -1;
 
-        while (true)
+        while (e.IsBusy)
         {
             K itemKey = keyGet(data[e.TargetIndex]);
             if (comparer.Equals(itemKey, key)) return e.TargetIndex;
-            if ((e.Link & HashTableEntry.HasNextBit) == 0u) return -1;
-            k = e.Link & HashTableEntry.NextIndexBits;
+            if (!e.HasNext) return -1;
+            k = e.NextIndex;
             e = hashTable[k];
         }
+
+        return -1;
     }
 
 
