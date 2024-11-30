@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Util.Collections;
 
@@ -149,7 +150,9 @@ public class ImmList<E> : IReadOnlyList<E>
     /// <summary>
     /// Creates an enumerator.
     /// </summary>
-    public IEnumerator<E> GetEnumerator() => segment.GetEnumerator();
+    public IEnumerator<E> GetEnumerator() => IsNotEmpty
+        ? segment.GetEnumerator()
+        : Enumerable.Empty<E>().GetEnumerator();
 
     /// <summary>
     /// Creates an enumerator.
