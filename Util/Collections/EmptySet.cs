@@ -8,11 +8,9 @@ namespace Util.Collections;
 /// <summary>
 /// Empty set and list.
 /// </summary>
-public class EmptySet<T> : Immutable, ImmOrderedSet<T>
+public class EmptySet<T> : ImmutableCollection<T>, ImmOrderedSet<T>
 {
     public static readonly EmptySet<T> Instance = new();
-
-    public Immutable Imp => this;
 
     public bool IsNotEmpty => false;
     public bool IsEmpty    => true;

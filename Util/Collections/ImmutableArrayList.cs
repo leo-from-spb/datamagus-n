@@ -10,10 +10,8 @@ namespace Util.Collections;
 /// Immutable array-based list.
 /// Non-empty.
 /// </summary>
-internal class ImmutableArrayList<T> : Immutable, ImmList<T>
+internal class ImmutableArrayList<T> : ImmutableCollection<T>, ImmList<T>
 {
-    protected static readonly EqualityComparer<T> eq = EqualityComparer<T>.Default;
-
     /// <summary>
     /// Elements. Non-empty.
     /// </summary>
@@ -34,8 +32,6 @@ internal class ImmutableArrayList<T> : Immutable, ImmList<T>
         this.Elements = elements;
         Count = elements.Length;
     }
-
-    public Immutable Imp => this;
 
     public bool IsNotEmpty => true;
     public bool IsEmpty    => false;
