@@ -22,7 +22,7 @@ public static class Imm
         array.Length switch
         {
             0 => EmptySet<E>.Instance,
-            1 => new ImmutableArrayList<E>(array.CloneArray()), // use a singleton set or list instead
+            1 => new ImmutableSingleton<E>(array[0]),
             _ => new ImmutableArrayList<E>(array.CloneArray())
         };
 
@@ -38,7 +38,7 @@ public static class Imm
         return collection.Count switch
                {
                    0 => EmptySet<E>.Instance,
-                   1 => new ImmutableArrayList<E>(new[] { collection.First() }), // use a singleton set or list instead
+                   1 => new ImmutableSingleton<E>(collection.First()),
                    _ => new ImmutableArrayList<E>(collection.ToArray())
                };
     }
