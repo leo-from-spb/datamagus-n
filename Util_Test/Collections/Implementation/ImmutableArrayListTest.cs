@@ -60,4 +60,37 @@ public class ImmutableArrayListTest
             () => list.LastIndexOf(42L).ShouldBe(0)
         );
     }
+
+
+    [Test]
+    public void SameValues()
+    {
+        long[] arr  = [26L, 42L, 74L, 74L, 33L, 26L];
+        var    list = new ImmutableArrayList<long>(arr);
+
+        list.Verify
+        (
+            l => l.IndexOf(26L).ShouldBe(0),
+            l => l.IndexOf(74L).ShouldBe(2),
+            l => l.LastIndexOf(74L).ShouldBe(3),
+            l => l.LastIndexOf(26L).ShouldBe(5)
+        );
+    }
+
+    [Test]
+    public void ToSet()
+    {
+        long[] arr  = [26L, 42L, 74L, 74L, 33L, 26L];
+        var    list = new ImmutableArrayList<long>(arr);
+        var    set  = list.ToSet();
+
+        set.Verify
+        (
+            s => s.Count.ShouldBe(4),
+            s => s.At(0).ShouldBe(26L),
+            s => s.At(1).ShouldBe(42L),
+            s => s.At(2).ShouldBe(74L),
+            s => s.At(3).ShouldBe(33L)
+        );
+    }
 }

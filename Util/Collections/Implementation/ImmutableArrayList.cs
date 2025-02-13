@@ -94,47 +94,34 @@ internal class ImmutableArrayList<T> : ImmutableCollection<T>, ImmList<T>
 
     public IEnumerator<T>   GetEnumerator() => Elements.AsEnumerable().GetEnumerator();
     IEnumerator IEnumerable.GetEnumerator() => Elements.GetEnumerator();
-}
 
 
-/// <summary>
-/// Array-based immutable set.
-/// All elements are expected to be different.
-/// </summary>
-internal class ImmutableArraySet<T> : ImmutableArrayList<T>, ImmOrderedSet<T>
-{
-    /// <summary>
-    /// Internal constructor.
-    /// The caller must guarantee that all elements are different.
-    /// </summary>
-    /// <param name="elements">array of different elements.</param>
-    internal ImmutableArraySet(T[] elements) : base(elements) { }
-}
-
-
-/// <summary>
-/// Array-based sorted immutable set.
-/// </summary>
-internal class ImmutableSortedSet<T> : ImmutableArraySet<T>, ImmSortedSet<T>
-    where T : IComparable<T>
-{
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="elements">sorted array.</param>
-    internal ImmutableSortedSet(T[] elements) : base(elements) { }
-
-    public override bool Contains(T element)
+    public ImmOrderedSet<T> ToSet()
     {
-        int index = Array.BinarySearch(Elements, element);
-        return index >= 0;
-    }
+        if (this is ImmOrderedSet<T> alreadyImmSet) return alreadyImmSet;
 
-    public override int IndexOf(T element, int notFound = int.MinValue)
-    {
-        int index = Array.BinarySearch(Elements, element);
-        return index >= 0 ? index : notFound;
-    }
+        var distinct = Elements.Deduplicate();
+        int m        = distinct.Count;
 
-    public override int LastIndexOf(T element, int notFound = int.MinValue) => IndexOf(element, notFound);
+        if (m == Count)
+        {
+            // our array has no duplicates
+            return Count <= 3
+                ? new ImmutableMiniSet<T>(Elements)
+                : new ImmutableHashSet<T>(Elements);
+        }
+        else
+        {
+            // our array has duplicates, use the deduplicated list
+            if (m == 1) return new ImmutableSingleton<T>(Elements[0]);
+
+            T[] newArray = distinct.ToArray();
+            return m <= 3
+                ? new ImmutableMiniSet<T>(newArray)
+                : new ImmutableHashSet<T>(newArray);
+        }
+    }
 }
+
+
+

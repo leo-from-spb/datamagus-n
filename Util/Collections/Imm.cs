@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Util.Collections.Implementation;
@@ -44,11 +43,54 @@ public static class Imm
     }
 
 
-    private static E[] CloneArray<E>(this E[] originalArray)
+    /// <summary>
+    /// Deduplicates elements and creates a snapshot set of this array.
+    /// </summary>
+    /// <param name="array">elements.</param>
+    /// <typeparam name="E">type of elements.</typeparam>
+    /// <returns>the created immutable set.</returns>
+    public static ImmSet<E> ToImmSet<E>(this E[] array)
     {
-        int n        = originalArray.Length;
-        E[] newArray = new E[n];
-        Array.Copy(originalArray, newArray, n);
-        return newArray;
+        int n = array.Length;
+        if (n == 0) return EmptySet<E>.Instance;
+        if (n == 1) return new ImmutableSingleton<E>(array[0]);
+
+        var list = new List<E>(n);
+        var hset = new HashSet<E>(n);
+
+        // deduplicate elements
+        foreach (E element in array)
+        {
+            if (hset.Add(element))
+                list.Add(element);
+        }
+
+        int m = list.Count;
+        if (m == 1) return new ImmutableSingleton<E>(array[0]);
+
+        E[] newArray = list.ToArray();
+        return m <= 3
+            ? new ImmutableMiniSet<E>(newArray)
+            : new ImmutableHashSet<E>(newArray);
     }
+
+
+    public static ImmOrderedSet<E> ToImmSet<E>(this IReadOnlyCollection<E> collection)
+    {
+        if (collection is ImmOrderedSet<E> immSet) return immSet;
+        if (collection is ImmutableArrayList<E> immArrayList) immArrayList.ToSet();
+
+        int n = collection.Count;
+        if (n == 0) return EmptySet<E>.Instance;
+
+        List<E> distinct = collection.Deduplicate();
+        int m = distinct.Count;
+        if (m == 1) return new ImmutableSingleton<E>(distinct[0]);
+
+        E[] newArray = distinct.ToArray();
+        return m <= 3
+            ? new ImmutableMiniSet<E>(newArray)
+            : new ImmutableHashSet<E>(newArray);
+    }
+
 }
