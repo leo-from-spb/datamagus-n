@@ -33,6 +33,15 @@ internal class ImmutableArrayList<T> : ImmutableCollection<T>, ImmList<T>
         Count = elements.Length;
     }
 
+
+    /// <summary>
+    /// Internal function that shares the inner array.
+    /// Never use this function.
+    /// </summary>
+    internal T[] ShareElementsArray() => Elements;
+
+
+
     public bool IsNotEmpty => true;
     public bool IsEmpty    => false;
 
@@ -122,6 +131,4 @@ internal class ImmutableArrayList<T> : ImmutableCollection<T>, ImmList<T>
         }
     }
 }
-
-
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Util.Collections.Implementation;
@@ -49,24 +50,29 @@ public static class Imm
     /// <param name="array">elements.</param>
     /// <typeparam name="E">type of elements.</typeparam>
     /// <returns>the created immutable set.</returns>
-    public static ImmSet<E> ToImmSet<E>(this E[] array)
+    public static ImmOrderedSet<E> ToImmSet<E>(this E[] array)
     {
         int n = array.Length;
         if (n == 0) return EmptySet<E>.Instance;
         if (n == 1) return new ImmutableSingleton<E>(array[0]);
 
+        return DeduplicateAndPrepareSet<E>(array, n);
+    }
+
+    private static ImmOrderedSet<E> DeduplicateAndPrepareSet<E>(IEnumerable<E> source, int n)
+    {
         var list = new List<E>(n);
         var hset = new HashSet<E>(n);
 
         // deduplicate elements
-        foreach (E element in array)
+        foreach (E element in source)
         {
             if (hset.Add(element))
                 list.Add(element);
         }
 
         int m = list.Count;
-        if (m == 1) return new ImmutableSingleton<E>(array[0]);
+        if (m == 1) return new ImmutableSingleton<E>(list[0]);
 
         E[] newArray = list.ToArray();
         return m <= 3
@@ -75,7 +81,32 @@ public static class Imm
     }
 
 
-    public static ImmOrderedSet<E> ToImmSet<E>(this IReadOnlyCollection<E> collection)
+    public static ImmSet<E> ToImmSet<E>(this IReadOnlyCollection<E> collection)
+    {
+        if (collection is ImmSet<E> immSet) return immSet;
+        if (collection is IReadOnlySet<E> set) return set.ToImmSet();
+        if (collection is IReadOnlyList<E> immList) immList.ToImmSet();
+
+        int n = collection.Count;
+        return DeduplicateAndPrepareSet(collection, n);
+    }
+
+
+    public static ImmSet<E> ToImmSet<E>(this IReadOnlySet<E> set)
+    {
+        int n = set.Count;
+        return n switch
+               {
+                   0    => EmptySet<E>.Instance,
+                   1    => new ImmutableSingleton<E>(set.First()),
+                   <= 3 => new ImmutableMiniSet<E>(set.ToArray()),
+                   _    => new ImmutableHashSet<E>(set.ToArray())
+               };
+    }
+
+
+
+    public static ImmOrderedSet<E> ToImmSet<E>(this IReadOnlyList<E> collection)
     {
         if (collection is ImmOrderedSet<E> immSet) return immSet;
         if (collection is ImmutableArrayList<E> immArrayList) immArrayList.ToSet();
@@ -91,6 +122,78 @@ public static class Imm
         return m <= 3
             ? new ImmutableMiniSet<E>(newArray)
             : new ImmutableHashSet<E>(newArray);
+    }
+
+
+    public static ImmSortedSet<E> ToImmSortedSet<E>(this E[] array)
+        where E : IComparable<E>
+    {
+        int n = array.Length;
+        if (n == 0) return EmptySortedSet<E>.Instance;
+        if (n == 1) return new ImmutableSortedSet<E>(array);
+
+        E[] newArray = new E[n];
+        Array.Copy(array, newArray, n);
+
+        return SortDeduplicateAndPrepareSet(newArray);
+    }
+
+
+    public static ImmSortedSet<E> ToImmSortedSet<E>(this IReadOnlyCollection<E> collection)
+        where E : IComparable<E>
+    {
+        if (collection is ImmSortedSet<E> immSortedSet) return immSortedSet;
+        if (collection is SortedSet<E> alreadySortedSet) return alreadySortedSet.ToImmSortedSet();
+        if (collection is IReadOnlySet<E> alreadySet) return alreadySet.ToImmSortedSet();
+
+        int n = collection.Count;
+        if (n == 0) return EmptySortedSet<E>.Instance;
+        if (n == 1) return new ImmutableSortedSingleton<E>(collection.First());
+
+        E[] array = collection.ToArray();
+        return SortDeduplicateAndPrepareSet(array);
+    }
+
+
+    public static ImmSortedSet<E> ToImmSortedSet<E>(this IReadOnlySet<E> set)
+        where E : IComparable<E>
+    {
+        int n = set.Count;
+        if (n == 0) return EmptySortedSet<E>.Instance;
+        if (n == 1) return new ImmutableSortedSingleton<E>(set.First());
+
+        E[] newArray = set.ToArray();
+        Array.Sort(newArray);
+        return new ImmutableSortedSet<E>(newArray);
+    }
+
+
+    public static ImmSortedSet<E> ToImmSortedSet<E>(this SortedSet<E> sortedSet)
+        where E : IComparable<E>
+    {
+        return sortedSet.Count switch
+               {
+                   0 => EmptySortedSet<E>.Instance,
+                   1 => new ImmutableSortedSingleton<E>(sortedSet.Min!),
+                   _ => new ImmutableSortedSet<E>(sortedSet.ToArray())
+               };
+    }
+
+
+    private static ImmSortedSet<E> SortDeduplicateAndPrepareSet<E>(E[] newArray)
+        where E : IComparable<E>
+    {
+        int n = newArray.Length;
+        newArray.SortAndDeduplicate(out int newCount);
+
+        if (newCount == 1) return new ImmutableSortedSingleton<E>(newArray[0]);
+
+        if (newCount < n)
+        {
+            Array.Resize(ref newArray, newCount);
+        }
+
+        return new ImmutableSortedSet<E>(newArray);
     }
 
 }
