@@ -51,4 +51,42 @@ public class ImmutableHashSetTest
     }
 
 
+    [Test]
+    public void OneHundredLongs()
+    {
+        // prepare a source array
+        ulong[] array = new ulong[100];
+        for (int i = 0; i < array.Length; i++)
+            array[i] = (ulong)(i + 1) * 7;
+
+        // make a hash set
+        var set = new ImmutableHashSet<ulong>(array);
+
+        // check all elements
+        for (int i = 0; i < array.Length; i++)
+        {
+            ulong value = array[i];
+            set.IndexOf(value).ShouldBe(i);
+        }
+    }
+
+    [Test]
+    public void OneMillionLongs()
+    {
+        // prepare a source array
+        ulong[] array = new ulong[1000000];
+        for (int i = 0; i < array.Length; i++)
+            array[i] = (ulong)(i + 1) * 7;
+
+        // make a hash set
+        var set = new ImmutableHashSet<ulong>(array);
+
+        // check all elements
+        for (int i = 0; i < array.Length; i++)
+        {
+            ulong value = array[i];
+            set.IndexOf(value).ShouldBe(i);
+        }
+    }
+
 }
