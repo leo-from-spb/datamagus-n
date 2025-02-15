@@ -5,6 +5,30 @@ namespace Util.Collections;
 [TestFixture]
 public class ImmListTest
 {
+    private static IEnumerable<ulong> MakeEnumerableSourceWith264274()
+    {
+        yield return 26uL;
+        yield return 42uL;
+        yield return 74uL;
+    }
+
+
+    [Test]
+    public void Basic_ToImmList_FromTrueEnumerable()
+    {
+        var enumerable = MakeEnumerableSourceWith264274();
+        var list = enumerable.ToImmList();
+        BasicTest(list);
+    }
+
+    [Test]
+    public void Basic_ToImmList_FromListEnumerable()
+    {
+        var enumerable = new List<ulong> { 26uL, 42uL, 74uL };
+        var list       = enumerable.ToImmList();
+        BasicTest(list);
+    }
+
     [Test]
     public void Basic_ToImmList_FromArray()
     {

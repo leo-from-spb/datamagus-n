@@ -6,6 +6,40 @@ namespace Util.Collections;
 [TestFixture]
 public class ImmSetTest
 {
+    private static IEnumerable<ulong> MakeEnumerable5()
+    {
+        yield return 77uL;
+        yield return 99uL;
+        yield return 55uL;
+        yield return 88uL;
+        yield return 66uL;
+    }
+
+
+    [Test]
+    public void Set_Easy_fromTrueEnumerable()
+    {
+        IEnumerable<ulong> source = MakeEnumerable5();
+        var                set    = source.ToImmSet();
+        Verify_55_99(set);
+    }
+
+    [Test]
+    public void Set_Easy_fromEnumerableList()
+    {
+        IEnumerable<ulong> list = new List<ulong> { 88uL, 99uL, 66uL, 55uL, 77uL };
+        var                set  = list.ToImmSet();
+        Verify_55_99(set);
+    }
+
+    [Test]
+    public void Set_Easy_fromOrderedEnumerable()
+    {
+        IOrderedEnumerable<ulong> oe  = MakeEnumerable5().Order();
+        ImmOrderedSet<ulong>      set = oe.ToImmSet();
+        Verify_55_99(set);
+    }
+
     [Test]
     public void Set_Easy_fromArray()
     {
@@ -52,12 +86,12 @@ public class ImmSetTest
             x => x.IsNotEmpty.ShouldBeTrue(),
             x => x.IsEmpty.ShouldBeFalse(),
             x => x.Count.ShouldBe(5),
-            x => x.Contains(55L).ShouldBeTrue(),
-            x => x.Contains(66L).ShouldBeTrue(),
-            x => x.Contains(77L).ShouldBeTrue(),
-            x => x.Contains(88L).ShouldBeTrue(),
-            x => x.Contains(99L).ShouldBeTrue(),
-            x => x.Contains(100L).ShouldBeFalse()
+            x => x.Contains(55uL).ShouldBeTrue(),
+            x => x.Contains(66uL).ShouldBeTrue(),
+            x => x.Contains(77uL).ShouldBeTrue(),
+            x => x.Contains(88uL).ShouldBeTrue(),
+            x => x.Contains(99uL).ShouldBeTrue(),
+            x => x.Contains(100uL).ShouldBeFalse()
         );
 
 
@@ -100,11 +134,11 @@ public class ImmSetTest
             x => x.IsNotEmpty.ShouldBeTrue(),
             x => x.IsEmpty.ShouldBeFalse(),
             x => x.Count.ShouldBe(5),
-            x => x.IndexOf(55L).ShouldBe(0),
-            x => x.IndexOf(66L).ShouldBe(1),
-            x => x.IndexOf(77L).ShouldBe(2),
-            x => x.IndexOf(88L).ShouldBe(3),
-            x => x.IndexOf(99L).ShouldBe(4),
+            x => x.IndexOf(55uL).ShouldBe(0),
+            x => x.IndexOf(66uL).ShouldBe(1),
+            x => x.IndexOf(77uL).ShouldBe(2),
+            x => x.IndexOf(88uL).ShouldBe(3),
+            x => x.IndexOf(99uL).ShouldBe(4),
             x => x.ToArray().ShouldBeEquivalentTo(new ulong[] {55, 66, 77, 88, 99})
         );
 

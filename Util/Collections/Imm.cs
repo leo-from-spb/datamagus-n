@@ -13,7 +13,7 @@ public static class Imm
 {
 
     /// <summary>
-    /// Create a snapshot of this array.
+    /// Creates a snapshot of this array.
     /// </summary>
     /// <param name="array">the original array.</param>
     /// <typeparam name="E">type of elements.</typeparam>
@@ -27,7 +27,21 @@ public static class Imm
         };
 
     /// <summary>
-    /// Create a snapshot of this collection.
+    /// Collects all elements from this <paramref name="source"/> and make an immutable list of them.
+    /// </summary>
+    /// <param name="source">the original collection.</param>
+    /// <typeparam name="E">type of elements.</typeparam>
+    /// <returns>the immutable list.</returns>
+    public static ImmList<E> ToImmList<E>(this IEnumerable<E> source)
+    {
+        if (source is IReadOnlyCollection<E> collection) return collection.ToImmList();
+        E[] array = source.ToArray();
+        return array.ToImmList();
+    }
+
+
+    /// <summary>
+    /// Creates a snapshot of this collection.
     /// </summary>
     /// <param name="collection">the original collection.</param>
     /// <typeparam name="E">type of elements.</typeparam>
@@ -41,6 +55,38 @@ public static class Imm
                    1 => new ImmutableSingleton<E>(collection.First()),
                    _ => new ImmutableArrayList<E>(collection.ToArray())
                };
+    }
+
+
+    /// <summary>
+    /// Collects and deduplicates all elements from this <paramref name="source"/> and creates an immutable set.
+    /// </summary>
+    /// <param name="source">elements.</param>
+    /// <typeparam name="E">type of elements.</typeparam>
+    /// <returns>the created immutable set.</returns>
+    public static ImmSet<E> ToImmSet<E>(this IEnumerable<E> source)
+    {
+        return source switch
+               {
+                   ImmSet<E> alreadyImmSet     => alreadyImmSet,
+                   IReadOnlySet<E> set         => set.ToImmSet(),
+                   ImmutableArrayList<E> immAL => DeduplicateAndPrepareSet(immAL.ShareElementsArray(), immAL.Count),
+                   E[] array                   => DeduplicateAndPrepareSet(array, array.Length),
+                   _                           => DeduplicateAndPrepareSet<E>(source, 0)
+               };
+    }
+
+
+    /// <summary>
+    /// Collects and deduplicates all elements from this <paramref name="source"/> and creates an immutable set.
+    /// Preserves the original order.
+    /// </summary>
+    /// <param name="source">elements.</param>
+    /// <typeparam name="E">type of elements.</typeparam>
+    /// <returns>the created immutable set.</returns>
+    public static ImmOrderedSet<E> ToImmSet<E>(this IOrderedEnumerable<E> source)
+    {
+        return DeduplicateAndPrepareSet<E>(source, 0);
     }
 
 
@@ -59,10 +105,10 @@ public static class Imm
         return DeduplicateAndPrepareSet<E>(array, n);
     }
 
-    private static ImmOrderedSet<E> DeduplicateAndPrepareSet<E>(IEnumerable<E> source, int n)
+    private static ImmOrderedSet<E> DeduplicateAndPrepareSet<E>(IEnumerable<E> source, int initialCapacity)
     {
-        var list = new List<E>(n);
-        var hset = new HashSet<E>(n);
+        var list = new List<E>(initialCapacity);
+        var hset = new HashSet<E>(initialCapacity);
 
         // deduplicate elements
         foreach (E element in source)
@@ -81,6 +127,12 @@ public static class Imm
     }
 
 
+    /// <summary>
+    /// Deduplicates elements and creates a snapshot set of this <paramref name="collection"/>.
+    /// </summary>
+    /// <param name="collection">elements.</param>
+    /// <typeparam name="E">type of elements.</typeparam>
+    /// <returns>the created immutable set.</returns>
     public static ImmSet<E> ToImmSet<E>(this IReadOnlyCollection<E> collection)
     {
         if (collection is ImmSet<E> immSet) return immSet;
@@ -92,6 +144,12 @@ public static class Imm
     }
 
 
+    /// <summary>
+    /// Makes an immutable snapshot of this <paramref name="set"/>.
+    /// </summary>
+    /// <param name="set">set of elements.</param>
+    /// <typeparam name="E">type of elements.</typeparam>
+    /// <returns>the created immutable set.</returns>
     public static ImmSet<E> ToImmSet<E>(this IReadOnlySet<E> set)
     {
         int n = set.Count;
@@ -105,16 +163,21 @@ public static class Imm
     }
 
 
-
-    public static ImmOrderedSet<E> ToImmSet<E>(this IReadOnlyList<E> collection)
+    /// <summary>
+    /// Deduplicates elements and creates a snapshot set of this <paramref name="list"/>.
+    /// </summary>
+    /// <param name="list">elements.</param>
+    /// <typeparam name="E">type of elements.</typeparam>
+    /// <returns>the created immutable set.</returns>
+    public static ImmOrderedSet<E> ToImmSet<E>(this IReadOnlyList<E> list)
     {
-        if (collection is ImmOrderedSet<E> immSet) return immSet;
-        if (collection is ImmutableArrayList<E> immArrayList) immArrayList.ToSet();
+        if (list is ImmOrderedSet<E> immSet) return immSet;
+        if (list is ImmutableArrayList<E> immArrayList) immArrayList.ToSet();
 
-        int n = collection.Count;
+        int n = list.Count;
         if (n == 0) return EmptySet<E>.Instance;
 
-        List<E> distinct = collection.Deduplicate();
+        List<E> distinct = list.Deduplicate();
         int m = distinct.Count;
         if (m == 1) return new ImmutableSingleton<E>(distinct[0]);
 
@@ -125,6 +188,12 @@ public static class Imm
     }
 
 
+    /// <summary>
+    /// Sorts and deduplicates elements and creates a snapshot set of this <paramref name="array"/>.
+    /// </summary>
+    /// <param name="array">elements.</param>
+    /// <typeparam name="E">type of elements.</typeparam>
+    /// <returns>the created immutable sorted set.</returns>
     public static ImmSortedSet<E> ToImmSortedSet<E>(this E[] array)
         where E : IComparable<E>
     {
@@ -139,6 +208,12 @@ public static class Imm
     }
 
 
+    /// <summary>
+    /// Sorts and deduplicates elements and creates a snapshot set of this <paramref name="collection"/>.
+    /// </summary>
+    /// <param name="collection">elements.</param>
+    /// <typeparam name="E">type of elements.</typeparam>
+    /// <returns>the created immutable sorted set.</returns>
     public static ImmSortedSet<E> ToImmSortedSet<E>(this IReadOnlyCollection<E> collection)
         where E : IComparable<E>
     {
@@ -155,6 +230,12 @@ public static class Imm
     }
 
 
+    /// <summary>
+    /// Sorts elements and creates a snapshot of this <paramref name="set"/>.
+    /// </summary>
+    /// <param name="set">elements.</param>
+    /// <typeparam name="E">type of elements.</typeparam>
+    /// <returns>the created immutable sorted set.</returns>
     public static ImmSortedSet<E> ToImmSortedSet<E>(this IReadOnlySet<E> set)
         where E : IComparable<E>
     {
@@ -168,6 +249,12 @@ public static class Imm
     }
 
 
+    /// <summary>
+    /// Creates a snapshot of this <paramref name="sortedSet"/>.
+    /// </summary>
+    /// <param name="sortedSet">elements.</param>
+    /// <typeparam name="E">type of elements.</typeparam>
+    /// <returns>the created immutable sorted set.</returns>
     public static ImmSortedSet<E> ToImmSortedSet<E>(this SortedSet<E> sortedSet)
         where E : IComparable<E>
     {
