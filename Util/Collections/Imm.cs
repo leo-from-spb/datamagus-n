@@ -13,6 +13,34 @@ public static class Imm
 {
 
     /// <summary>
+    /// Makes a list with the given elements.
+    /// </summary>
+    /// <param name="elements"></param>
+    /// <typeparam name="E"></typeparam>
+    /// <returns>new list.</returns>
+    public static ImmList<E> ListOf<E>(params E[] elements) => elements.ToImmList();
+
+    /// <summary>
+    /// Deduplicates elements and makes a set of them.
+    /// Preserves the original order.
+    /// </summary>
+    /// <param name="elements"></param>
+    /// <typeparam name="E"></typeparam>
+    /// <returns>new set.</returns>
+    public static ImmOrderedSet<E> SetOf<E>(params E[] elements) => elements.ToImmSet();
+
+    /// <summary>
+    /// Sortes and deduplicates elements and makes a set of them.
+    /// </summary>
+    /// <param name="elements"></param>
+    /// <typeparam name="E"></typeparam>
+    /// <returns>new sorted set.</returns>
+    public static ImmSortedSet<E> SortedSetOf<E>(params E[] elements)
+        where E : IComparable<E>
+        => elements.ToImmSortedSet();
+
+
+    /// <summary>
     /// Creates a snapshot of this array.
     /// </summary>
     /// <param name="array">the original array.</param>

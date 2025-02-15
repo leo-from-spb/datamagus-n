@@ -6,6 +6,76 @@ namespace Util.Collections;
 [TestFixture]
 public class ImmSetTest
 {
+    [Test]
+    public void Set_ArgumentArray_Basic()
+    {
+        ImmOrderedSet<byte> set = Imm.SetOf(_3_, _5_, _7_);
+        Verify357(set);
+    }
+
+    [Test]
+    public void Set_ArgumentArray_FromArray()
+    {
+        byte[]        bytes = [_3_, _5_, _7_];
+        ImmOrderedSet<byte> set  = Imm.SetOf(bytes);
+        Verify357(set);
+    }
+
+    [Test]
+    public void Set_ArgumentArray_FromArrayModified()
+    {
+        byte[]        bytes = [_3_, _5_, _7_];
+        ImmOrderedSet<byte> set  = Imm.SetOf(bytes);
+        Verify357(set);
+
+        bytes[0] = 77;
+        bytes[1] = 88;
+        bytes[2] = 99;
+
+        Verify357(set);
+    }
+
+    [Test]
+    public void SortedSet_ArgumentArray_Basic()
+    {
+        ImmOrderedSet<byte> set = Imm.SortedSetOf(_7_, _3_, _5_);
+        Verify357(set);
+    }
+
+    [Test]
+    public void SortedSet_ArgumentArray_FromArray()
+    {
+        byte[]        bytes = [_7_, _3_, _5_];
+        ImmOrderedSet<byte> set  = Imm.SortedSetOf(bytes);
+        Verify357(set);
+    }
+
+    [Test]
+    public void SortedSet_ArgumentArray_FromArrayModified()
+    {
+        byte[]        bytes = [_7_, _3_, _5_];
+        ImmOrderedSet<byte> set  = Imm.SortedSetOf(bytes);
+        Verify357(set);
+
+        bytes[0] = 77;
+        bytes[1] = 88;
+        bytes[2] = 99;
+
+        Verify357(set);
+    }
+
+    private static void Verify357(ImmOrderedSet<byte> set)
+    {
+        set.Verify
+        (
+            s => s[0].ShouldBe(_3_),
+            s => s[1].ShouldBe(_5_),
+            s => s[2].ShouldBe(_7_)
+        );
+    }
+
+
+
     private static IEnumerable<ulong> MakeEnumerable5()
     {
         yield return 77uL;

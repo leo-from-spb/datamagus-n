@@ -5,6 +5,46 @@ namespace Util.Collections;
 [TestFixture]
 public class ImmListTest
 {
+    [Test]
+    public void ArgumentArray_Basic()
+    {
+        ImmList<byte> list = Imm.ListOf(_3_, _5_, _7_);
+        Verify357(list);
+    }
+
+    [Test]
+    public void ArgumentArray_FromArray()
+    {
+        byte[]        bytes = [_3_, _5_, _7_];
+        ImmList<byte> list  = Imm.ListOf(bytes);
+        Verify357(list);
+    }
+
+    [Test]
+    public void ArgumentArray_FromArrayModified()
+    {
+        byte[]        bytes = [_3_, _5_, _7_];
+        ImmList<byte> list  = Imm.ListOf(bytes);
+        Verify357(list);
+
+        bytes[0] = 77;
+        bytes[1] = 88;
+        bytes[2] = 99;
+
+        Verify357(list);
+    }
+
+    private static void Verify357(ImmList<byte> list)
+    {
+        list.Verify
+        (
+            l => l[0].ShouldBe(_3_),
+            l => l[1].ShouldBe(_5_),
+            l => l[2].ShouldBe(_7_)
+        );
+    }
+
+
     private static IEnumerable<ulong> MakeEnumerableSourceWith264274()
     {
         yield return 26uL;
