@@ -125,9 +125,16 @@ public class ImmListTest
             l => l.LastIndexOf(74uL).ShouldBe(2),
             l => l.LastIndexOf(99uL).ShouldBeNegative(),
             l => l.Contains(42uL).ShouldBeTrue(),
-            l => l.Contains(66uL).ShouldBeFalse()
-            //l => l.Slice(1, 1).First.ShouldBe(42uL),
-            //l => l.Slice(0, 3).ShouldBeSameAs(l)
+            l => l.Contains(66uL).ShouldBeFalse(),
+            l => l.Contains(x => x is >= 10 and <= 90).ShouldBeTrue(),
+            l => l.Contains(x => x >= 100).ShouldBeFalse(),
+            l => l.Find(x => x > 30).ShouldBe(new Found<ulong>(true, 42uL)),
+            l => l.Find(x => x < 5).ShouldBe(new Found<ulong>(false, 0uL)),
+            l => l.FindFirst(x => x <= 50).ShouldBe(new Found<ulong>(true, 26uL)),
+            l => l.FindFirst(x => x <= 50, 1).ShouldBe(new Found<ulong>(true, 42uL)),
+            l => l.FindFirst(x => x <= 50, 2).ShouldBe(new Found<ulong>(false, 0uL)),
+            l => l.FindFirst(x => x >= 33, 2).ShouldBe(new Found<ulong>(true, 74uL)),
+            l => l.FindLast(x => x <= 50).ShouldBe(new Found<ulong>(true, 42uL))
         );
 
 }
