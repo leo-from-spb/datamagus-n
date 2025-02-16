@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Util.Collections.Implementation;
 
@@ -15,6 +17,60 @@ internal class ImmutableArraySet<T> : ImmutableArrayList<T>, ImmOrderedSet<T>
     /// </summary>
     /// <param name="elements">array of different elements.</param>
     internal ImmutableArraySet(T[] elements) : base(elements) { }
+
+    public bool IsSubsetOf(IEnumerable<T>       other) => IsSubsetOf(other, false);
+    public bool IsProperSubsetOf(IEnumerable<T> other) => IsSubsetOf(other, true);
+
+    private bool IsSubsetOf(IEnumerable<T> other, bool strict)
+    {
+        if (other is IReadOnlyCollection<T> collection && collection.Count + (strict ? 1 : 0) < this.Count) return false;
+        BitArray indices       = new BitArray(this.Count);
+        bool     wasAnotherOne = false;
+        foreach (var x in other)
+        {
+            int index = this.IndexOf(x);
+
+            if (index >= 0) indices[index] = true;
+            else wasAnotherOne             = true;
+
+            if (indices.CountTrues() >= this.Count && (wasAnotherOne || !strict)) return true;
+        }
+        return false;
+    }
+
+    public bool IsSupersetOf(IEnumerable<T>       other) => IsSupersetOf(other, false);
+    public bool IsProperSupersetOf(IEnumerable<T> other) => IsSupersetOf(other, true);
+
+    public bool IsSupersetOf(IEnumerable<T> other, bool strict)
+    {
+        BitArray indices = new BitArray(this.Count);
+        foreach (var x in other)
+        {
+            int index = this.IndexOf(x);
+            if (index < 0) return false;
+            indices[index] = true;
+        }
+        return indices.CountTrues() < this.Count || !strict;
+    }
+
+    public bool Overlaps(IEnumerable<T> other)
+    {
+        foreach (var x in other)
+            if (this.Contains(x)) return true;
+        return false;
+    }
+
+    public bool SetEquals(IEnumerable<T> other)
+    {
+        BitArray indices = new BitArray(this.Count);
+        foreach (var x in other)
+        {
+            int index = this.IndexOf(x);
+            if (index < 0) return false;
+            indices[index] = true;
+        }
+        return indices.CountTrues() == this.Count;
+    }
 }
 
 

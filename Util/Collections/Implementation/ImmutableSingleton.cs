@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Util.Collections.Implementation;
 
@@ -54,6 +55,44 @@ public class ImmutableSingleton<T> : ImmutableCollection<T>, ImmOrderedSet<T>
     public int IndexOf(T element, int notFound = int.MinValue) => eq.Equals(this.element, element) ? 0 : notFound;
 
     public int LastIndexOf(T element, int notFound = int.MinValue) => IndexOf(element, notFound);
+
+    public bool IsSubsetOf(IEnumerable<T> other) => other.Contains(element);
+
+    public bool IsProperSubsetOf(IEnumerable<T> other)
+    {
+        bool such = false, another = false;
+        foreach (var x in other)
+        {
+            bool equal = eq.Equals(this.element, x);
+            such    |= equal;
+            another |= !equal;
+            if (such && another) return true;
+        }
+        return false;
+    }
+
+    public bool IsProperSupersetOf(IEnumerable<T> other) => other.IsEmpty();
+
+    public bool IsSupersetOf(IEnumerable<T> other)
+    {
+        foreach (var x in other)
+            if (eq.Equals(this.element, x) == false) return false;
+        return true;
+    }
+
+    public bool Overlaps(IEnumerable<T> other) => other.Contains(element);
+
+    public bool SetEquals(IEnumerable<T> other)
+    {
+        int n = 0;
+        foreach (var x in other)
+        {
+            n++;
+            if (n > 1) return false;
+            if (eq.Equals(this.element, x) == false) return false;
+        }
+        return true;
+    }
 
     public IEnumerator<T>   GetEnumerator() => new ImmuatbleSingletonEnumerator<T>(element);
     IEnumerator IEnumerable.GetEnumerator() => new ImmuatbleSingletonEnumerator<T>(element);

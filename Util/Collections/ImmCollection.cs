@@ -39,14 +39,6 @@ public interface ImmCollection<T> : IReadOnlyCollection<T>
     /// <param name="predicate">the predicate to match.</param>
     /// <returns>whether an element exists in the collection.</returns>
     public bool Contains(Predicate<T> predicate);
-
-    /// <summary>
-    /// Check whether the collection the given <paramref name="element"/>.
-    /// The performance of the method depends on the implementation of the collection.
-    /// </summary>
-    /// <param name="element">the element to check.</param>
-    /// <returns>whether the element exists in the collection.</returns>
-    public bool Contains(T element);
 }
 
 
@@ -118,12 +110,11 @@ public interface ImmList<T> : ImmCollection<T>, IReadOnlyList<T>
 
 /// <summary>
 /// Immutable set of elements, all elements are different.
-/// It also provides fast function <see cref="ImmCollection{T}.Contains(T)"/>
+/// It also provides fast function <b>Contains(T)</b> that is declared in <see cref="IReadOnlySet{T}"/>.
 /// </summary>
 /// <typeparam name="T">type of elements.</typeparam>
-public interface ImmSet<T> : ImmCollection<T>
+public interface ImmSet<T> : ImmCollection<T>, IReadOnlySet<T>
 { }
-
 
 /// <summary>
 /// Immutable ordered set of elements, in which elements have a meaningful order.

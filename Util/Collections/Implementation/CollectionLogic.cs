@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Util.Collections.Implementation;
@@ -30,6 +31,30 @@ internal static class CollectionLogic
         return list;
     }
 
+
+    internal static bool IsNotEmpty<E>(this IEnumerable<E> source)
+    {
+        if (source is IReadOnlyCollection<E> collection)
+        {
+            return collection.Count > 0;
+        }
+        else
+        {
+            using IEnumerator<E> enumerator = source.GetEnumerator();
+            return enumerator.MoveNext();
+        }
+    }
+
+    internal static bool IsEmpty<E>(this IEnumerable<E> source) => !IsNotEmpty(source);
+
+
+    internal static int CountTrues(this BitArray bits)
+    {
+        int n = 0;
+        foreach (bool b in bits)
+            if (b) n++;
+        return n;
+    }
 
 
 }

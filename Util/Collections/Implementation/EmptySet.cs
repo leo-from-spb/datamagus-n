@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Util.Collections.Implementation;
 
 namespace Util.Collections;
 
@@ -32,8 +33,17 @@ public class EmptySet<T> : ImmutableCollection<T>, ImmOrderedSet<T>
     public int IndexOf(T     element, int notFound = int.MinValue) => notFound;
     public int LastIndexOf(T element, int notFound = int.MinValue) => notFound;
 
+    public bool IsProperSubsetOf(IEnumerable<T>   other) => other.IsNotEmpty();
+    public bool IsSubsetOf(IEnumerable<T>         other) => true;
+    public bool IsProperSupersetOf(IEnumerable<T> other) => false;
+    public bool IsSupersetOf(IEnumerable<T>       other) => other.IsEmpty();
+
+    public bool Overlaps(IEnumerable<T>  other) => false;
+    public bool SetEquals(IEnumerable<T> other) => other.IsEmpty();
+
     IEnumerator IEnumerable.GetEnumerator() => Array.Empty<T>().GetEnumerator();
     public IEnumerator<T> GetEnumerator() => Enumerable.Empty<T>().GetEnumerator();
+
 }
 
 

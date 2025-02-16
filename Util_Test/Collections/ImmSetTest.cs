@@ -76,7 +76,7 @@ public class ImmSetTest
 
 
 
-    private static IEnumerable<ulong> MakeEnumerable5()
+    private static IEnumerable<ulong> EnumerableMatch()
     {
         yield return 77uL;
         yield return 99uL;
@@ -85,13 +85,49 @@ public class ImmSetTest
         yield return 66uL;
     }
 
+    private static IEnumerable<ulong> EnumerablePlus()
+    {
+        yield return 77uL;
+        yield return 99uL;
+        yield return 44uL;
+        yield return 55uL;
+        yield return 88uL;
+        yield return 66uL;
+    }
+
+    private static IEnumerable<ulong> EnumerableMinus()
+    {
+        yield return 77uL;
+        yield return 99uL;
+        yield return 88uL;
+        yield return 66uL;
+    }
+
+    private static IEnumerable<ulong> EnumerableOverlap()
+    {
+        yield return 77uL;
+        yield return 99uL;
+        yield return 70uL;
+        yield return 66uL;
+    }
+
+    private static IEnumerable<ulong> EnumerableOther()
+    {
+        yield return 60uL;
+        yield return 70uL;
+        yield return 80uL;
+        yield return 90uL;
+        yield return 50uL;
+    }
+
 
     [Test]
     public void Set_Easy_fromTrueEnumerable()
     {
-        IEnumerable<ulong> source = MakeEnumerable5();
+        IEnumerable<ulong> source = EnumerableMatch();
         var                set    = source.ToImmSet();
         Verify_55_99(set);
+        VerifySets(set);
     }
 
     [Test]
@@ -100,14 +136,16 @@ public class ImmSetTest
         IEnumerable<ulong> list = new List<ulong> { 88uL, 99uL, 66uL, 55uL, 77uL };
         var                set  = list.ToImmSet();
         Verify_55_99(set);
+        VerifySets(set);
     }
 
     [Test]
     public void Set_Easy_fromOrderedEnumerable()
     {
-        IOrderedEnumerable<ulong> oe  = MakeEnumerable5().Order();
+        IOrderedEnumerable<ulong> oe  = EnumerableMatch().Order();
         ImmOrderedSet<ulong>      set = oe.ToImmSet();
         Verify_55_99(set);
+        VerifySets(set);
     }
 
     [Test]
@@ -116,6 +154,7 @@ public class ImmSetTest
         ulong[] array = [55, 66, 77, 88, 99];
         var     set   = array.ToImmSet();
         Verify_55_99(set);
+        VerifySets(set);
     }
 
     [Test]
@@ -124,6 +163,7 @@ public class ImmSetTest
         IReadOnlyCollection<ulong> collection = new List<ulong> { 77L, 55L, 99L, 88L, 66L };
         var set  = collection.ToImmSet();
         Verify_55_99(set);
+        VerifySets(set);
     }
 
     [Test]
@@ -132,6 +172,7 @@ public class ImmSetTest
         var list = new List<ulong> { 77L, 55L, 99L, 88L, 66L };
         var set  = list.ToImmSet();
         Verify_55_99(set);
+        VerifySets(set);
     }
 
     [Test]
@@ -140,6 +181,7 @@ public class ImmSetTest
         var ss  = new HashSet<ulong> { 55L, 66L, 77L, 88L, 99L };
         var set = ss.ToImmSet();
         Verify_55_99(set);
+        VerifySets(set);
     }
 
     [Test]
@@ -148,6 +190,7 @@ public class ImmSetTest
         var ss  = new SortedSet<ulong> { 55L, 66L, 77L, 88L, 99L };
         var set = ss.ToImmSet();
         Verify_55_99(set);
+        VerifySets(set);
     }
 
     private void Verify_55_99(ImmSet<ulong> set) =>
@@ -171,6 +214,7 @@ public class ImmSetTest
         ulong[] array = [77L, 55L, 99L, 88L, 66L];
         var     set   = array.ToImmSortedSet();
         Verify_Sorted_55_99(set);
+        VerifySets(set);
     }
 
     [Test]
@@ -180,6 +224,7 @@ public class ImmSetTest
 
         var set = collection.ToImmSortedSet();
         Verify_Sorted_55_99(set);
+        VerifySets(set);
     }
 
     [Test]
@@ -188,6 +233,7 @@ public class ImmSetTest
         var ss  = new SortedSet<ulong> { 55L, 66L, 77L, 88L, 99L };
         var set = ss.ToImmSortedSet();
         Verify_Sorted_55_99(set);
+        VerifySets(set);
     }
 
     [Test]
@@ -196,6 +242,7 @@ public class ImmSetTest
         ulong[] array = { 77L, 88L, 99L, 55L, 66L, 77L, 66L, 88L, 55L };
         var     set   = array.ToImmSortedSet();
         Verify_Sorted_55_99(set);
+        VerifySets(set);
     }
 
     private void Verify_Sorted_55_99(ImmSortedSet<ulong> set) =>
@@ -212,6 +259,33 @@ public class ImmSetTest
             x => x.ToArray().ShouldBeEquivalentTo(new ulong[] {55, 66, 77, 88, 99})
         );
 
+
+    private static void VerifySets(ImmSet<ulong> set) =>
+        set.Verify
+        (
+            s => s.IsProperSupersetOf(EnumerableMinus()).ShouldBeTrue(),
+            s => s.IsProperSupersetOf(EnumerableMatch()).ShouldBeFalse(),
+            s => s.IsProperSupersetOf(EnumerablePlus()).ShouldBeFalse(),
+            s => s.IsSupersetOf(EnumerableMinus()).ShouldBeTrue(),
+            s => s.IsSupersetOf(EnumerableMatch()).ShouldBeTrue(),
+            s => s.IsSupersetOf(EnumerablePlus()).ShouldBeFalse(),
+            s => s.IsSubsetOf(EnumerableMinus()).ShouldBeFalse(),
+            s => s.IsSubsetOf(EnumerableMatch()).ShouldBeTrue(),
+            s => s.IsSubsetOf(EnumerablePlus()).ShouldBeTrue(),
+            s => s.IsProperSubsetOf(EnumerableMinus()).ShouldBeFalse(),
+            s => s.IsProperSubsetOf(EnumerableMatch()).ShouldBeFalse(),
+            s => s.IsProperSubsetOf(EnumerablePlus()).ShouldBeTrue(),
+            s => s.Overlaps(EnumerableMinus()).ShouldBeTrue(),
+            s => s.Overlaps(EnumerableMatch()).ShouldBeTrue(),
+            s => s.Overlaps(EnumerablePlus()).ShouldBeTrue(),
+            s => s.Overlaps(EnumerableOverlap()).ShouldBeTrue(),
+            s => s.Overlaps(EnumerableOther()).ShouldBeFalse(),
+            s => s.SetEquals(EnumerableMatch()).ShouldBeTrue(),
+            s => s.SetEquals(EnumerablePlus()).ShouldBeFalse(),
+            s => s.SetEquals(EnumerableMinus()).ShouldBeFalse(),
+            s => s.SetEquals(EnumerableOverlap()).ShouldBeFalse(),
+            s => s.SetEquals(EnumerableOther()).ShouldBeFalse()
+        );
 
 
     [Test]
