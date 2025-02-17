@@ -35,3 +35,25 @@ public abstract class ImmutableCollection<T> : Immutable
     public ImmutableCollection<T> Imp => this;
 
 }
+
+
+/// <summary>
+/// Base class for every immutable dictionary class.
+/// </summary>
+/// <typeparam name="K">type of the key.</typeparam>
+/// <typeparam name="V">type of the value.</typeparam>
+public abstract class ImmutableDictionary<K,V> : Immutable
+{
+
+    /// <summary>
+    /// The equality comparer for keys.
+    /// </summary>
+    protected static readonly EqualityComparer<K> keyEq = EqualityComparer<K>.Default;
+
+    /// <summary>
+    /// The equality comparer for keys.
+    /// </summary>
+    protected static readonly EqualityComparer<V> valueEq = EqualityComparer<V>.Default;
+
+
+}
