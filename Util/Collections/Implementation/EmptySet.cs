@@ -30,8 +30,8 @@ public class EmptySet<T> : ImmutableCollection<T>, ImmOrderedSet<T>
     public T First => throw new IndexOutOfRangeException("Collection is empty");
     public T Last  => throw new IndexOutOfRangeException("Collection is empty");
 
-    public int IndexOf(T     element, int notFound = int.MinValue) => notFound;
-    public int LastIndexOf(T element, int notFound = int.MinValue) => notFound;
+    public int IndexOf(T     element, int notFound) => notFound;
+    public int LastIndexOf(T element, int notFound) => notFound;
 
     public bool IsProperSubsetOf(IEnumerable<T>   other) => other.IsNotEmpty();
     public bool IsSubsetOf(IEnumerable<T>         other) => true;

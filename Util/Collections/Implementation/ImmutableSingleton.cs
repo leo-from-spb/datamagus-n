@@ -2,6 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using static Util.Collections.ImmConst;
+using static Util.Collections.Implementation.CollectionLogic;
+
 
 namespace Util.Collections.Implementation;
 
@@ -11,7 +14,7 @@ public class ImmutableSingleton<T> : ImmutableCollection<T>, ImmOrderedSet<T>
     /// <summary>
     /// The element.
     /// </summary>
-    private readonly T element;
+    private readonly T Element;
 
     /// <summary>
     /// Trivial constructor.
@@ -19,83 +22,53 @@ public class ImmutableSingleton<T> : ImmutableCollection<T>, ImmOrderedSet<T>
     /// <param name="element">the element to hold.</param>
     public ImmutableSingleton(T element)
     {
-        this.element = element;
+        this.Element = element;
     }
 
     public int  Count      => 1;
     public bool IsNotEmpty => true;
     public bool IsEmpty    => false;
-    public T    First      => element;
-    public T    Last       => element;
+    public T    First      => Element;
+    public T    Last       => Element;
 
     public T At(int index)
     {
-        if (index == 0) return element;
+        if (index == 0) return Element;
         else throw new IndexOutOfRangeException($"Requested an element at index {index} when the collection has one element only.");
     }
 
     public T this[int index] => At(index);
 
-    public bool Contains(T element) => eq.Equals(this.element, element);
+    public bool Contains(T element) => eq.Equals(this.Element, element);
 
-    public bool Contains(Predicate<T> predicate) => predicate(this.element);
+    public bool Contains(Predicate<T> predicate) => predicate(this.Element);
 
     public Found<T> Find(Predicate<T> predicate) =>
-        predicate(this.element)
-            ? new Found<T>(true, element)
+        predicate(this.Element)
+            ? new Found<T>(true, Element)
             : Found<T>.NotFound;
 
     public Found<T> FindFirst(Predicate<T> predicate, int fromIndex = 0) =>
-        fromIndex == 0 && predicate(this.element)
-            ? new Found<T>(true, element)
+        fromIndex == 0 && predicate(this.Element)
+            ? new Found<T>(true, Element)
             : Found<T>.NotFound;
 
     public Found<T> FindLast(Predicate<T> predicate) => Find(predicate);
 
-    public int IndexOf(T element, int notFound = int.MinValue) => eq.Equals(this.element, element) ? 0 : notFound;
+    public int IndexOf(T     element)               => eq.Equals(this.Element, element) ? 0 : notFoundIndex;
+    public int IndexOf(T     element, int notFound) => eq.Equals(this.Element, element) ? 0 : notFound;
+    public int LastIndexOf(T element)               => eq.Equals(this.Element, element) ? 0 : notFoundIndex;
+    public int LastIndexOf(T element, int notFound) => eq.Equals(this.Element, element) ? 0 : notFound;
 
-    public int LastIndexOf(T element, int notFound = int.MinValue) => IndexOf(element, notFound);
+    public bool IsSubsetOf(IEnumerable<T>         other) => IsTheSingletonSubsetOf(Element, eq, other, false);
+    public bool IsProperSubsetOf(IEnumerable<T>   other) => IsTheSingletonSubsetOf(Element, eq, other, true);
+    public bool IsProperSupersetOf(IEnumerable<T> other) => IsTheSingletonSupersetOf(Element, eq, other, true);
+    public bool IsSupersetOf(IEnumerable<T>       other) => IsTheSingletonSupersetOf(Element, eq, other, false);
+    public bool Overlaps(IEnumerable<T>           other) => other.Contains(Element);
+    public bool SetEquals(IEnumerable<T>          other) => IsTheSingletonEqualTo(Element, eq, other);
 
-    public bool IsSubsetOf(IEnumerable<T> other) => other.Contains(element);
-
-    public bool IsProperSubsetOf(IEnumerable<T> other)
-    {
-        bool such = false, another = false;
-        foreach (var x in other)
-        {
-            bool equal = eq.Equals(this.element, x);
-            such    |= equal;
-            another |= !equal;
-            if (such && another) return true;
-        }
-        return false;
-    }
-
-    public bool IsProperSupersetOf(IEnumerable<T> other) => other.IsEmpty();
-
-    public bool IsSupersetOf(IEnumerable<T> other)
-    {
-        foreach (var x in other)
-            if (eq.Equals(this.element, x) == false) return false;
-        return true;
-    }
-
-    public bool Overlaps(IEnumerable<T> other) => other.Contains(element);
-
-    public bool SetEquals(IEnumerable<T> other)
-    {
-        int n = 0;
-        foreach (var x in other)
-        {
-            n++;
-            if (n > 1) return false;
-            if (eq.Equals(this.element, x) == false) return false;
-        }
-        return true;
-    }
-
-    public IEnumerator<T>   GetEnumerator() => new ImmuatbleSingletonEnumerator<T>(element);
-    IEnumerator IEnumerable.GetEnumerator() => new ImmuatbleSingletonEnumerator<T>(element);
+    public IEnumerator<T>   GetEnumerator() => new ImmuatbleSingletonEnumerator<T>(Element);
+    IEnumerator IEnumerable.GetEnumerator() => new ImmuatbleSingletonEnumerator<T>(Element);
 
 }
 

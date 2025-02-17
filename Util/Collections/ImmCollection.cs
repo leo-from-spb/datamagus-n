@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using static Util.Collections.ImmConst;
+
 
 namespace Util.Collections;
 
@@ -72,12 +74,30 @@ public interface ImmList<T> : ImmCollection<T>, IReadOnlyList<T>
     /// <summary>
     /// Finds the first occurrence of the given element in the list.
     /// If the element is found, returns its index (zero-based),
+    /// otherwise returns a negative number.
+    /// </summary>
+    /// <param name="element">the element to find.</param>
+    /// <returns>index of the element, or a negative number when not found.</returns>
+    public int IndexOf(T element) => IndexOf(element, notFoundIndex);
+
+    /// <summary>
+    /// Finds the first occurrence of the given element in the list.
+    /// If the element is found, returns its index (zero-based),
     /// otherwise returns the value of the parameter <paramref name="notFound"/>.
     /// </summary>
     /// <param name="element">the element to find.</param>
     /// <param name="notFound">what to return when the given element is not found.</param>
     /// <returns>index of the element, or <paramref name="notFound"/> when not found.</returns>
-    public int IndexOf(T element, int notFound = int.MinValue);
+    public int IndexOf(T element, int notFound);
+
+    /// <summary>
+    /// Finds the last occurrence of the given element in the list.
+    /// If the element is found, returns its index (zero-based),
+    /// otherwise returns a negative number.
+    /// </summary>
+    /// <param name="element">the element to find.</param>
+    /// <returns>index of the element, or a negative number when not found.</returns>
+    public int LastIndexOf(T element) => LastIndexOf(element, notFoundIndex);
 
     /// <summary>
     /// Finds the last occurrence of the given element in the list.
@@ -87,7 +107,7 @@ public interface ImmList<T> : ImmCollection<T>, IReadOnlyList<T>
     /// <param name="element">the element to find.</param>
     /// <param name="notFound">what to return when the given element is not found.</param>
     /// <returns>index of the element, or <paramref name="notFound"/> when not found.</returns>
-    public int LastIndexOf(T element, int notFound = int.MinValue);
+    public int LastIndexOf(T element, int notFound);
 
     /// <summary>
     /// Finds an element, that matched the given <paramref name="predicate"/>.

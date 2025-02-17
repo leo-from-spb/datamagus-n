@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using static Util.Collections.ImmConst;
 
 namespace Util.Collections.Implementation;
 
@@ -41,7 +42,6 @@ internal class ImmutableArrayList<T> : ImmutableCollection<T>, ImmList<T>
     internal T[] ShareElementsArray() => Elements;
 
 
-
     public bool IsNotEmpty => true;
     public bool IsEmpty    => false;
 
@@ -63,14 +63,18 @@ internal class ImmutableArrayList<T> : ImmutableCollection<T>, ImmList<T>
         return false;
     }
 
-    public virtual int IndexOf(T element, int notFound = int.MinValue)
+    public int IndexOf(T element) => IndexOf(element, notFoundIndex);
+
+    public virtual int IndexOf(T element, int notFound)
     {
         for (int i = 0; i < Count; i++)
             if (eq.Equals(Elements[i], element)) return i;
         return notFound;
     }
 
-    public virtual int LastIndexOf(T element, int notFound = int.MinValue)
+    public virtual int LastIndexOf(T element) => LastIndexOf(element, notFoundIndex);
+
+    public virtual int LastIndexOf(T element, int notFound)
     {
         for (int i = Count - 1; i >= 0; i--)
             if (eq.Equals(Elements[i], element)) return i;
