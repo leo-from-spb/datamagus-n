@@ -8,6 +8,79 @@ namespace Util.Collections.Implementation;
 
 internal static class CollectionLogic
 {
+    internal static int IndexOf<E>(this E[]            array,
+                                   E                   element,
+                                   EqualityComparer<E> eq,
+                                   int                 fromIndex = 0,
+                                   int                 tillIndex = int.MaxValue,
+                                   int                 notFound  = ImmConst.notFoundIndex)
+    {
+        int n = array.Length;
+        if (fromIndex >= n) return notFound;
+        for (var i = 0; i < int.Min(tillIndex, n); i++)
+            if (eq.Equals(array[i], element)) return i;
+        return notFound;
+    }
+
+    internal static int IndexOf<E>(this E[]     array,
+                                   Predicate<E> predicate,
+                                   int          fromIndex = 0,
+                                   int          tillIndex = int.MaxValue,
+                                   int          notFound  = ImmConst.notFoundIndex)
+    {
+        int n = array.Length;
+        if (fromIndex >= n) return notFound;
+        for (int i = 0; i < int.Min(tillIndex, n); i++)
+            if (predicate(array[i])) return i;
+        return notFound;
+    }
+
+    internal static int LastIndexOf<E>(this E[]     array,
+                                       Predicate<E> predicate,
+                                       int          fromIndex = 0,
+                                       int          tillIndex = int.MaxValue,
+                                       int          notFound  = ImmConst.notFoundIndex)
+    {
+        int n = array.Length;
+        if (fromIndex >= n) return notFound;
+        for (var i = int.Min(tillIndex, n) - 1; i >= 0; i--)
+            if (predicate(array[i])) return i;
+        return notFound;
+    }
+
+    internal static Found<E> FindElement<E>(this E[] array, Predicate<E> predicate)
+    {
+        foreach (E element in array)
+            if (predicate(element)) return new Found<E>(true, element);
+        return Found<E>.NotFound;
+    }
+
+    internal static Found<P> FindElementPart<E,P>(this E[] array, Func<E,P> part, Predicate<P> predicate, int fromIndex = 0)
+    {
+        for (var i = fromIndex; i < array.Length; i++)
+        {
+            P p = part(array[i]);
+            if (predicate(p)) return new Found<P>(true, p);
+        }
+
+        return Found<P>.NotFound;
+    }
+
+    internal static Found<P> FindLastElementPart<E,P>(this E[] array, Func<E,P> part, Predicate<P> predicate)
+    {
+        for (var i = array.Length-1; i >= 0; i--)
+        {
+            P p = part(array[i]);
+            if (predicate(p)) return new Found<P>(true, p);
+        }
+
+        return Found<P>.NotFound;
+    }
+
+    internal static Found<E> FindByIndex<E>(this E[] array, int index) =>
+        index >= 0 && index < array.Length
+            ? new Found<E>(true, array[index])
+            : Found<E>.NotFound;
 
     internal static E[] CloneArray<E>(this E[] originalArray)
     {
