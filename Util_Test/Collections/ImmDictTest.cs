@@ -6,6 +6,8 @@ using Util.Collections.Implementation;
 namespace Util.Collections;
 
 using StringULongPair = KeyValuePair<string,ulong>;
+using UIntStringPair = KeyValuePair<uint,string>;
+
 
 [TestFixture]
 public class ImmDictTest
@@ -185,6 +187,94 @@ public class ImmDictTest
             vs => vs.Contains(3uL).ShouldBeTrue(),
             vs => vs.Contains(10uL).ShouldBeFalse(),
             vs => (vs as IEnumerable<ulong>).ToArray().ShouldContainAll(1uL, 2uL, 3uL)
+        );
+    }
+
+    #endregion
+
+
+    #region 5 UINT
+
+    private UIntStringPair[] Uints5 =
+        [new(26u, "Lipetsk"), new(33u, "Piter"), new(42u, "Moscow"), new(66u, "Tambov"), new(74u, "Elets")];
+
+    [Test]
+    public void Uint5_Mini()
+    {
+        var dict = new ImmutableMiniDictionary<uint,string>(Uints5);
+        VerifyUints5(dict);
+    }
+
+    [Test]
+    public void Uint5_Hash()
+    {
+        var dict = new ImmutableHashDictionary<uint,string>(Uints5);
+        VerifyUints5(dict);
+    }
+
+    [Test]
+    public void Uint5_Flat()
+    {
+        var dict = new ImmutableFlatDictionary<string>(Uints5);
+        VerifyUints5(dict);
+    }
+
+    [Test]
+    public void Uint5_FromDictionary()
+    {
+        var dictionary = new Dictionary<uint,string> { {26u, "Lipetsk"}, {33u, "Piter"}, {42u, "Moscow"}, {66u, "Tambov"}, {74u, "Elets"} };
+        var dict       = dictionary.ToImmDict();
+        VerifyUints5(dict);
+    }
+
+    private void VerifyUints5(ImmDict<uint,string> dict)
+    {
+        dict.Verify
+        (
+            d => d.IsNotEmpty.ShouldBeTrue(),
+            d => d.IsEmpty.ShouldBeFalse(),
+            d => d.Count.ShouldBe(5),
+            d => d.Find(26u).ShouldBe(new Found<string>(true, "Lipetsk")),
+            d => d.Find(33u).ShouldBe(new Found<string>(true, "Piter")),
+            d => d.Find(42u).ShouldBe(new Found<string>(true, "Moscow")),
+            d => d.Find(66u).ShouldBe(new Found<string>(true, "Tambov")),
+            d => d.Find(74u).ShouldBe(new Found<string>(true, "Elets")),
+            d => d.Find(25u).Ok.ShouldBeFalse(),
+            d => d.Find(27u).Ok.ShouldBeFalse(),
+            d => d.Find(73u).Ok.ShouldBeFalse(),
+            d => d.Find(75u).Ok.ShouldBeFalse()
+        );
+
+        dict.Keys.Verify
+        (
+            ks => ks.IsNotEmpty.ShouldBeTrue(),
+            ks => ks.IsEmpty.ShouldBeFalse(),
+            ks => ks.Count.ShouldBe(5),
+            ks => ks.Contains(26u).ShouldBeTrue(),
+            ks => ks.Contains(33u).ShouldBeTrue(),
+            ks => ks.Contains(42u).ShouldBeTrue(),
+            ks => ks.Contains(66u).ShouldBeTrue(),
+            ks => ks.Contains(74u).ShouldBeTrue(),
+            ks => ks.Contains(25u).ShouldBeFalse(),
+            ks => ks.Contains(27u).ShouldBeFalse(),
+            ks => ks.Contains(73u).ShouldBeFalse(),
+            ks => ks.Contains(75u).ShouldBeFalse(),
+            ks => ks.ToArray().ShouldContainAll(26u, 33u, 42u, 66u, 74u)
+            //ks => ks.ToArray().ShouldContainAll("Lipetsk", "Piter", "Moscow", "Tambov", "Elets")
+        );
+
+        dict.Values.Verify
+        (
+            vs => vs.IsNotEmpty.ShouldBeTrue(),
+            vs => vs.IsEmpty.ShouldBeFalse(),
+            vs => vs.Count.ShouldBe(5),
+            vs => vs.Contains("Lipetsk").ShouldBeTrue(),
+            vs => vs.Contains("Piter").ShouldBeTrue(),
+            vs => vs.Contains("Moscow").ShouldBeTrue(),
+            vs => vs.Contains("Tambov").ShouldBeTrue(),
+            vs => vs.Contains("Elets").ShouldBeTrue(),
+            vs => vs.Contains("X").ShouldBeFalse(),
+            vs => vs.ToArray().ShouldContainAll("Lipetsk", "Piter", "Moscow", "Tambov", "Elets")
         );
     }
 

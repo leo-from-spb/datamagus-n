@@ -416,6 +416,7 @@ public static class Imm
     /// <typeparam name="V">type of the value.</typeparam>
     /// <returns>the just created immutable snapshot.</returns>
     public static ImmDict<K,V> ToImmDict<K,V>(this Dictionary<K,V> dictionary)
+        where K : notnull
     {
         int n = dictionary.Count;
         if (n == 0) return EmptyDictionary<K,V>.Instance;
@@ -430,5 +431,53 @@ public static class Imm
     }
 
 
+    /// <summary>
+    /// Makes an immutable snapshot of this dictionary.
+    /// Specialization for <c>uint</c> keys.
+    /// </summary>
+    /// <param name="dictionary">the original dictionary.</param>
+    /// <typeparam name="V">type of the value.</typeparam>
+    /// <returns>the just created immutable snapshot.</returns>
+    public static ImmDict<uint,V> ToImmDict<V>(this IReadOnlyDictionary<uint,V> dictionary)
+    {
+        if (dictionary is ImmDict<uint,V> immDict) return immDict;
+        return MakeImmDict(dictionary, dictionary.Count);
+    }
 
+    /// <summary>
+    /// Makes an immutable snapshot of this dictionary.
+    /// Specialization for <c>uint</c> keys.
+    /// </summary>
+    /// <param name="dictionary">the original dictionary.</param>
+    /// <typeparam name="V">type of the value.</typeparam>
+    /// <returns>the just created immutable snapshot.</returns>
+    public static ImmDict<uint,V> ToImmDict<V>(this IDictionary<uint,V> dictionary)
+    {
+        return MakeImmDict(dictionary, dictionary.Count);
+    }
+
+    /// <summary>
+    /// Makes an immutable snapshot of this dictionary.
+    /// Specialization for <c>uint</c> keys.
+    /// </summary>
+    /// <param name="dictionary">the original dictionary.</param>
+    /// <typeparam name="V">type of the value.</typeparam>
+    /// <returns>the just created immutable snapshot.</returns>
+    public static ImmDict<uint,V> ToImmDict<V>(this Dictionary<uint,V> dictionary)
+    {
+        return MakeImmDict(dictionary, dictionary.Count);
+    }
+
+    private static ImmDict<uint,V> MakeImmDict<V>(IEnumerable<KeyValuePair<uint,V>> pairs, int n)
+    {
+        if (n == 0) return EmptyDictionary<uint,V>.Instance;
+        if (n == 1) return new ImmutableSingletonDictionary<uint,V>(pairs.First());
+
+        KeyValuePair<uint,V>[] array = pairs.ToArray();
+        if (n <= 3) return new ImmutableMiniDictionary<uint,V>(array);
+
+        var interval = ImmutableFlatDictionary<V>.CollectInterval(array);
+        if (interval.Length <= n * 4) return new ImmutableFlatDictionary<V>(interval, array);
+        else return new ImmutableHashDictionary<uint,V>(array);
+    }
 }

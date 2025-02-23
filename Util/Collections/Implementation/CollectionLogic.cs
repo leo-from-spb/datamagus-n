@@ -132,8 +132,11 @@ internal static class CollectionLogic
 
 
     internal static bool IsTheSetSubsetOf<E>(int count, Func<E,int> findIndex, IEnumerable<E> anotherSources, bool strict)
+        => IsTheSetSubsetOf(count, count, findIndex, anotherSources, strict);
+
+    internal static bool IsTheSetSubsetOf<E>(int Capacity, int count, Func<E,int> findIndex, IEnumerable<E> anotherSources, bool strict)
     {
-        BitArray indices       = new BitArray(count);
+        BitArray indices       = new BitArray(Capacity);
         bool     wasAnotherOne = false;
         foreach (var x in anotherSources)
         {
@@ -148,8 +151,11 @@ internal static class CollectionLogic
     }
 
     internal static bool IsTheSetSupersetOf<E>(int count, Func<E,int> findIndex, IEnumerable<E> anotherSources, bool strict)
+        => IsTheSetSupersetOf(count, count, findIndex, anotherSources, strict);
+
+    internal static bool IsTheSetSupersetOf<E>(int Capacity, int count, Func<E,int> findIndex, IEnumerable<E> anotherSources, bool strict)
     {
-        BitArray indices = new BitArray(count);
+        BitArray indices = new BitArray(Capacity);
         foreach (var x in anotherSources)
         {
             int index = findIndex(x);
@@ -167,8 +173,11 @@ internal static class CollectionLogic
     }
 
     internal static bool IsTheSetEqualTo<E>(int count, Func<E,int> findIndex, IEnumerable<E> anotherSources)
+        => IsTheSetEqualTo(count, count, findIndex, anotherSources);
+
+    internal static bool IsTheSetEqualTo<E>(int Capacity, int count, Func<E,int> findIndex, IEnumerable<E> anotherSources)
     {
-        BitArray indices = new BitArray(count);
+        BitArray indices = new BitArray(Capacity);
         foreach (var x in anotherSources)
         {
             int index = findIndex(x);

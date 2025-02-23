@@ -15,6 +15,12 @@ internal class ImmutableSingletonDictionary<K,V> : ImmutableDictionary<K,V>, Imm
         Value = value;
     }
 
+    internal ImmutableSingletonDictionary(KeyValuePair<K, V> pair)
+    {
+        this.Key   = pair.Key;
+        this.Value = pair.Value;
+    }
+
     public bool IsNotEmpty => true;
     public bool IsEmpty    => false;
     public int  Count      => 1;
