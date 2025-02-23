@@ -33,6 +33,56 @@ public class ImmDictTest
         VerifyBasic1(dict);
     }
 
+    [Test]
+    public void Basic1_1_Param()
+    {
+        var dict = Imm.Dict("thing", 42uL);
+        VerifyBasic1(dict);
+    }
+
+    [Test]
+    public void Basic1_2_ParamsSame()
+    {
+        var dict = Imm.Dict("thing", 42uL, "thing", 13uL);
+        VerifyBasic1(dict);
+    }
+
+    [Test]
+    public void Basic1_3_ParamsSame()
+    {
+        var dict = Imm.Dict("thing", 42uL, "thing", 13uL, "thing", 1uL);
+        VerifyBasic1(dict);
+    }
+
+    [Test]
+    public void Basic1_From_IDictionary()
+    {
+        Dictionary<string,ulong> d = new Dictionary<string,ulong>();
+        d.Add("thing", 42uL);
+        IDictionary<string,ulong> id = d;
+        var dict = id.ToImmDict();
+        VerifyBasic1(dict);
+    }
+
+    [Test]
+    public void Basic1_From_IReadOnlyDictionary()
+    {
+        Dictionary<string,ulong> d = new Dictionary<string,ulong>();
+        d.Add("thing", 42uL);
+        IReadOnlyDictionary<string,ulong> rd = d;
+        var dict = rd.ToImmDict();
+        VerifyBasic1(dict);
+    }
+
+    [Test]
+    public void Basic1_From_Dictionary()
+    {
+        Dictionary<string,ulong> d = new Dictionary<string,ulong>();
+        d.Add("thing", 42uL);
+        var dict = d.ToImmDict();
+        VerifyBasic1(dict);
+    }
+
     private static void VerifyBasic1(ImmDict<string,ulong> dict)
     {
         dict.Verify
@@ -86,6 +136,13 @@ public class ImmDictTest
     public void Basic3_Hash()
     {
         var dict = new ImmutableHashDictionary<string,ulong>(Pairs3);
+        VerifyBasic3(dict);
+    }
+
+    [Test]
+    public void Basic3_Param()
+    {
+        var dict = Imm.Dict("раз", 1uL, "два", 2uL, "три", 3uL);
         VerifyBasic3(dict);
     }
 

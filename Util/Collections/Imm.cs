@@ -311,4 +311,124 @@ public static class Imm
         return new ImmutableSortedSet<E>(newArray);
     }
 
+
+    /// <summary>
+    /// Makes an immutables dictionary of one pair.
+    /// </summary>
+    /// <param name="key">the key.</param>
+    /// <param name="value">the value.</param>
+    /// <typeparam name="K">type of the key.</typeparam>
+    /// <typeparam name="V">type of the value.</typeparam>
+    /// <returns>the just created immutable dictionary.</returns>
+    public static ImmDict<K,V> Dict<K,V>(K key, V value) =>
+        new ImmutableSingletonDictionary<K,V>(key, value);
+
+    /// <summary>
+    /// Makes an immutables dictionary of a couple of pairs.
+    /// </summary>
+    /// <param name="key1">the key of the pair 1.</param>
+    /// <param name="value1">the value of the pair 1.</param>
+    /// <param name="key2">the key of the pair 2.</param>
+    /// <param name="value2">the value of the pair 2.</param>
+    /// <typeparam name="K">type of the key.</typeparam>
+    /// <typeparam name="V">type of the value.</typeparam>
+    /// <returns>the just created immutable dictionary.</returns>
+    public static ImmDict<K,V> Dict<K,V>(K key1, V value1, K key2, V value2)
+        where K : IEquatable<K>
+        => EqualityComparer<K>.Default.Equals(key1, key2)
+            ? new ImmutableSingletonDictionary<K,V>(key1, value1)
+            : new ImmutableMiniDictionary<K,V>([new(key1, value1), new(key2, value2)]);
+
+    /// <summary>
+    /// Makes an immutables dictionary of three pairs.
+    /// </summary>
+    /// <param name="key1">the key of the pair 1.</param>
+    /// <param name="value1">the value of the pair 1.</param>
+    /// <param name="key2">the key of the pair 2.</param>
+    /// <param name="value2">the value of the pair 2.</param>
+    /// <param name="key3">the key of the pair 3.</param>
+    /// <param name="value3">the value of the pair 3.</param>
+    /// <typeparam name="K">type of the key.</typeparam>
+    /// <typeparam name="V">type of the value.</typeparam>
+    /// <returns>the just created immutable dictionary.</returns>
+    public static ImmDict<K, V> Dict<K, V>(K key1, V value1, K key2, V value2, K key3, V value3)
+        where K : IEquatable<K>
+    {
+        var eq = EqualityComparer<K>.Default;
+        if (eq.Equals(key1, key2)) return Dict(key1, value1, key3, value3);
+        if (eq.Equals(key1, key3)) return Dict(key1, value1, key2, value2);
+        if (eq.Equals(key2, key3)) return Dict(key1, value1, key2, value2);
+
+        KeyValuePair<K,V>[] pairs =
+            new KeyValuePair<K,V>[]{ new(key1,value1), new(key2,value2), new(key3,value3) };
+        return new ImmutableMiniDictionary<K,V>(pairs);
+    }
+
+    /// <summary>
+    /// Makes an immutable snapshot of this dictionary.
+    /// </summary>
+    /// <param name="dictionary">the original dictionary.</param>
+    /// <typeparam name="K">type of the key.</typeparam>
+    /// <typeparam name="V">type of the value.</typeparam>
+    /// <returns>the just created immutable snapshot.</returns>
+    public static ImmDict<K,V> ToImmDict<K,V>(this IReadOnlyDictionary<K,V> dictionary)
+    {
+        if (dictionary is ImmDict<K,V> immDict) return immDict;
+
+        int n = dictionary.Count;
+        if (n == 0) return EmptyDictionary<K,V>.Instance;
+
+        KeyValuePair<K,V>[] pairs = dictionary.ToArray();
+        return n switch
+               {
+                   1    => new ImmutableSingletonDictionary<K,V>(pairs[0].Key, pairs[0].Value),
+                   <= 4 => new ImmutableMiniDictionary<K,V>(pairs),
+                   _    => new ImmutableHashDictionary<K,V>(pairs)
+               };
+    }
+
+    /// <summary>
+    /// Makes an immutable snapshot of this dictionary.
+    /// </summary>
+    /// <param name="dictionary">the original dictionary.</param>
+    /// <typeparam name="K">type of the key.</typeparam>
+    /// <typeparam name="V">type of the value.</typeparam>
+    /// <returns>the just created immutable snapshot.</returns>
+    public static ImmDict<K,V> ToImmDict<K,V>(this IDictionary<K,V> dictionary)
+    {
+        int n = dictionary.Count;
+        if (n == 0) return EmptyDictionary<K,V>.Instance;
+
+        KeyValuePair<K,V>[] pairs = dictionary.ToArray();
+        return n switch
+               {
+                   1    => new ImmutableSingletonDictionary<K,V>(pairs[0].Key, pairs[0].Value),
+                   <= 4 => new ImmutableMiniDictionary<K,V>(pairs),
+                   _    => new ImmutableHashDictionary<K,V>(pairs)
+               };
+    }
+
+    /// <summary>
+    /// Makes an immutable snapshot of this dictionary.
+    /// </summary>
+    /// <param name="dictionary">the original dictionary.</param>
+    /// <typeparam name="K">type of the key.</typeparam>
+    /// <typeparam name="V">type of the value.</typeparam>
+    /// <returns>the just created immutable snapshot.</returns>
+    public static ImmDict<K,V> ToImmDict<K,V>(this Dictionary<K,V> dictionary)
+    {
+        int n = dictionary.Count;
+        if (n == 0) return EmptyDictionary<K,V>.Instance;
+
+        KeyValuePair<K,V>[] pairs = dictionary.ToArray();
+        return n switch
+               {
+                   1    => new ImmutableSingletonDictionary<K,V>(pairs[0].Key, pairs[0].Value),
+                   <= 4 => new ImmutableMiniDictionary<K,V>(pairs),
+                   _    => new ImmutableHashDictionary<K,V>(pairs)
+               };
+    }
+
+
+
 }

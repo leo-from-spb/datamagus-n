@@ -7,6 +7,8 @@ namespace Util.Collections.Implementation;
 /// </summary>
 public sealed class EmptyDictionary<K,V> : ImmDict<K,V>
 {
+    public static readonly EmptyDictionary<K,V> Instance = new();
+
     public bool IsNotEmpty => false;
     public bool IsEmpty    => true;
     public int  Count      => 0;
