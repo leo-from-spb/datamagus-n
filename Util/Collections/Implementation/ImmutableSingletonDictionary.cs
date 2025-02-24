@@ -4,7 +4,7 @@ namespace Util.Collections.Implementation;
 
 
 
-internal class ImmutableSingletonDictionary<K,V> : ImmutableDictionary<K,V>, ImmDict<K,V>
+internal class ImmutableSingletonDictionary<K,V> : ImmutableDictionary<K,V>, ImmOrderedDict<K,V>
 {
     private readonly K Key;
     private readonly V Value;
@@ -32,9 +32,9 @@ internal class ImmutableSingletonDictionary<K,V> : ImmutableDictionary<K,V>, Imm
             ? new Found<V>(true, Value)
             : Found<V>.NotFound;
 
-    public ImmSet<K> Keys => new ImmutableSingleton<K>(Key);
-    public ImmCollection<V> Values => new ImmutableSingleton<V>(Value);
+    public ImmOrderedSet<K> Keys => new ImmutableSingleton<K>(Key);
+    public ImmList<V> Values => new ImmutableSingleton<V>(Value);
 
-    public ImmCollection<KeyValuePair<K,V>> Entries =>
+    public ImmList<KeyValuePair<K,V>> Entries =>
         new ImmutableSingleton<KeyValuePair<K,V>>(new KeyValuePair<K,V>(Key, Value));
 }

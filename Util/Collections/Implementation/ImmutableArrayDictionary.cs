@@ -16,7 +16,7 @@ namespace Util.Collections.Implementation;
 /// </summary>
 /// <typeparam name="K">type of the key.</typeparam>
 /// <typeparam name="V">type of the associated value.</typeparam>
-internal abstract class ImmutableArrayDictionary<K,V> : ImmutableDictionary<K,V>, ImmDict<K,V>
+internal abstract class ImmutableArrayDictionary<K,V> : ImmutableDictionary<K,V>, ImmOrderedDict<K,V>
 {
     /// <summary>
     /// Pairs.
@@ -50,10 +50,10 @@ internal abstract class ImmutableArrayDictionary<K,V> : ImmutableDictionary<K,V>
     public abstract int LastIndexOfKey(K key, int notFound);
 
 
-    public virtual ImmSet<K>        Keys   => new KeySet(this);
-    public virtual ImmCollection<V> Values => new ValueCollection(this);
+    public virtual ImmOrderedSet<K> Keys   => new KeySet(this);
+    public virtual ImmList<V>       Values => new ValueCollection(this);
 
-    public virtual ImmCollection<KeyValuePair<K,V>> Entries => new ImmutableArrayList<KeyValuePair<K,V>>(Pairs);
+    public virtual ImmList<KeyValuePair<K,V>> Entries => new ImmutableArrayList<KeyValuePair<K,V>>(Pairs);
 
     public IEnumerator<KeyValuePair<K,V>> GetEnumerator() => Pairs.AsEnumerable().GetEnumerator();
 

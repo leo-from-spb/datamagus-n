@@ -47,3 +47,22 @@ public interface ImmDict<K,V> : IReadOnlyDictionary<K,V>
 }
 
 
+ /// <summary>
+ /// Immutable dictionary, where entries have a meaningful order (but not always sorted).
+ /// </summary>
+ /// <typeparam name="K"></typeparam>
+ /// <typeparam name="V"></typeparam>
+public interface ImmOrderedDict<K,V> : ImmDict<K,V>
+{
+    public new ImmOrderedSet<K> Keys { get; }
+
+    ImmSet<K> ImmDict<K,V>.Keys => Keys;
+    
+    public new ImmList<V> Values { get; }
+
+    ImmCollection<V> ImmDict<K,V>.Values => Values;
+
+    public new ImmList<KeyValuePair<K,V>> Entries { get; }
+
+    ImmCollection<KeyValuePair<K,V>> ImmDict<K,V>.Entries => Entries;
+}

@@ -148,7 +148,7 @@ public class ImmDictTest
         VerifyBasic3(dict);
     }
 
-    private static void VerifyBasic3(ImmDict<string,ulong> dict)
+    private static void VerifyBasic3(ImmOrderedDict<string,ulong> dict)
     {
         dict.Verify
         (
@@ -170,6 +170,9 @@ public class ImmDictTest
             ks => ks.IsNotEmpty.ShouldBeTrue(),
             ks => ks.IsEmpty.ShouldBeFalse(),
             ks => ks.Count.ShouldBe(3),
+            ks => ks[0].ShouldBe("раз"),
+            ks => ks[1].ShouldBe("два"),
+            ks => ks[2].ShouldBe("три"),
             ks => ks.Contains("раз").ShouldBeTrue(),
             ks => ks.Contains("два").ShouldBeTrue(),
             ks => ks.Contains("три").ShouldBeTrue(),
@@ -182,6 +185,9 @@ public class ImmDictTest
             vs => vs.IsNotEmpty.ShouldBeTrue(),
             vs => vs.IsEmpty.ShouldBeFalse(),
             vs => vs.Count.ShouldBe(3),
+            vs => vs[0].ShouldBe(1uL),
+            vs => vs[1].ShouldBe(2uL),
+            vs => vs[2].ShouldBe(3uL),
             vs => vs.Contains(1uL).ShouldBeTrue(),
             vs => vs.Contains(2uL).ShouldBeTrue(),
             vs => vs.Contains(3uL).ShouldBeTrue(),
