@@ -44,19 +44,13 @@ public interface ImmCollection<T> : IReadOnlyCollection<T>
 }
 
 
+
 /// <summary>
-/// Immutable list.
+/// Immutable sequence — a collection that preserves the order of elements.
 /// </summary>
 /// <typeparam name="T">type of elements.</typeparam>
-public interface ImmList<T> : ImmCollection<T>, IReadOnlyList<T>
+public interface ImmSeq<T> : ImmCollection<T>
 {
-    /// <summary>
-    /// Item at the given index.
-    /// </summary>
-    /// <param name="index">index, zero-based.</param>
-    /// <exception cref="IndexOutOfRangeException">when the index is wrong or the collection is empty.</exception>
-    public T At(int index);
-
     /// <summary>
     /// The first element.
     /// </summary>
@@ -70,6 +64,22 @@ public interface ImmList<T> : ImmCollection<T>, IReadOnlyList<T>
     /// <exception cref="IndexOutOfRangeException">when this collection is empty</exception>
     /// <seealso cref="First"/>
     public T Last { get; }
+}
+
+
+
+/// <summary>
+/// Immutable list — a collection that preserves the order of elements and also allows the direct access by index.
+/// </summary>
+/// <typeparam name="T">type of elements.</typeparam>
+public interface ImmList<T> : ImmSeq<T>, IReadOnlyList<T>
+{
+    /// <summary>
+    /// Item at the given index.
+    /// </summary>
+    /// <param name="index">index, zero-based.</param>
+    /// <exception cref="IndexOutOfRangeException">when the index is wrong or the collection is empty.</exception>
+    public T At(int index);
 
     /// <summary>
     /// Finds the first occurrence of the given element in the list.
@@ -136,15 +146,40 @@ public interface ImmList<T> : ImmCollection<T>, IReadOnlyList<T>
 public interface ImmSet<T> : ImmCollection<T>, IReadOnlySet<T>
 { }
 
+
+
 /// <summary>
 /// Immutable ordered set of elements, in which elements have a meaningful order.
 /// </summary>
 /// <typeparam name="T">type of elements.</typeparam>
-public interface ImmOrderedSet<T> : ImmSet<T>, ImmList<T>
+public interface ImmOrdSet<T> : ImmSet<T>, ImmSeq<T>
 { }
 
 
 
-public interface ImmSortedSet<T> : ImmOrderedSet<T>
+/// <summary>
+/// Immutable ordered set of elements, that also has direct access by index.
+/// </summary>
+/// <typeparam name="T">type of elements.</typeparam>
+public interface ImmListSet<T> : ImmOrdSet<T>, ImmList<T>
+{ }
+
+
+
+/// <summary>
+/// Immutable set where all elements are sorted by default order.
+/// </summary>
+/// <typeparam name="T">type of elements.</typeparam>
+public interface ImmSortedSet<T> : ImmOrdSet<T>
+    where T : IComparable<T>
+{ }
+
+
+
+/// <summary>
+/// Immutable set with direct access to its elements and where all elements are sorted by default order.
+/// </summary>
+/// <typeparam name="T">type of elements.</typeparam>
+public interface ImmSortedListSet<T> : ImmSortedSet<T>, ImmListSet<T>
     where T : IComparable<T>
 { }

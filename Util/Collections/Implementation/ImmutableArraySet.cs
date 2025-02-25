@@ -10,7 +10,7 @@ namespace Util.Collections.Implementation;
 /// Array-based immutable set.
 /// All elements are expected to be different.
 /// </summary>
-internal class ImmutableArraySet<T> : ImmutableArrayList<T>, ImmOrderedSet<T>
+internal class ImmutableArraySet<T> : ImmutableArrayList<T>, ImmListSet<T>
 {
     /// <summary>
     /// Internal constructor.
@@ -76,7 +76,7 @@ internal class ImmutableHashSet<T> : ImmutableArraySet<T>
 /// <summary>
 /// Array-based sorted immutable set.
 /// </summary>
-internal class ImmutableSortedSet<T> : ImmutableArraySet<T>, ImmSortedSet<T>
+internal class ImmutableSortedSet<T> : ImmutableArraySet<T>, ImmSortedListSet<T>
     where T : IComparable<T>
 {
     /// <summary>

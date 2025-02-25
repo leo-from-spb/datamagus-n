@@ -9,7 +9,7 @@ using static Util.Collections.Implementation.CollectionLogic;
 namespace Util.Collections.Implementation;
 
 
-public class ImmutableSingleton<T> : ImmutableCollection<T>, ImmOrderedSet<T>
+public class ImmutableSingleton<T> : ImmutableCollection<T>, ImmListSet<T>
 {
     /// <summary>
     /// The element.
@@ -74,7 +74,7 @@ public class ImmutableSingleton<T> : ImmutableCollection<T>, ImmOrderedSet<T>
 
 
 
-public class ImmutableSortedSingleton<T> : ImmutableSingleton<T>, ImmSortedSet<T>
+public class ImmutableSortedSingleton<T> : ImmutableSingleton<T>, ImmSortedListSet<T>
     where T: IComparable<T>
 {
     public ImmutableSortedSingleton(T element) : base(element) { }

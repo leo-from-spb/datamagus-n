@@ -27,7 +27,7 @@ public static class Imm
     /// <param name="elements"></param>
     /// <typeparam name="E"></typeparam>
     /// <returns>new set.</returns>
-    public static ImmOrderedSet<E> SetOf<E>(params E[] elements) => elements.ToImmSet();
+    public static ImmListSet<E> SetOf<E>(params E[] elements) => elements.ToImmSet();
 
     /// <summary>
     /// Sortes and deduplicates elements and makes a set of them.
@@ -35,7 +35,7 @@ public static class Imm
     /// <param name="elements"></param>
     /// <typeparam name="E"></typeparam>
     /// <returns>new sorted set.</returns>
-    public static ImmSortedSet<E> SortedSetOf<E>(params E[] elements)
+    public static ImmSortedListSet<E> SortedSetOf<E>(params E[] elements)
         where E : IComparable<E>
         => elements.ToImmSortedSet();
 
@@ -112,7 +112,7 @@ public static class Imm
     /// <param name="source">elements.</param>
     /// <typeparam name="E">type of elements.</typeparam>
     /// <returns>the created immutable set.</returns>
-    public static ImmOrderedSet<E> ToImmSet<E>(this IOrderedEnumerable<E> source)
+    public static ImmListSet<E> ToImmSet<E>(this IOrderedEnumerable<E> source)
     {
         return DeduplicateAndPrepareSet<E>(source, 0);
     }
@@ -124,7 +124,7 @@ public static class Imm
     /// <param name="array">elements.</param>
     /// <typeparam name="E">type of elements.</typeparam>
     /// <returns>the created immutable set.</returns>
-    public static ImmOrderedSet<E> ToImmSet<E>(this E[] array)
+    public static ImmListSet<E> ToImmSet<E>(this E[] array)
     {
         int n = array.Length;
         if (n == 0) return EmptySet<E>.Instance;
@@ -133,7 +133,7 @@ public static class Imm
         return DeduplicateAndPrepareSet<E>(array, n);
     }
 
-    private static ImmOrderedSet<E> DeduplicateAndPrepareSet<E>(IEnumerable<E> source, int initialCapacity)
+    private static ImmListSet<E> DeduplicateAndPrepareSet<E>(IEnumerable<E> source, int initialCapacity)
     {
         var list = new List<E>(initialCapacity);
         var hset = new HashSet<E>(initialCapacity);
@@ -197,9 +197,9 @@ public static class Imm
     /// <param name="list">elements.</param>
     /// <typeparam name="E">type of elements.</typeparam>
     /// <returns>the created immutable set.</returns>
-    public static ImmOrderedSet<E> ToImmSet<E>(this IReadOnlyList<E> list)
+    public static ImmListSet<E> ToImmSet<E>(this IReadOnlyList<E> list)
     {
-        if (list is ImmOrderedSet<E> immSet) return immSet;
+        if (list is ImmListSet<E> immSet) return immSet;
         if (list is ImmutableArrayList<E> immArrayList) immArrayList.ToSet();
 
         int n = list.Count;
@@ -222,7 +222,7 @@ public static class Imm
     /// <param name="array">elements.</param>
     /// <typeparam name="E">type of elements.</typeparam>
     /// <returns>the created immutable sorted set.</returns>
-    public static ImmSortedSet<E> ToImmSortedSet<E>(this E[] array)
+    public static ImmSortedListSet<E> ToImmSortedSet<E>(this E[] array)
         where E : IComparable<E>
     {
         int n = array.Length;
@@ -242,10 +242,10 @@ public static class Imm
     /// <param name="collection">elements.</param>
     /// <typeparam name="E">type of elements.</typeparam>
     /// <returns>the created immutable sorted set.</returns>
-    public static ImmSortedSet<E> ToImmSortedSet<E>(this IReadOnlyCollection<E> collection)
+    public static ImmSortedListSet<E> ToImmSortedSet<E>(this IReadOnlyCollection<E> collection)
         where E : IComparable<E>
     {
-        if (collection is ImmSortedSet<E> immSortedSet) return immSortedSet;
+        if (collection is ImmSortedListSet<E> immSortedSet) return immSortedSet;
         if (collection is SortedSet<E> alreadySortedSet) return alreadySortedSet.ToImmSortedSet();
         if (collection is IReadOnlySet<E> alreadySet) return alreadySet.ToImmSortedSet();
 
@@ -264,7 +264,7 @@ public static class Imm
     /// <param name="set">elements.</param>
     /// <typeparam name="E">type of elements.</typeparam>
     /// <returns>the created immutable sorted set.</returns>
-    public static ImmSortedSet<E> ToImmSortedSet<E>(this IReadOnlySet<E> set)
+    public static ImmSortedListSet<E> ToImmSortedSet<E>(this IReadOnlySet<E> set)
         where E : IComparable<E>
     {
         int n = set.Count;
@@ -283,7 +283,7 @@ public static class Imm
     /// <param name="sortedSet">elements.</param>
     /// <typeparam name="E">type of elements.</typeparam>
     /// <returns>the created immutable sorted set.</returns>
-    public static ImmSortedSet<E> ToImmSortedSet<E>(this SortedSet<E> sortedSet)
+    public static ImmSortedListSet<E> ToImmSortedSet<E>(this SortedSet<E> sortedSet)
         where E : IComparable<E>
     {
         return sortedSet.Count switch
@@ -295,7 +295,7 @@ public static class Imm
     }
 
 
-    private static ImmSortedSet<E> SortDeduplicateAndPrepareSet<E>(E[] newArray)
+    private static ImmSortedListSet<E> SortDeduplicateAndPrepareSet<E>(E[] newArray)
         where E : IComparable<E>
     {
         int n = newArray.Length;

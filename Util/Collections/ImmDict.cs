@@ -54,7 +54,7 @@ public interface ImmDict<K,V> : IReadOnlyDictionary<K,V>
  /// <typeparam name="V"></typeparam>
 public interface ImmOrderedDict<K,V> : ImmDict<K,V>
 {
-    public new ImmOrderedSet<K> Keys { get; }
+    public new ImmListSet<K> Keys { get; }
 
     ImmSet<K> ImmDict<K,V>.Keys => Keys;
     

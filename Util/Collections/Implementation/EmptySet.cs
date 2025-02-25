@@ -9,7 +9,7 @@ namespace Util.Collections;
 /// <summary>
 /// Empty set and list.
 /// </summary>
-public class EmptySet<T> : ImmutableCollection<T>, ImmOrderedSet<T>
+public class EmptySet<T> : ImmutableCollection<T>, ImmListSet<T>
 {
     public static readonly EmptySet<T> Instance = new();
 
@@ -51,7 +51,7 @@ public class EmptySet<T> : ImmutableCollection<T>, ImmOrderedSet<T>
 /// <summary>
 /// Empty sorted set.
 /// </summary>
-public class EmptySortedSet<T> : EmptySet<T>, ImmSortedSet<T>
+public class EmptySortedSet<T> : EmptySet<T>, ImmSortedListSet<T>
     where T : IComparable<T>
 {
     public new static readonly EmptySortedSet<T> Instance = new();

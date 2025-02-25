@@ -109,9 +109,9 @@ internal class ImmutableArrayList<T> : ImmutableCollection<T>, ImmList<T>
     IEnumerator IEnumerable.GetEnumerator() => Elements.GetEnumerator();
 
 
-    public ImmOrderedSet<T> ToSet()
+    public ImmListSet<T> ToSet()
     {
-        if (this is ImmOrderedSet<T> alreadyImmSet) return alreadyImmSet;
+        if (this is ImmListSet<T> alreadyImmSet) return alreadyImmSet;
 
         var distinct = Elements.Deduplicate();
         int m        = distinct.Count;

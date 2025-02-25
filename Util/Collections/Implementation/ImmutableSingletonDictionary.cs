@@ -32,7 +32,7 @@ internal class ImmutableSingletonDictionary<K,V> : ImmutableDictionary<K,V>, Imm
             ? new Found<V>(true, Value)
             : Found<V>.NotFound;
 
-    public ImmOrderedSet<K> Keys => new ImmutableSingleton<K>(Key);
+    public ImmListSet<K> Keys => new ImmutableSingleton<K>(Key);
     public ImmList<V> Values => new ImmutableSingleton<V>(Value);
 
     public ImmList<KeyValuePair<K,V>> Entries =>

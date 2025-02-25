@@ -9,7 +9,7 @@ public class ImmSetTest
     [Test]
     public void Set_ArgumentArray_Basic()
     {
-        ImmOrderedSet<byte> set = Imm.SetOf(_3_, _5_, _7_);
+        ImmListSet<byte> set = Imm.SetOf(_3_, _5_, _7_);
         Verify357(set);
     }
 
@@ -17,7 +17,7 @@ public class ImmSetTest
     public void Set_ArgumentArray_FromArray()
     {
         byte[]        bytes = [_3_, _5_, _7_];
-        ImmOrderedSet<byte> set  = Imm.SetOf(bytes);
+        ImmListSet<byte> set  = Imm.SetOf(bytes);
         Verify357(set);
     }
 
@@ -25,7 +25,7 @@ public class ImmSetTest
     public void Set_ArgumentArray_FromArrayModified()
     {
         byte[]        bytes = [_3_, _5_, _7_];
-        ImmOrderedSet<byte> set  = Imm.SetOf(bytes);
+        ImmListSet<byte> set  = Imm.SetOf(bytes);
         Verify357(set);
 
         bytes[0] = 77;
@@ -38,7 +38,7 @@ public class ImmSetTest
     [Test]
     public void SortedSet_ArgumentArray_Basic()
     {
-        ImmOrderedSet<byte> set = Imm.SortedSetOf(_7_, _3_, _5_);
+        ImmListSet<byte> set = Imm.SortedSetOf(_7_, _3_, _5_);
         Verify357(set);
     }
 
@@ -46,7 +46,7 @@ public class ImmSetTest
     public void SortedSet_ArgumentArray_FromArray()
     {
         byte[]        bytes = [_7_, _3_, _5_];
-        ImmOrderedSet<byte> set  = Imm.SortedSetOf(bytes);
+        ImmListSet<byte> set  = Imm.SortedSetOf(bytes);
         Verify357(set);
     }
 
@@ -54,7 +54,7 @@ public class ImmSetTest
     public void SortedSet_ArgumentArray_FromArrayModified()
     {
         byte[]        bytes = [_7_, _3_, _5_];
-        ImmOrderedSet<byte> set  = Imm.SortedSetOf(bytes);
+        ImmListSet<byte> set  = Imm.SortedSetOf(bytes);
         Verify357(set);
 
         bytes[0] = 77;
@@ -64,7 +64,7 @@ public class ImmSetTest
         Verify357(set);
     }
 
-    private static void Verify357(ImmOrderedSet<byte> set)
+    private static void Verify357(ImmListSet<byte> set)
     {
         set.Verify
         (
@@ -143,7 +143,7 @@ public class ImmSetTest
     public void Set_Easy_fromOrderedEnumerable()
     {
         IOrderedEnumerable<ulong> oe  = EnumerableMatch().Order();
-        ImmOrderedSet<ulong>      set = oe.ToImmSet();
+        ImmListSet<ulong>      set = oe.ToImmSet();
         Verify_55_99(set);
         VerifySets(set);
     }
@@ -245,7 +245,7 @@ public class ImmSetTest
         VerifySets(set);
     }
 
-    private void Verify_Sorted_55_99(ImmSortedSet<ulong> set) =>
+    private void Verify_Sorted_55_99(ImmSortedListSet<ulong> set) =>
         set.Verify
         (
             x => x.IsNotEmpty.ShouldBeTrue(),
@@ -303,7 +303,7 @@ public class ImmSetTest
         VerifyEmptySortSet(x);
     }
 
-    private void VerifyEmptySortSet(ImmSortedSet<ulong> set) =>
+    private void VerifyEmptySortSet(ImmSortedListSet<ulong> set) =>
         set.Verify
         (
             x => x.IsEmpty.ShouldBeTrue(),

@@ -17,7 +17,7 @@ public sealed class EmptyDictionary<K,V> : ImmOrderedDict<K,V>
 
     public Found<V> Find(K key) => Found<V>.NotFound;
 
-    public ImmOrderedSet<K> Keys => EmptySet<K>.Instance;
+    public ImmListSet<K> Keys => EmptySet<K>.Instance;
     public ImmList<V> Values     => EmptySet<V>.Instance;
 
     public ImmList<KeyValuePair<K,V>> Entries => EmptySet<KeyValuePair<K,V>>.Instance;

@@ -50,7 +50,7 @@ internal abstract class ImmutableArrayDictionary<K,V> : ImmutableDictionary<K,V>
     public abstract int LastIndexOfKey(K key, int notFound);
 
 
-    public virtual ImmOrderedSet<K> Keys   => new KeySet(this);
+    public virtual ImmListSet<K> Keys   => new KeySet(this);
     public virtual ImmList<V>       Values => new ValueCollection(this);
 
     public virtual ImmList<KeyValuePair<K,V>> Entries => new ImmutableArrayList<KeyValuePair<K,V>>(Pairs);
@@ -63,7 +63,7 @@ internal abstract class ImmutableArrayDictionary<K,V> : ImmutableDictionary<K,V>
 
     // INNER CLASSES \\
 
-    private class KeySet : ImmutableCollection<K>, ImmOrderedSet<K>
+    private class KeySet : ImmutableCollection<K>, ImmListSet<K>
     {
         private readonly ImmutableArrayDictionary<K,V> Dict;
 
