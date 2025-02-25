@@ -424,11 +424,63 @@ public static class Imm
         KeyValuePair<K,V>[] pairs = dictionary.ToArray();
         return n switch
                {
-                   1    => new ImmutableSingletonDictionary<K,V>(pairs[0].Key, pairs[0].Value),
+                   1    => new ImmutableSingletonDictionary<K,V>(pairs[0]),
                    <= 4 => new ImmutableMiniDictionary<K,V>(pairs),
                    _    => new ImmutableHashDictionary<K,V>(pairs)
                };
     }
+
+    /// <summary>
+    /// Sorts the entries and makes an immutable snapshot of them.
+    /// </summary>
+    /// <param name="dictionary">the original dictionary.</param>
+    /// <typeparam name="K">type of the key.</typeparam>
+    /// <typeparam name="V">type of the value.</typeparam>
+    /// <returns>the just created immutable snapshot.</returns>
+    public static ImmSortedDict<K,V> ToImmSortedDict<K,V>(this IReadOnlyDictionary<K,V> dictionary)
+        where K : IComparable<K>
+    {
+        if (dictionary is ImmSortedDict<K,V> alreadyDict) return alreadyDict;
+        if (dictionary.Count == 0) return EmptySortedDictionary<K,V>.Instance;
+        KeyValuePair<K,V>[] pairs = dictionary.ToArray();
+        return MakeSortedDict(pairs);
+    }
+
+    /// <summary>
+    /// Sorts the entries and makes an immutable snapshot of them.
+    /// </summary>
+    /// <param name="dictionary">the original dictionary.</param>
+    /// <typeparam name="K">type of the key.</typeparam>
+    /// <typeparam name="V">type of the value.</typeparam>
+    /// <returns>the just created immutable snapshot.</returns>
+    public static ImmSortedDict<K,V> ToImmSortedDict<K,V>(this IDictionary<K,V> dictionary)
+        where K : IComparable<K>
+    {
+        if (dictionary.Count == 0) return EmptySortedDictionary<K,V>.Instance;
+        KeyValuePair<K,V>[] pairs = dictionary.ToArray();
+        return MakeSortedDict(pairs);
+    }
+
+    private static ImmSortedDict<K,V> MakeSortedDict<K,V>(KeyValuePair<K,V>[] pairs)
+        where K : IComparable<K>
+    {
+        if (pairs.Length == 1) return new ImmutableSingletonSortedDictionary<K,V>(pairs[0]);
+
+        var comparer = Comparer<K>.Default;
+        Array.Sort(pairs, (x,y) => comparer.Compare(x.Key, y.Key));
+        return new ImmutableSortedDictionary<K,V>(pairs);
+    }
+
+    /// <summary>
+    /// Sorts the entries and makes an immutable snapshot of them.
+    /// </summary>
+    /// <param name="dictionary">the original dictionary.</param>
+    /// <typeparam name="K">type of the key.</typeparam>
+    /// <typeparam name="V">type of the value.</typeparam>
+    /// <returns>the just created immutable snapshot.</returns>
+    public static ImmSortedDict<K,V> ToImmSortedDict<K,V>(this Dictionary<K,V> dictionary)
+        where K : IComparable<K>
+        => ToImmSortedDict((IDictionary<K,V>)dictionary);
 
 
     /// <summary>
@@ -438,11 +490,34 @@ public static class Imm
     /// <param name="dictionary">the original dictionary.</param>
     /// <typeparam name="V">type of the value.</typeparam>
     /// <returns>the just created immutable snapshot.</returns>
-    public static ImmDict<uint,V> ToImmDict<V>(this IReadOnlyDictionary<uint,V> dictionary)
+    public static ImmSortedDict<uint,V> ToImmSortedDict<V>(this IReadOnlyDictionary<uint,V> dictionary)
+    {
+        if (dictionary is ImmSortedDict<uint,V> immDict) return immDict;
+        return MakeImmSortedDict(dictionary, dictionary.Count);
+    }
+
+    /// <summary>
+    /// Makes an immutable snapshot of this dictionary.
+    /// Specialization for <c>uint</c> keys.
+    /// </summary>
+    /// <param name="dictionary">the original dictionary.</param>
+    /// <typeparam name="V">type of the value.</typeparam>
+    /// <returns>the just created immutable snapshot.</returns>
+    public static ImmDict<uint, V> ToImmDict<V>(this IReadOnlyDictionary<uint, V> dictionary)
     {
         if (dictionary is ImmDict<uint,V> immDict) return immDict;
-        return MakeImmDict(dictionary, dictionary.Count);
+        return MakeImmSortedDict(dictionary, dictionary.Count);
     }
+
+    /// <summary>
+    /// Makes an immutable snapshot of this dictionary.
+    /// Specialization for <c>uint</c> keys.
+    /// </summary>
+    /// <param name="dictionary">the original dictionary.</param>
+    /// <typeparam name="V">type of the value.</typeparam>
+    /// <returns>the just created immutable snapshot.</returns>
+    public static ImmSortedDict<uint,V> ToImmSortedDict<V>(this IDictionary<uint,V> dictionary)
+        => MakeImmSortedDict(dictionary, dictionary.Count);
 
     /// <summary>
     /// Makes an immutable snapshot of this dictionary.
@@ -452,9 +527,17 @@ public static class Imm
     /// <typeparam name="V">type of the value.</typeparam>
     /// <returns>the just created immutable snapshot.</returns>
     public static ImmDict<uint,V> ToImmDict<V>(this IDictionary<uint,V> dictionary)
-    {
-        return MakeImmDict(dictionary, dictionary.Count);
-    }
+        => MakeImmSortedDict(dictionary, dictionary.Count);
+
+    /// <summary>
+    /// Makes an immutable snapshot of this dictionary.
+    /// Specialization for <c>uint</c> keys.
+    /// </summary>
+    /// <param name="dictionary">the original dictionary.</param>
+    /// <typeparam name="V">type of the value.</typeparam>
+    /// <returns>the just created immutable snapshot.</returns>
+    public static ImmSortedDict<uint,V> ToImmSortedDict<V>(this Dictionary<uint,V> dictionary)
+        => MakeImmSortedDict(dictionary, dictionary.Count);
 
     /// <summary>
     /// Makes an immutable snapshot of this dictionary.
@@ -464,20 +547,22 @@ public static class Imm
     /// <typeparam name="V">type of the value.</typeparam>
     /// <returns>the just created immutable snapshot.</returns>
     public static ImmDict<uint,V> ToImmDict<V>(this Dictionary<uint,V> dictionary)
-    {
-        return MakeImmDict(dictionary, dictionary.Count);
-    }
+        => MakeImmSortedDict(dictionary, dictionary.Count);
 
-    private static ImmDict<uint,V> MakeImmDict<V>(IEnumerable<KeyValuePair<uint,V>> pairs, int n)
+    private static ImmSortedDict<uint,V> MakeImmSortedDict<V>(IEnumerable<KeyValuePair<uint,V>> pairs, int n)
     {
-        if (n == 0) return EmptyDictionary<uint,V>.Instance;
-        if (n == 1) return new ImmutableSingletonDictionary<uint,V>(pairs.First());
+        if (n == 0) return EmptySortedDictionary<uint,V>.Instance;
+        if (n == 1) return new ImmutableSingletonSortedDictionary<uint,V>(pairs.First());
 
         KeyValuePair<uint,V>[] array = pairs.ToArray();
-        if (n <= 3) return new ImmutableMiniDictionary<uint,V>(array);
 
-        var interval = ImmutableFlatDictionary<V>.CollectInterval(array);
-        if (interval.Length <= n * 4) return new ImmutableFlatDictionary<V>(interval, array);
-        else return new ImmutableHashDictionary<uint,V>(array);
+        if (n > 2)
+        {
+            var interval = ImmutableFlatDictionary<V>.CollectInterval(array);
+            if (interval.Length <= n * 5) return new ImmutableFlatDictionary<V>(interval, array);
+        }
+
+        Array.Sort(array, (x,y) => Comparer<uint>.Default.Compare(x.Key, y.Key));
+        return new ImmutableSortedDictionary<uint,V>(array);
     }
 }

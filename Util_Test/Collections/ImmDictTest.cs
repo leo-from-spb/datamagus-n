@@ -17,7 +17,7 @@ public class ImmDictTest
     [Test]
     public void Basic1_Singleton()
     {
-        var dict = new ImmutableSingletonDictionary<string,ulong>("thing", 42uL);
+        var dict = new ImmutableSingletonSortedDictionary<string,ulong>("thing", 42uL);
         VerifyBasic1(dict);
     }
 
@@ -32,6 +32,13 @@ public class ImmDictTest
     public void Basic1_Hash()
     {
         var dict = new ImmutableHashDictionary<string,ulong>([new("thing", 42uL)]);
+        VerifyBasic1(dict);
+    }
+
+    [Test]
+    public void Basic1_Sorted()
+    {
+        var dict = new ImmutableSortedDictionary<string,ulong>([new("thing", 42uL)]);
         VerifyBasic1(dict);
     }
 
@@ -131,7 +138,7 @@ public class ImmDictTest
     #region 3 ELEMENTS
 
     private static readonly StringULongPair[] Pairs3 =
-        [new("раз", 1uL), new("два", 2uL), new("три", 3uL)];
+        [new("один", 1uL), new("пара", 2uL), new("тройка", 3uL)];
 
     [Test]
     public void Basic3_Mini()
@@ -148,9 +155,16 @@ public class ImmDictTest
     }
 
     [Test]
+    public void Basic3_Sorted()
+    {
+        var dict = new ImmutableSortedDictionary<string,ulong>(Pairs3);
+        VerifyBasic3(dict);
+    }
+
+    [Test]
     public void Basic3_Param()
     {
-        var dict = Imm.Dict("раз", 1uL, "два", 2uL, "три", 3uL);
+        var dict = Imm.Dict("один", 1uL, "пара", 2uL, "тройка", 3uL);
         VerifyBasic3(dict);
     }
 
@@ -163,13 +177,13 @@ public class ImmDictTest
             d => d.Count.ShouldBe(3),
             d => d.FirstEntry.ShouldBe(Pairs3[0]),
             d => d.LastEntry.ShouldBe(Pairs3[^1]),
-            d => d.Find("раз").ShouldBe(new Found<ulong>(true, 1uL)),
-            d => d.Find("два").ShouldBe(new Found<ulong>(true, 2uL)),
-            d => d.Find("три").ShouldBe(new Found<ulong>(true, 3uL)),
+            d => d.Find("один").ShouldBe(new Found<ulong>(true, 1uL)),
+            d => d.Find("пара").ShouldBe(new Found<ulong>(true, 2uL)),
+            d => d.Find("тройка").ShouldBe(new Found<ulong>(true, 3uL)),
             d => d.Find("десять").ShouldBe(new Found<ulong>(false, 0uL)),
-            d => d.ContainsKey("раз").ShouldBeTrue(),
-            d => d.ContainsKey("два").ShouldBeTrue(),
-            d => d.ContainsKey("три").ShouldBeTrue(),
+            d => d.ContainsKey("один").ShouldBeTrue(),
+            d => d.ContainsKey("пара").ShouldBeTrue(),
+            d => d.ContainsKey("тройка").ShouldBeTrue(),
             d => d.ContainsKey("восемь").ShouldBeFalse()
         );
 
@@ -178,16 +192,16 @@ public class ImmDictTest
             ks => ks.IsNotEmpty.ShouldBeTrue(),
             ks => ks.IsEmpty.ShouldBeFalse(),
             ks => ks.Count.ShouldBe(3),
-            ks => ks.First.ShouldBe("раз"),
-            ks => ks.Last.ShouldBe("три"),
-            ks => ks[0].ShouldBe("раз"),
-            ks => ks[1].ShouldBe("два"),
-            ks => ks[2].ShouldBe("три"),
-            ks => ks.Contains("раз").ShouldBeTrue(),
-            ks => ks.Contains("два").ShouldBeTrue(),
-            ks => ks.Contains("три").ShouldBeTrue(),
+            ks => ks.First.ShouldBe("один"),
+            ks => ks.Last.ShouldBe("тройка"),
+            ks => ks[0].ShouldBe("один"),
+            ks => ks[1].ShouldBe("пара"),
+            ks => ks[2].ShouldBe("тройка"),
+            ks => ks.Contains("один").ShouldBeTrue(),
+            ks => ks.Contains("пара").ShouldBeTrue(),
+            ks => ks.Contains("тройка").ShouldBeTrue(),
             ks => ks.Contains("шесть").ShouldBeFalse(),
-            ks => (ks as IEnumerable<string>).ToArray().ShouldContainAll("раз", "два", "три")
+            ks => (ks as IEnumerable<string>).ToArray().ShouldContainAll("один", "пара", "тройка")
         );
 
         dict.Values.Verify
@@ -218,32 +232,112 @@ public class ImmDictTest
     public void Uint5_Mini()
     {
         var dict = new ImmutableMiniDictionary<uint,string>(Uints5);
-        VerifyUints5(dict);
+        VerifyDict5(dict);
     }
 
     [Test]
     public void Uint5_Hash()
     {
         var dict = new ImmutableHashDictionary<uint,string>(Uints5);
-        VerifyUints5(dict);
+        VerifyDict5(dict);
     }
 
     [Test]
     public void Uint5_Flat()
     {
         var dict = new ImmutableFlatDictionary<string>(Uints5);
-        VerifyUints5(dict);
+        VerifySortedDict5(dict);
     }
 
     [Test]
-    public void Uint5_FromDictionary()
+    public void Uint5_FromIReadOnlyDictionary1()
+    {
+        IDictionary<uint,string> dictionary =
+            new Dictionary<uint,string> { {26u, "Lipetsk"}, {33u, "Piter"}, {42u, "Moscow"}, {66u, "Tambov"}, {74u, "Elets"} };
+        var dict = dictionary.ToImmDict();
+        VerifyDict5(dict);
+    }
+
+    [Test]
+    public void Uint5_FromIReadOnlyDictionary2()
+    {
+        IReadOnlyDictionary<uint,string> dictionary =
+            new Dictionary<uint,string> { {26u, "Lipetsk"}, {33u, "Piter"}, {42u, "Moscow"}, {66u, "Tambov"}, {74u, "Elets"} };
+        var dict = dictionary.ToImmSortedDict();
+        VerifySortedDict5(dict);
+    }
+
+    [Test]
+    public void Uint5_FromIReadOnlyDictionary3()
+    {
+        IReadOnlyDictionary<uint,string> dictionary1 =
+            new Dictionary<uint,string> { {26u, "Lipetsk"}, {33u, "Piter"}, {42u, "Moscow"}, {66u, "Tambov"}, {74u, "Elets"} };
+        IReadOnlyDictionary<uint, string> dictionary2 =
+            dictionary1.ToImmSortedDict();
+        var dict = dictionary2.ToImmSortedDict();
+        VerifySortedDict5(dict);
+    }
+
+    [Test]
+    public void Uint5_FromIDictionary1()
+    {
+        IReadOnlyDictionary<uint,string> dictionary =
+            new Dictionary<uint,string> { {26u, "Lipetsk"}, {33u, "Piter"}, {42u, "Moscow"}, {66u, "Tambov"}, {74u, "Elets"} };
+        var dict = dictionary.ToImmDict();
+        VerifyDict5(dict);
+    }
+
+    [Test]
+    public void Uint5_FromIDictionary2()
+    {
+        IDictionary<uint,string> dictionary =
+            new Dictionary<uint,string> { {26u, "Lipetsk"}, {33u, "Piter"}, {42u, "Moscow"}, {66u, "Tambov"}, {74u, "Elets"} };
+        var dict = dictionary.ToImmSortedDict();
+        VerifySortedDict5(dict);
+    }
+
+    [Test]
+    public void Uint5_FromDictionary1()
     {
         var dictionary = new Dictionary<uint,string> { {26u, "Lipetsk"}, {33u, "Piter"}, {42u, "Moscow"}, {66u, "Tambov"}, {74u, "Elets"} };
         var dict       = dictionary.ToImmDict();
-        VerifyUints5(dict);
+        VerifyDict5(dict);
     }
 
-    private void VerifyUints5(ImmDict<uint,string> dict)
+    [Test]
+    public void Uint5_FromDictionary2()
+    {
+        var dictionary = new Dictionary<uint,string> { {26u, "Lipetsk"}, {33u, "Piter"}, {42u, "Moscow"}, {66u, "Tambov"}, {74u, "Elets"} };
+        var dict       = dictionary.ToImmSortedDict();
+        VerifySortedDict5(dict);
+    }
+
+    private void VerifySortedDict5(ImmSortedDict<uint, string> dict)
+    {
+        VerifyDict5(dict);
+
+        dict.Verify
+        (
+            d => d.MinKey.ShouldBe(26u),
+            d => d.MaxKey.ShouldBe(74u),
+            d => d.FirstEntry.ShouldBe(new UIntStringPair(26u, "Lipetsk")),
+            d => d.LastEntry.ShouldBe(new UIntStringPair(74u, "Elets"))
+        );
+
+        dict.Keys.Verify
+        (
+            ks => ks.First.ShouldBe(26u),
+            ks => ks.Last.ShouldBe(74u)
+        );
+
+        dict.Values.Verify
+        (
+            vs => vs.First.ShouldBe("Lipetsk"),
+            vs => vs.Last.ShouldBe("Elets")
+        );
+    }
+
+    private void VerifyDict5(ImmDict<uint,string> dict)
     {
         dict.Verify
         (

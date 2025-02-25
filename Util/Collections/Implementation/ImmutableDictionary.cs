@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Util.Extensions;
 using static Util.Collections.ImmConst;
 using static Util.Collections.Implementation.CollectionLogic;
 using static Util.Collections.Implementation.HashTableLogic;
@@ -16,7 +17,7 @@ namespace Util.Collections.Implementation;
 /// </summary>
 /// <typeparam name="K">type of the key.</typeparam>
 /// <typeparam name="V">type of the associated value.</typeparam>
-internal abstract class ImmutableArrayDictionary<K,V> : ImmutableDictionary<K,V>, ImmListDict<K,V>
+internal abstract class ImmutableDictionary<K,V> : Collections.ImmutableDictionary<K,V>, ImmListDict<K,V>
 {
     /// <summary>
     /// Pairs.
@@ -29,7 +30,7 @@ internal abstract class ImmutableArrayDictionary<K,V> : ImmutableDictionary<K,V>
     public int Count { get; }
 
 
-    protected ImmutableArrayDictionary(KeyValuePair<K,V>[] pairs)
+    protected ImmutableDictionary(KeyValuePair<K,V>[] pairs)
     {
         Debug.Assert(pairs.Length > 0);
         Pairs = pairs;
@@ -39,8 +40,8 @@ internal abstract class ImmutableArrayDictionary<K,V> : ImmutableDictionary<K,V>
     public bool IsNotEmpty => true;
     public bool IsEmpty    => false;
 
-    public KeyValuePair<K,V>? FirstEntry => Pairs[0];
-    public KeyValuePair<K,V>? LastEntry  => Pairs[^1];
+    public KeyValuePair<K, V> FirstEntry => Pairs[0];
+    public KeyValuePair<K, V> LastEntry  => Pairs[^1];
 
     public abstract bool ContainsKey(K key);
 
@@ -68,9 +69,9 @@ internal abstract class ImmutableArrayDictionary<K,V> : ImmutableDictionary<K,V>
 
     private class KeySet : ImmutableCollection<K>, ImmListSet<K>
     {
-        private readonly ImmutableArrayDictionary<K,V> Dict;
+        private readonly ImmutableDictionary<K,V> Dict;
 
-        internal KeySet(ImmutableArrayDictionary<K,V> dict)
+        internal KeySet(ImmutableDictionary<K,V> dict)
         {
             Dict = dict;
         }
@@ -116,9 +117,9 @@ internal abstract class ImmutableArrayDictionary<K,V> : ImmutableDictionary<K,V>
 
     private class ValueCollection : ImmutableCollection<V>, ImmList<V>
     {
-        private readonly ImmutableArrayDictionary<K,V> Dict;
+        private readonly ImmutableDictionary<K,V> Dict;
 
-        internal ValueCollection(ImmutableArrayDictionary<K,V> dict)
+        internal ValueCollection(ImmutableDictionary<K,V> dict)
         {
             Dict = dict;
         }
@@ -155,7 +156,7 @@ internal abstract class ImmutableArrayDictionary<K,V> : ImmutableDictionary<K,V>
 
 
 
-internal sealed class ImmutableMiniDictionary<K,V> : ImmutableArrayDictionary<K,V>
+internal sealed class ImmutableMiniDictionary<K,V> : ImmutableDictionary<K,V>
 {
     internal ImmutableMiniDictionary(KeyValuePair<K,V>[] entries) : base(entries) { }
 
@@ -179,7 +180,7 @@ internal sealed class ImmutableMiniDictionary<K,V> : ImmutableArrayDictionary<K,
 
 
 
-internal sealed class ImmutableHashDictionary<K,V> : ImmutableArrayDictionary<K,V>
+internal sealed class ImmutableHashDictionary<K,V> : ImmutableDictionary<K,V>
 {
     private readonly HashTableEntry[] HashTable;
 
@@ -210,5 +211,41 @@ internal sealed class ImmutableHashDictionary<K,V> : ImmutableArrayDictionary<K,
     public override bool ContainsKey(K key)
     {
         return FindIndex<KeyValuePair<K,V>,K>(Pairs, HashTable, e => e.Key, keyEq, key, -1) >= 0;
+    }
+}
+
+
+
+/// <summary>
+/// Sorted dictionary.
+/// </summary>
+internal sealed class ImmutableSortedDictionary<K,V> : ImmutableDictionary<K,V>, ImmSortedDict<K,V>
+    where K : IComparable<K>
+{
+    /// <summary>
+    /// Trivial constructor.
+    /// </summary>
+    /// <param name="pairs">the array of pairs, the pairs should be already sorted and deduplicated.</param>
+    public ImmutableSortedDictionary(KeyValuePair<K,V>[] pairs) : base(pairs) { }
+
+    public K MinKey => Pairs[0].Key;
+    public K MaxKey => Pairs[^1].Key;
+
+    public override int IndexOfKey(K key, int notFound)
+    {
+        int result = Pairs.BinarySearchByPart(key, e => e.Key, Comparer<K>.Default);
+        return result >= 0 ? result : notFound;
+    }
+
+    public override int LastIndexOfKey(K key, int notFound)
+        => IndexOfKey(key, notFound);
+
+    public override bool ContainsKey(K key)
+        => IndexOfKey(key) >= 0;
+
+    public override Found<V> Find(K key)
+    {
+        int index = IndexOfKey(key);
+        return index >= 0 ? new Found<V>(true, Pairs[index].Value) : Found<V>.NotFound;
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -69,12 +70,12 @@ public interface ImmOrdDict<K,V> : ImmDict<K,V>
     /// <summary>
     /// The first entry, or null if the dictionary is empty.
     /// </summary>
-    public KeyValuePair<K,V>? FirstEntry { get; }
+    public KeyValuePair<K,V> FirstEntry { get; }
 
     /// <summary>
     /// The last entry, or null if the dictionary is empty.
     /// </summary>
-    public KeyValuePair<K,V>? LastEntry { get; }
+    public KeyValuePair<K,V> LastEntry { get; }
 
     /// <summary>
     /// The set of dictionary keys.
@@ -100,11 +101,11 @@ public interface ImmOrdDict<K,V> : ImmDict<K,V>
 
 
 
- /// <summary>
- /// Immutable dictionary, where entries have a meaningful order (but not always sorted).
- /// </summary>
- /// <typeparam name="K">type of keys.</typeparam>
- /// <typeparam name="V">type of associated values.</typeparam>
+/// <summary>
+/// Immutable dictionary, where entries have a meaningful order (but not always sorted).
+/// </summary>
+/// <typeparam name="K">type of keys.</typeparam>
+/// <typeparam name="V">type of associated values.</typeparam>
 public interface ImmListDict<K,V> : ImmOrdDict<K,V>
 {
     /// <summary>
@@ -130,4 +131,26 @@ public interface ImmListDict<K,V> : ImmOrdDict<K,V>
 
     ImmSeq<KeyValuePair<K,V>> ImmOrdDict<K,V>.Entries => Entries;
     ImmCollection<KeyValuePair<K,V>> ImmDict<K,V>.Entries => Entries;
+}
+
+
+
+/// <summary>
+/// Immutable dictionary where the entries are sorted by keys.
+/// Doesn't preserve order when the original source is not sorted by the keys.
+/// </summary>
+/// <typeparam name="K">type of keys.</typeparam>
+/// <typeparam name="V">type of associated values.</typeparam>
+public interface ImmSortedDict<K, V> : ImmOrdDict<K, V>
+    where K : IComparable<K>
+{
+    /// <summary>
+    /// The minimal (first) key.
+    /// </summary>
+    public K MinKey { get; }
+
+    /// <summary>
+    /// The minimal (last) key.
+    /// </summary>
+    public K MaxKey { get; }
 }

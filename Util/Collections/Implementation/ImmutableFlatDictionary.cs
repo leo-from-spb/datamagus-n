@@ -14,14 +14,15 @@ namespace Util.Collections.Implementation;
 /// This dictionary doesn't preserve the original order, it sorts the keys instead.
 /// </summary>
 /// <typeparam name="V">type of the value.</typeparam>
-internal class ImmutableFlatDictionary<V> : ImmutableDictionary<uint,V>, ImmDict<uint,V>
+internal class ImmutableFlatDictionary<V> : Collections.ImmutableDictionary<uint,V>, ImmSortedDict<uint,V>
 {
     private  readonly BitArray Spots;
     private  readonly V[]      Cells;
-    internal readonly uint     MinKey;
-    internal readonly uint     MaxKey;
     internal readonly uint     Capacity;
     private  readonly int      Cnt;
+
+    public uint MinKey { init; get; }
+    public uint MaxKey { init; get; }
 
 
     internal ImmutableFlatDictionary(IReadOnlyDictionary<uint,V> source)
@@ -84,6 +85,9 @@ internal class ImmutableFlatDictionary<V> : ImmutableDictionary<uint,V>, ImmDict
     public bool IsNotEmpty => Cnt != 0;
     public bool IsEmpty    => Cnt == 0;
 
+    public KeyValuePair<uint, V> FirstEntry => new KeyValuePair<uint,V>(MinKey, Cells[0]);
+    public KeyValuePair<uint, V> LastEntry  => new KeyValuePair<uint,V>(MaxKey, Cells[^1]);
+
     public int IndexOfKey(uint key) => IndexOfKey(key, notFoundIndex);
 
     public int IndexOfKey(uint key, int notFound)
@@ -106,14 +110,14 @@ internal class ImmutableFlatDictionary<V> : ImmutableDictionary<uint,V>, ImmDict
         : Found<V>.NotFound;
 
 
-    public ImmSet<uint>                        Keys    => new KeySet(this);
-    public ImmCollection<V>                    Values  => new ValueCollection(this);
-    public ImmCollection<KeyValuePair<uint,V>> Entries => new EntryCollection(this);
+    public ImmOrdSet<uint>              Keys    => new KeySet(this);
+    public ImmSeq<V>                    Values  => new ValueCollection(this);
+    public ImmSeq<KeyValuePair<uint,V>> Entries => new EntryCollection(this);
 
 
     // INNER CLASSES \\
 
-    private sealed class KeySet : ImmutableCollection<uint>, ImmSet<uint>
+    private sealed class KeySet : ImmutableCollection<uint>, ImmOrdSet<uint>
     {
         private readonly ImmutableFlatDictionary<V> Dict;
 
@@ -125,6 +129,9 @@ internal class ImmutableFlatDictionary<V> : ImmutableDictionary<uint,V>, ImmDict
         public int  Count      => Dict.Count;
         public bool IsNotEmpty => Dict.IsNotEmpty;
         public bool IsEmpty    => Dict.IsEmpty;
+
+        public uint First => Dict.MinKey;
+        public uint Last  => Dict.MaxKey;
 
         public bool Contains(uint item) => Dict.ContainsKey(item);
 
@@ -183,7 +190,7 @@ internal class ImmutableFlatDictionary<V> : ImmutableDictionary<uint,V>, ImmDict
 
 
 
-    private sealed class ValueCollection : ImmutableCollection<V>, ImmCollection<V>
+    private sealed class ValueCollection : ImmutableCollection<V>, ImmSeq<V>
     {
         private readonly ImmutableFlatDictionary<V> Dict;
 
@@ -195,6 +202,9 @@ internal class ImmutableFlatDictionary<V> : ImmutableDictionary<uint,V>, ImmDict
         public int  Count      => Dict.Count;
         public bool IsNotEmpty => Dict.IsNotEmpty;
         public bool IsEmpty    => Dict.IsEmpty;
+
+        public V First => Dict.Cells[0];
+        public V Last  => Dict.Cells[^1];
 
         public Found<V> Find(Predicate<V> predicate)
         {
@@ -221,7 +231,7 @@ internal class ImmutableFlatDictionary<V> : ImmutableDictionary<uint,V>, ImmDict
     }
 
 
-    private sealed class EntryCollection : ImmutableCollection<KeyValuePair<uint,V>>, ImmCollection<KeyValuePair<uint,V>>
+    private sealed class EntryCollection : ImmutableCollection<KeyValuePair<uint,V>>, ImmSeq<KeyValuePair<uint,V>>
     {
         private readonly ImmutableFlatDictionary<V> Dict;
 
@@ -233,6 +243,9 @@ internal class ImmutableFlatDictionary<V> : ImmutableDictionary<uint,V>, ImmDict
         public int  Count      => Dict.Count;
         public bool IsNotEmpty => Dict.IsNotEmpty;
         public bool IsEmpty    => Dict.IsEmpty;
+
+        public KeyValuePair<uint,V> First => Dict.FirstEntry!;
+        public KeyValuePair<uint,V> Last  => Dict.LastEntry;
 
         public Found<KeyValuePair<uint,V>> Find(Predicate<KeyValuePair<uint,V>> predicate)
         {
