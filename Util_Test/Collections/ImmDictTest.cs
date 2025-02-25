@@ -85,14 +85,16 @@ public class ImmDictTest
         VerifyBasic1(dict);
     }
 
-    private static void VerifyBasic1(ImmDict<string,ulong> dict)
+    private static void VerifyBasic1(ImmOrdDict<string,ulong> dict)
     {
         dict.Verify
         (
             d => d.IsNotEmpty.ShouldBeTrue(),
             d => d.IsEmpty.ShouldBeFalse(),
             d => d.Count.ShouldBe(1),
-            d => d.Find("thing").ShouldBe(new Found<ulong>(true, 42L)),
+            d => d.FirstEntry.ShouldBe(new StringULongPair("thing", 42uL)),
+            d => d.LastEntry.ShouldBe(new StringULongPair("thing", 42uL)),
+            d => d.Find("thing").ShouldBe(new Found<ulong>(true, 42uL)),
             d => d.Find("nothing").ShouldBe(new Found<ulong>(false, 0)),
             d => d.ContainsKey("thing").ShouldBeTrue(),
             d => d.ContainsKey("nothing").ShouldBeFalse()
@@ -103,6 +105,8 @@ public class ImmDictTest
             ks => ks.IsNotEmpty.ShouldBeTrue(),
             ks => ks.IsEmpty.ShouldBeFalse(),
             ks => ks.Count.ShouldBe(1),
+            ks => ks.First.ShouldBe("thing"),
+            ks => ks.Last.ShouldBe("thing"),
             ks => ks.Contains("thing").ShouldBeTrue(),
             ks => ks.Contains("nothing").ShouldBeFalse(),
             ks => (ks as IEnumerable<string>).ToArray().ShouldContainAll("thing")
@@ -113,6 +117,8 @@ public class ImmDictTest
             vs => vs.IsNotEmpty.ShouldBeTrue(),
             vs => vs.IsEmpty.ShouldBeFalse(),
             vs => vs.Count.ShouldBe(1),
+            vs => vs.First.ShouldBe(42uL),
+            vs => vs.Last.ShouldBe(42uL),
             vs => vs.Contains(42uL).ShouldBeTrue(),
             vs => vs.Contains(13uL).ShouldBeFalse(),
             vs => (vs as IEnumerable<ulong>).ToArray().ShouldContainAll(42uL)
@@ -124,7 +130,7 @@ public class ImmDictTest
 
     #region 3 ELEMENTS
 
-    private readonly StringULongPair[] Pairs3 =
+    private static readonly StringULongPair[] Pairs3 =
         [new("раз", 1uL), new("два", 2uL), new("три", 3uL)];
 
     [Test]
@@ -148,13 +154,15 @@ public class ImmDictTest
         VerifyBasic3(dict);
     }
 
-    private static void VerifyBasic3(ImmOrderedDict<string,ulong> dict)
+    private static void VerifyBasic3(ImmListDict<string,ulong> dict)
     {
         dict.Verify
         (
             d => d.IsNotEmpty.ShouldBeTrue(),
             d => d.IsEmpty.ShouldBeFalse(),
             d => d.Count.ShouldBe(3),
+            d => d.FirstEntry.ShouldBe(Pairs3[0]),
+            d => d.LastEntry.ShouldBe(Pairs3[^1]),
             d => d.Find("раз").ShouldBe(new Found<ulong>(true, 1uL)),
             d => d.Find("два").ShouldBe(new Found<ulong>(true, 2uL)),
             d => d.Find("три").ShouldBe(new Found<ulong>(true, 3uL)),
@@ -170,6 +178,8 @@ public class ImmDictTest
             ks => ks.IsNotEmpty.ShouldBeTrue(),
             ks => ks.IsEmpty.ShouldBeFalse(),
             ks => ks.Count.ShouldBe(3),
+            ks => ks.First.ShouldBe("раз"),
+            ks => ks.Last.ShouldBe("три"),
             ks => ks[0].ShouldBe("раз"),
             ks => ks[1].ShouldBe("два"),
             ks => ks[2].ShouldBe("три"),
@@ -201,7 +211,7 @@ public class ImmDictTest
 
     #region 5 UINT
 
-    private UIntStringPair[] Uints5 =
+    private readonly UIntStringPair[] Uints5 =
         [new(26u, "Lipetsk"), new(33u, "Piter"), new(42u, "Moscow"), new(66u, "Tambov"), new(74u, "Elets")];
 
     [Test]

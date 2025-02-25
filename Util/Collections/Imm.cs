@@ -320,7 +320,7 @@ public static class Imm
     /// <typeparam name="K">type of the key.</typeparam>
     /// <typeparam name="V">type of the value.</typeparam>
     /// <returns>the just created immutable dictionary.</returns>
-    public static ImmOrderedDict<K,V> Dict<K,V>(K key, V value) =>
+    public static ImmListDict<K,V> Dict<K,V>(K key, V value) =>
         new ImmutableSingletonDictionary<K,V>(key, value);
 
     /// <summary>
@@ -333,7 +333,7 @@ public static class Imm
     /// <typeparam name="K">type of the key.</typeparam>
     /// <typeparam name="V">type of the value.</typeparam>
     /// <returns>the just created immutable dictionary.</returns>
-    public static ImmOrderedDict<K,V> Dict<K,V>(K key1, V value1, K key2, V value2)
+    public static ImmListDict<K,V> Dict<K,V>(K key1, V value1, K key2, V value2)
         where K : IEquatable<K>
         => EqualityComparer<K>.Default.Equals(key1, key2)
             ? new ImmutableSingletonDictionary<K,V>(key1, value1)
@@ -351,7 +351,7 @@ public static class Imm
     /// <typeparam name="K">type of the key.</typeparam>
     /// <typeparam name="V">type of the value.</typeparam>
     /// <returns>the just created immutable dictionary.</returns>
-    public static ImmOrderedDict<K,V> Dict<K,V>(K key1, V value1, K key2, V value2, K key3, V value3)
+    public static ImmListDict<K,V> Dict<K,V>(K key1, V value1, K key2, V value2, K key3, V value3)
         where K : IEquatable<K>
     {
         var eq = EqualityComparer<K>.Default;
@@ -371,9 +371,9 @@ public static class Imm
     /// <typeparam name="K">type of the key.</typeparam>
     /// <typeparam name="V">type of the value.</typeparam>
     /// <returns>the just created immutable snapshot.</returns>
-    public static ImmOrderedDict<K,V> ToImmDict<K,V>(this IReadOnlyDictionary<K,V> dictionary)
+    public static ImmListDict<K,V> ToImmDict<K,V>(this IReadOnlyDictionary<K,V> dictionary)
     {
-        if (dictionary is ImmOrderedDict<K,V> immDict) return immDict;
+        if (dictionary is ImmListDict<K,V> immDict) return immDict;
 
         int n = dictionary.Count;
         if (n == 0) return EmptyDictionary<K,V>.Instance;
@@ -394,7 +394,7 @@ public static class Imm
     /// <typeparam name="K">type of the key.</typeparam>
     /// <typeparam name="V">type of the value.</typeparam>
     /// <returns>the just created immutable snapshot.</returns>
-    public static ImmOrderedDict<K,V> ToImmDict<K,V>(this IDictionary<K,V> dictionary)
+    public static ImmListDict<K,V> ToImmDict<K,V>(this IDictionary<K,V> dictionary)
     {
         int n = dictionary.Count;
         if (n == 0) return EmptyDictionary<K,V>.Instance;
@@ -415,7 +415,7 @@ public static class Imm
     /// <typeparam name="K">type of the key.</typeparam>
     /// <typeparam name="V">type of the value.</typeparam>
     /// <returns>the just created immutable snapshot.</returns>
-    public static ImmOrderedDict<K,V> ToImmDict<K,V>(this Dictionary<K,V> dictionary)
+    public static ImmListDict<K,V> ToImmDict<K,V>(this Dictionary<K,V> dictionary)
         where K : notnull
     {
         int n = dictionary.Count;

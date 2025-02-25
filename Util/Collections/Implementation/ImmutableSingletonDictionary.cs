@@ -4,7 +4,7 @@ namespace Util.Collections.Implementation;
 
 
 
-internal class ImmutableSingletonDictionary<K,V> : ImmutableDictionary<K,V>, ImmOrderedDict<K,V>
+internal class ImmutableSingletonDictionary<K,V> : ImmutableDictionary<K,V>, ImmListDict<K,V>
 {
     private readonly K Key;
     private readonly V Value;
@@ -24,6 +24,9 @@ internal class ImmutableSingletonDictionary<K,V> : ImmutableDictionary<K,V>, Imm
     public bool IsNotEmpty => true;
     public bool IsEmpty    => false;
     public int  Count      => 1;
+
+    public KeyValuePair<K,V>? FirstEntry => new KeyValuePair<K,V>(Key, Value);
+    public KeyValuePair<K,V>? LastEntry  => new KeyValuePair<K,V>(Key, Value);
 
     public bool ContainsKey(K key) => keyEq.Equals(key, Key);
 

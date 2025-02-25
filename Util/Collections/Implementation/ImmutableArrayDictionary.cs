@@ -16,7 +16,7 @@ namespace Util.Collections.Implementation;
 /// </summary>
 /// <typeparam name="K">type of the key.</typeparam>
 /// <typeparam name="V">type of the associated value.</typeparam>
-internal abstract class ImmutableArrayDictionary<K,V> : ImmutableDictionary<K,V>, ImmOrderedDict<K,V>
+internal abstract class ImmutableArrayDictionary<K,V> : ImmutableDictionary<K,V>, ImmListDict<K,V>
 {
     /// <summary>
     /// Pairs.
@@ -38,6 +38,9 @@ internal abstract class ImmutableArrayDictionary<K,V> : ImmutableDictionary<K,V>
 
     public bool IsNotEmpty => true;
     public bool IsEmpty    => false;
+
+    public KeyValuePair<K,V>? FirstEntry => Pairs[0];
+    public KeyValuePair<K,V>? LastEntry  => Pairs[^1];
 
     public abstract bool ContainsKey(K key);
 

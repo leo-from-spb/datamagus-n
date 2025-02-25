@@ -8,6 +8,8 @@ namespace Util.Collections;
 /// <summary>
 /// Immutable dictionary.
 /// </summary>
+/// <typeparam name="K">type of keys.</typeparam>
+/// <typeparam name="V">type of associated values.</typeparam>
 public interface ImmDict<K,V> : IReadOnlyDictionary<K,V>
 {
 
@@ -32,10 +34,19 @@ public interface ImmDict<K,V> : IReadOnlyDictionary<K,V>
     V IReadOnlyDictionary<K, V>.this[K key] => Find(key).Item;
 
 
+    /// <summary>
+    /// The set of dictionary keys.
+    /// </summary>
     public new ImmSet<K> Keys { get; }
 
+    /// <summary>
+    /// The set of dictionary values.
+    /// </summary>
     public new ImmCollection<V> Values { get; }
 
+    /// <summary>
+    /// The set of dictionary entries.
+    /// </summary>
     public ImmCollection<KeyValuePair<K,V>> Entries { get; }
 
 
@@ -47,22 +58,76 @@ public interface ImmDict<K,V> : IReadOnlyDictionary<K,V>
 }
 
 
- /// <summary>
- /// Immutable dictionary, where entries have a meaningful order (but not always sorted).
- /// </summary>
- /// <typeparam name="K"></typeparam>
- /// <typeparam name="V"></typeparam>
-public interface ImmOrderedDict<K,V> : ImmDict<K,V>
+
+/// <summary>
+/// Immutable dictionary, where entries have a meaningful order (but not always sorted).
+/// </summary>
+/// <typeparam name="K">type of keys.</typeparam>
+/// <typeparam name="V">type of associated values.</typeparam>
+public interface ImmOrdDict<K,V> : ImmDict<K,V>
 {
-    public new ImmListSet<K> Keys { get; }
+    /// <summary>
+    /// The first entry, or null if the dictionary is empty.
+    /// </summary>
+    public KeyValuePair<K,V>? FirstEntry { get; }
+
+    /// <summary>
+    /// The last entry, or null if the dictionary is empty.
+    /// </summary>
+    public KeyValuePair<K,V>? LastEntry { get; }
+
+    /// <summary>
+    /// The set of dictionary keys.
+    /// </summary>
+    public new ImmOrdSet<K> Keys { get; }
 
     ImmSet<K> ImmDict<K,V>.Keys => Keys;
-    
-    public new ImmList<V> Values { get; }
+
+    /// <summary>
+    /// The set of dictionary values.
+    /// </summary>
+    public new ImmSeq<V> Values { get; }
 
     ImmCollection<V> ImmDict<K,V>.Values => Values;
 
+    /// <summary>
+    /// The set of dictionary entries.
+    /// </summary>
+    public new ImmSeq<KeyValuePair<K,V>> Entries { get; }
+
+    ImmCollection<KeyValuePair<K,V>> ImmDict<K,V>.Entries => Entries;
+}
+
+
+
+ /// <summary>
+ /// Immutable dictionary, where entries have a meaningful order (but not always sorted).
+ /// </summary>
+ /// <typeparam name="K">type of keys.</typeparam>
+ /// <typeparam name="V">type of associated values.</typeparam>
+public interface ImmListDict<K,V> : ImmOrdDict<K,V>
+{
+    /// <summary>
+    /// The set of dictionary keys.
+    /// </summary>
+    public new ImmListSet<K> Keys { get; }
+
+    ImmOrdSet<K> ImmOrdDict<K,V>.Keys => Keys;
+    ImmSet<K> ImmDict<K,V>.Keys => Keys;
+
+    /// <summary>
+    /// The set of dictionary values.
+    /// </summary>
+    public new ImmList<V> Values { get; }
+
+    ImmSeq<V> ImmOrdDict<K,V>.Values => Values;
+    ImmCollection<V> ImmDict<K,V>.Values => Values;
+
+    /// <summary>
+    /// The set of dictionary entries.
+    /// </summary>
     public new ImmList<KeyValuePair<K,V>> Entries { get; }
 
+    ImmSeq<KeyValuePair<K,V>> ImmOrdDict<K,V>.Entries => Entries;
     ImmCollection<KeyValuePair<K,V>> ImmDict<K,V>.Entries => Entries;
 }

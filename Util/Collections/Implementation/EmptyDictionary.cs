@@ -5,13 +5,16 @@ namespace Util.Collections.Implementation;
 /// <summary>
 /// Empty dictionary.
 /// </summary>
-public sealed class EmptyDictionary<K,V> : ImmOrderedDict<K,V>
+public sealed class EmptyDictionary<K,V> : ImmListDict<K,V>
 {
     public static readonly EmptyDictionary<K,V> Instance = new();
 
     public bool IsNotEmpty => false;
     public bool IsEmpty    => true;
     public int  Count      => 0;
+
+    public KeyValuePair<K,V>? FirstEntry => null;
+    public KeyValuePair<K,V>? LastEntry  => null;
 
     public bool ContainsKey(K key) => false;
 
