@@ -16,6 +16,8 @@ public class ImmutableSingleton<T> : ImmutableCollection<T>, ImmListSet<T>
     /// </summary>
     private readonly T Element;
 
+    protected override string CollectionWord => "Singleton";
+
     /// <summary>
     /// Trivial constructor.
     /// </summary>
@@ -25,7 +27,8 @@ public class ImmutableSingleton<T> : ImmutableCollection<T>, ImmListSet<T>
         this.Element = element;
     }
 
-    public int  Count      => 1;
+    public override int Count => 1;
+
     public bool IsNotEmpty => true;
     public bool IsEmpty    => false;
     public T    First      => Element;
@@ -67,8 +70,7 @@ public class ImmutableSingleton<T> : ImmutableCollection<T>, ImmListSet<T>
     public bool Overlaps(IEnumerable<T>           other) => other.Contains(Element);
     public bool SetEquals(IEnumerable<T>          other) => IsTheSingletonEqualTo(Element, eq, other);
 
-    public IEnumerator<T>   GetEnumerator() => new ImmuatbleSingletonEnumerator<T>(Element);
-    IEnumerator IEnumerable.GetEnumerator() => new ImmuatbleSingletonEnumerator<T>(Element);
+    public override IEnumerator<T> GetEnumerator() => new ImmutableSingletonEnumerator<T>(Element);
 
 }
 
@@ -77,11 +79,13 @@ public class ImmutableSingleton<T> : ImmutableCollection<T>, ImmListSet<T>
 public class ImmutableSortedSingleton<T> : ImmutableSingleton<T>, ImmSortedListSet<T>
     where T: IComparable<T>
 {
+    protected override string CollectionWord => "SortedSingleton";
+
     public ImmutableSortedSingleton(T element) : base(element) { }
 }
 
 
-internal class ImmuatbleSingletonEnumerator<T> : IEnumerator<T>
+internal class ImmutableSingletonEnumerator<T> : IEnumerator<T>
 {
     private readonly T element;
 
@@ -93,7 +97,7 @@ internal class ImmuatbleSingletonEnumerator<T> : IEnumerator<T>
     /// </summary>
     private byte state = 0;
 
-    public ImmuatbleSingletonEnumerator(T element)
+    public ImmutableSingletonEnumerator(T element)
     {
         this.element = element;
     }

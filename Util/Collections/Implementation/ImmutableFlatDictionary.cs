@@ -16,6 +16,8 @@ namespace Util.Collections.Implementation;
 /// <typeparam name="V">type of the value.</typeparam>
 internal class ImmutableFlatDictionary<V> : Collections.ImmutableDictionary<uint,V>, ImmSortedDict<uint,V>
 {
+    protected override string DictionaryWord => "FlatDictionary";
+
     private  readonly BitArray Spots;
     private  readonly V[]      Cells;
     internal readonly uint     Capacity;
@@ -81,7 +83,8 @@ internal class ImmutableFlatDictionary<V> : Collections.ImmutableDictionary<uint
     }
 
 
-    public int  Count      => Cnt;
+    public override int Count => Cnt;
+
     public bool IsNotEmpty => Cnt != 0;
     public bool IsEmpty    => Cnt == 0;
 
@@ -119,6 +122,8 @@ internal class ImmutableFlatDictionary<V> : Collections.ImmutableDictionary<uint
 
     private sealed class KeySet : ImmutableCollection<uint>, ImmOrdSet<uint>
     {
+        protected override string CollectionWord => "FlatDictionaryKeySet";
+
         private readonly ImmutableFlatDictionary<V> Dict;
 
         internal KeySet(ImmutableFlatDictionary<V> dict)
@@ -126,7 +131,8 @@ internal class ImmutableFlatDictionary<V> : Collections.ImmutableDictionary<uint
             Dict = dict;
         }
 
-        public int  Count      => Dict.Count;
+        public override int Count => Dict.Count;
+
         public bool IsNotEmpty => Dict.IsNotEmpty;
         public bool IsEmpty    => Dict.IsEmpty;
 
@@ -176,7 +182,7 @@ internal class ImmutableFlatDictionary<V> : Collections.ImmutableDictionary<uint
         public bool SetEquals(IEnumerable<uint> other)
             => IsTheSetEqualTo((int)Dict.Capacity, Dict.Cnt, Dict.IndexOfKey, other);
 
-        public IEnumerator<uint> GetEnumerator()
+        public override IEnumerator<uint> GetEnumerator()
         {
             for (uint x = 0; x < Dict.Capacity; x++)
             {
@@ -192,6 +198,8 @@ internal class ImmutableFlatDictionary<V> : Collections.ImmutableDictionary<uint
 
     private sealed class ValueCollection : ImmutableCollection<V>, ImmSeq<V>
     {
+        protected override string CollectionWord => "FlatDictionaryValueCollection";
+
         private readonly ImmutableFlatDictionary<V> Dict;
 
         internal ValueCollection(ImmutableFlatDictionary<V> dict)
@@ -199,7 +207,8 @@ internal class ImmutableFlatDictionary<V> : Collections.ImmutableDictionary<uint
             Dict = dict;
         }
 
-        public int  Count      => Dict.Count;
+        public override int Count => Dict.Count;
+
         public bool IsNotEmpty => Dict.IsNotEmpty;
         public bool IsEmpty    => Dict.IsEmpty;
 
@@ -221,7 +230,7 @@ internal class ImmutableFlatDictionary<V> : Collections.ImmutableDictionary<uint
 
         public bool Contains(Predicate<V> predicate) => Find(predicate).Ok;
 
-        public IEnumerator<V> GetEnumerator()
+        public override IEnumerator<V> GetEnumerator()
         {
             for (int i = 0; i < Dict.Capacity; i++)
                 if (Dict.Spots[i]) yield return Dict.Cells[i];
@@ -233,6 +242,8 @@ internal class ImmutableFlatDictionary<V> : Collections.ImmutableDictionary<uint
 
     private sealed class EntryCollection : ImmutableCollection<KeyValuePair<uint,V>>, ImmSeq<KeyValuePair<uint,V>>
     {
+        protected override string CollectionWord => "FlatDictionaryEntryCollection";
+
         private readonly ImmutableFlatDictionary<V> Dict;
 
         internal EntryCollection(ImmutableFlatDictionary<V> dict)
@@ -240,7 +251,8 @@ internal class ImmutableFlatDictionary<V> : Collections.ImmutableDictionary<uint
             Dict = dict;
         }
 
-        public int  Count      => Dict.Count;
+        public override int Count => Dict.Count;
+
         public bool IsNotEmpty => Dict.IsNotEmpty;
         public bool IsEmpty    => Dict.IsEmpty;
 
@@ -264,7 +276,7 @@ internal class ImmutableFlatDictionary<V> : Collections.ImmutableDictionary<uint
 
         public bool Contains(Predicate<KeyValuePair<uint,V>> predicate) => Find(predicate).Ok;
 
-        public IEnumerator<KeyValuePair<uint,V>> GetEnumerator()
+        public override IEnumerator<KeyValuePair<uint,V>> GetEnumerator()
         {
             for (int i = 0; i < Dict.Capacity; i++)
             {

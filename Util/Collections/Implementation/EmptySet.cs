@@ -13,9 +13,12 @@ public class EmptySet<T> : ImmutableCollection<T>, ImmListSet<T>
 {
     public static readonly EmptySet<T> Instance = new();
 
+    protected override string CollectionWord => "EmptySet";
+
     public bool IsNotEmpty => false;
     public bool IsEmpty    => true;
-    public int  Count      => 0;
+
+    public override int Count => 0;
 
     public Found<T> Find(Predicate<T>      predicate)                    => Found<T>.NotFound;
     public Found<T> FindFirst(Predicate<T> predicate, int fromIndex = 0) => Found<T>.NotFound;
@@ -41,9 +44,10 @@ public class EmptySet<T> : ImmutableCollection<T>, ImmListSet<T>
     public bool Overlaps(IEnumerable<T>  other) => false;
     public bool SetEquals(IEnumerable<T> other) => other.IsEmpty();
 
+    public override IEnumerator<T> GetEnumerator() => Enumerable.Empty<T>().GetEnumerator();
     IEnumerator IEnumerable.GetEnumerator() => Array.Empty<T>().GetEnumerator();
-    public IEnumerator<T> GetEnumerator() => Enumerable.Empty<T>().GetEnumerator();
 
+    public override string ToString() => CollectionWord;
 }
 
 
@@ -54,5 +58,7 @@ public class EmptySet<T> : ImmutableCollection<T>, ImmListSet<T>
 public class EmptySortedSet<T> : EmptySet<T>, ImmSortedListSet<T>
     where T : IComparable<T>
 {
+    protected override string CollectionWord => "EmptySortedSet";
+
     public new static readonly EmptySortedSet<T> Instance = new();
 }

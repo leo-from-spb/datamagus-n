@@ -19,6 +19,8 @@ namespace Util.Collections.Implementation;
 /// <typeparam name="V">type of the associated value.</typeparam>
 internal abstract class ImmutableDictionary<K,V> : Collections.ImmutableDictionary<K,V>, ImmListDict<K,V>
 {
+    protected override string DictionaryWord => "ArrayDictionary";
+
     /// <summary>
     /// Pairs.
     /// </summary>
@@ -27,7 +29,7 @@ internal abstract class ImmutableDictionary<K,V> : Collections.ImmutableDictiona
     /// <summary>
     /// Number of pairs.
     /// </summary>
-    public int Count { get; }
+    public override int Count { get; }
 
 
     protected ImmutableDictionary(KeyValuePair<K,V>[] pairs)
@@ -71,12 +73,15 @@ internal abstract class ImmutableDictionary<K,V> : Collections.ImmutableDictiona
     {
         private readonly ImmutableDictionary<K,V> Dict;
 
+        protected override string CollectionWord =>  Dict.DictionaryWord + "KeySet";
+
         internal KeySet(ImmutableDictionary<K,V> dict)
         {
             Dict = dict;
         }
 
-        public int  Count      => Dict.Count;
+        public override int Count => Dict.Count;
+
         public bool IsNotEmpty => true;
         public bool IsEmpty    => false;
 
@@ -110,8 +115,7 @@ internal abstract class ImmutableDictionary<K,V> : Collections.ImmutableDictiona
         public bool Overlaps(IEnumerable<K>  other) => IsTheSetOverlapping(Contains, other);
         public bool SetEquals(IEnumerable<K> other) => IsTheSetEqualTo(Dict.Count, IndexOf, other);
 
-        public IEnumerator<K> GetEnumerator() => new AdaptingEnumerator<KeyValuePair<K,V>,K>(Dict.GetEnumerator(), p => p.Key);
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public override IEnumerator<K> GetEnumerator() => new AdaptingEnumerator<KeyValuePair<K,V>,K>(Dict.GetEnumerator(), p => p.Key);
     }
 
 
@@ -119,12 +123,15 @@ internal abstract class ImmutableDictionary<K,V> : Collections.ImmutableDictiona
     {
         private readonly ImmutableDictionary<K,V> Dict;
 
+        protected override string CollectionWord => Dict.DictionaryWord + "ValueCollection";
+
         internal ValueCollection(ImmutableDictionary<K,V> dict)
         {
             Dict = dict;
         }
 
-        public int  Count      => Dict.Count;
+        public override int Count => Dict.Count;
+
         public bool IsNotEmpty => true;
         public bool IsEmpty    => false;
 
@@ -148,8 +155,7 @@ internal abstract class ImmutableDictionary<K,V> : Collections.ImmutableDictiona
 
         public bool Contains(V item) => IndexOf(item) >= 0;
 
-        public IEnumerator<V> GetEnumerator() => new AdaptingEnumerator<KeyValuePair<K,V>,V>(Dict.GetEnumerator(), p => p.Value);
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public override IEnumerator<V> GetEnumerator() => new AdaptingEnumerator<KeyValuePair<K,V>,V>(Dict.GetEnumerator(), p => p.Value);
     }
 
 }
@@ -158,6 +164,8 @@ internal abstract class ImmutableDictionary<K,V> : Collections.ImmutableDictiona
 
 internal sealed class ImmutableMiniDictionary<K,V> : ImmutableDictionary<K,V>
 {
+    protected override string DictionaryWord => "MiniDictionary";
+
     internal ImmutableMiniDictionary(KeyValuePair<K,V>[] entries) : base(entries) { }
 
     public override int IndexOfKey(K key, int notFound) =>
@@ -182,6 +190,8 @@ internal sealed class ImmutableMiniDictionary<K,V> : ImmutableDictionary<K,V>
 
 internal sealed class ImmutableHashDictionary<K,V> : ImmutableDictionary<K,V>
 {
+    protected override string DictionaryWord => "HashDictionary";
+
     private readonly HashTableEntry[] HashTable;
 
     internal ImmutableHashDictionary(KeyValuePair<K,V>[] pairs)
@@ -222,6 +232,8 @@ internal sealed class ImmutableHashDictionary<K,V> : ImmutableDictionary<K,V>
 internal sealed class ImmutableSortedDictionary<K,V> : ImmutableDictionary<K,V>, ImmSortedDict<K,V>
     where K : IComparable<K>
 {
+    protected override string DictionaryWord => "SortedDictionary";
+
     /// <summary>
     /// Trivial constructor.
     /// </summary>

@@ -38,8 +38,9 @@ internal class ImmutableArraySet<T> : ImmutableArrayList<T>, ImmListSet<T>
 /// <typeparam name="T">type of elements.</typeparam>
 internal class ImmutableMiniSet<T> : ImmutableArraySet<T>
 {
-    internal ImmutableMiniSet(T[] elements) : base(elements) { }
+    protected override string CollectionWord => "MiniSet";
 
+    internal ImmutableMiniSet(T[] elements) : base(elements) { }
 }
 
 
@@ -51,6 +52,8 @@ internal class ImmutableMiniSet<T> : ImmutableArraySet<T>
 /// <typeparam name="T">type of elements.</typeparam>
 internal class ImmutableHashSet<T> : ImmutableArraySet<T>
 {
+    protected override string CollectionWord => "HashSet";
+
     private readonly HashTableEntry[] HashTable;
 
     public ImmutableHashSet(T[] array) : base(array)
@@ -79,6 +82,8 @@ internal class ImmutableHashSet<T> : ImmutableArraySet<T>
 internal class ImmutableSortedSet<T> : ImmutableArraySet<T>, ImmSortedListSet<T>
     where T : IComparable<T>
 {
+    protected override string CollectionWord =>  "SortedSet";
+
     /// <summary>
     /// Makes a sorted set.
     /// </summary>

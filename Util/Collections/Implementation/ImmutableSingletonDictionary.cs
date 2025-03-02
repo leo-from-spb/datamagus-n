@@ -7,6 +7,8 @@ namespace Util.Collections.Implementation;
 
 internal class ImmutableSingletonDictionary<K,V> : Collections.ImmutableDictionary<K,V>, ImmListDict<K,V>
 {
+    protected override string DictionaryWord => "SingletonDictionary";
+
     protected readonly K Key;
     protected readonly V Value;
 
@@ -24,7 +26,8 @@ internal class ImmutableSingletonDictionary<K,V> : Collections.ImmutableDictiona
 
     public bool IsNotEmpty => true;
     public bool IsEmpty    => false;
-    public int  Count      => 1;
+
+    public override int Count => 1;
 
     public KeyValuePair<K, V> FirstEntry => new KeyValuePair<K,V>(Key, Value);
     public KeyValuePair<K, V> LastEntry  => new KeyValuePair<K,V>(Key, Value);

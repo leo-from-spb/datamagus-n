@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using static Util.Collections.ImmConst;
@@ -13,6 +12,8 @@ namespace Util.Collections.Implementation;
 /// </summary>
 internal class ImmutableArrayList<T> : ImmutableCollection<T>, ImmList<T>
 {
+    protected override string CollectionWord => "ArrayList";
+
     /// <summary>
     /// Elements. Non-empty.
     /// </summary>
@@ -21,7 +22,7 @@ internal class ImmutableArrayList<T> : ImmutableCollection<T>, ImmList<T>
     /// <summary>
     ///Number of elements.
     /// </summary>
-    public readonly int Count;
+    public override int Count { get; }
 
     /// <summary>
     /// Internal constructor — takes the given arrays as is and doesn't copy it.
@@ -105,8 +106,7 @@ internal class ImmutableArrayList<T> : ImmutableCollection<T>, ImmList<T>
         return Found<T>.NotFound;
     }
 
-    public IEnumerator<T>   GetEnumerator() => Elements.AsEnumerable().GetEnumerator();
-    IEnumerator IEnumerable.GetEnumerator() => Elements.GetEnumerator();
+    public override IEnumerator<T> GetEnumerator() => Elements.AsEnumerable().GetEnumerator();
 
 
     public ImmListSet<T> ToSet()
