@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Util.Collections.Implementation;
 using static Util.Collections.ImmConst;
 
 
@@ -144,7 +145,27 @@ public interface ImmList<T> : ImmSeq<T>, IReadOnlyList<T>
 /// </summary>
 /// <typeparam name="T">type of elements.</typeparam>
 public interface ImmSet<T> : ImmCollection<T>, IReadOnlySet<T>
-{ }
+{
+    /// <summary>
+    /// Union set of two sets.
+    /// The result is a view to the given sets.
+    /// </summary>
+    /// <param name="setA">the first set.</param>
+    /// <param name="setB">the second set.</param>
+    /// <returns>the resulted union set.</returns>
+    public static ImmSet<T> operator +(ImmSet<T> setA, ImmSet<T> setB)
+        => CollectionLogic.UnionSet(setA, setB);
+
+    /// <summary>
+    /// Union set of a set and an array.
+    /// The result is a view to the given sets.
+    /// </summary>
+    /// <param name="setA">the set.</param>
+    /// <param name="arrayB">the array.</param>
+    /// <returns>the resulted union set.</returns>
+    public static ImmSet<T> operator +(ImmSet<T> setA, T[] arrayB)
+        => CollectionLogic.UnionSet(setA, arrayB);
+}
 
 
 

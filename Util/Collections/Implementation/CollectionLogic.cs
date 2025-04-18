@@ -223,4 +223,26 @@ internal static class CollectionLogic
         return true;
     }
 
+    internal static ImmSet<E> UnionSet<E>(ImmSet<E> setA, ImmSet<E> setB)
+    {
+        int nA = setA.Count;
+        int nB = setB.Count;
+        if (nB == 0) return setA;
+        if (nA == 0) return setB;
+        // TODO optimize
+        return new ImmutableUnionSet<E>(setA, setB);
+    }
+
+    internal static ImmSet<E> UnionSet<E>(ImmSet<E> setA, E[] arrayB)
+    {
+        if (setA.IsEmpty) return arrayB.ToImmSet();
+        var listB = new List<E>(arrayB.Length);
+        foreach (var el in arrayB)
+            if (setA.Contains(el) == false) listB.Add(el);
+        if (listB.IsEmpty()) return setA;
+        var setB     = listB.ToImmSet();
+        int newCount = setA.Count + setB.Count;
+        return new ImmutableUnionSet<E>(setA, setB, newCount);
+    }
+
 }

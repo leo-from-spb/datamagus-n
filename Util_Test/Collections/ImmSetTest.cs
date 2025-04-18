@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Util.Collections.Implementation;
 
 namespace Util.Collections;
 
@@ -193,6 +194,60 @@ public class ImmSetTest
         VerifySets(set);
     }
 
+    [Test]
+    public void UnionSet_noIntersection()
+    {
+        ulong[]       arrayA   = [55uL, 88uL];
+        ulong[]       arrayB   = [66uL, 77uL, 99uL];
+        ImmSet<ulong> setA     = arrayA.ToImmSet();
+        ImmSet<ulong> setB     = arrayB.ToImmSet();
+        ImmSet<ulong> unionSet = new ImmutableUnionSet<ulong>(setA, setB);
+        Verify_55_99(unionSet);
+    }
+
+    [Test]
+    public void UnionSet_withIntersection()
+    {
+        ulong[]       arrayA   = [55uL, 77uL, 88uL];
+        ulong[]       arrayB   = [66uL, 77uL, 99uL];
+        ImmSet<ulong> setA     = arrayA.ToImmSet();
+        ImmSet<ulong> setB     = arrayB.ToImmSet();
+        ImmSet<ulong> unionSet = new ImmutableUnionSet<ulong>(setA, setB);
+        Verify_55_99(unionSet);
+    }
+
+    [Test]
+    public void UnionSet_fromPlus_TwoSets()
+    {
+        ulong[]       arrayA   = [55uL, 77uL, 88uL];
+        ulong[]       arrayB   = [66uL, 77uL, 99uL];
+        ImmSet<ulong> setA     = arrayA.ToImmSet();
+        ImmSet<ulong> setB     = arrayB.ToImmSet();
+        ImmSet<ulong> unionSet = setA + setB;
+        Verify_55_99(unionSet);
+    }
+
+    [Test]
+    public void UnionSet_fromPlus_SetAndArray()
+    {
+        ulong[]       arrayA   = [55uL, 77uL, 88uL];
+        ulong[]       arrayB   = [66uL, 77uL, 99uL];
+        ImmSet<ulong> setA     = arrayA.ToImmSet();
+        ImmSet<ulong> unionSet = setA + arrayB;
+        Verify_55_99(unionSet);
+    }
+
+    [Test]
+    public void UnionSet_fromPlus_SetAndArrayThatIsNotNeeded()
+    {
+        ulong[]       arrayA   = [55uL, 66uL, 77uL, 88uL, 99uL];
+        ulong[]       arrayB   = [66uL, 77uL, 88uL];
+        ImmSet<ulong> setA     = arrayA.ToImmSet();
+        ImmSet<ulong> unionSet = setA + arrayB;
+        unionSet.ShouldBeSameAs(setA);
+    }
+
+
     private void Verify_55_99(ImmSet<ulong> set) =>
         set.Verify
         (
@@ -204,7 +259,10 @@ public class ImmSetTest
             x => x.Contains(77uL).ShouldBeTrue(),
             x => x.Contains(88uL).ShouldBeTrue(),
             x => x.Contains(99uL).ShouldBeTrue(),
-            x => x.Contains(100uL).ShouldBeFalse()
+            x => x.Contains(100uL).ShouldBeFalse(),
+            x => x.Overlaps(EnumerableMinus()).ShouldBeTrue(),
+            x => x.Overlaps(EnumerablePlus()).ShouldBeTrue(),
+            x => x.SetEquals(EnumerableMatch()).ShouldBeTrue()
         );
 
 
@@ -256,6 +314,7 @@ public class ImmSetTest
             x => x.IndexOf(77uL).ShouldBe(2),
             x => x.IndexOf(88uL).ShouldBe(3),
             x => x.IndexOf(99uL).ShouldBe(4),
+            x => x.SetEquals(EnumerableMatch()).ShouldBeTrue(),
             x => x.ToArray().ShouldBeEquivalentTo(new ulong[] {55, 66, 77, 88, 99})
         );
 
