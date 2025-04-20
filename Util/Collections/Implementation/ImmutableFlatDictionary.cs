@@ -5,6 +5,8 @@ using Util.Structures;
 using static Util.Collections.ImmConst;
 using static Util.Collections.Implementation.CollectionLogic;
 
+using UIntInterval = Util.Structures.Interval<uint>;
+
 namespace Util.Collections.Implementation;
 
 
@@ -39,7 +41,7 @@ internal class ImmutableFlatDictionary<V> : Collections.ImmutableDictionary<uint
     {
         MinKey   = keyInterval.Min;
         MaxKey   = keyInterval.Max;
-        Capacity = keyInterval.Length;
+        Capacity = keyInterval.Length();
 
         int cnt = 0;
         Spots = new BitArray((int)Capacity);

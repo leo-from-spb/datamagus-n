@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Util.Collections.Implementation;
+using Util.Structures;
 
 namespace Util.Collections;
 
@@ -559,7 +560,7 @@ public static class Imm
         if (n > 2)
         {
             var interval = ImmutableFlatDictionary<V>.CollectInterval(array);
-            if (interval.Length <= n * 5) return new ImmutableFlatDictionary<V>(interval, array);
+            if (interval.Length() <= n * 5) return new ImmutableFlatDictionary<V>(interval, array);
         }
 
         Array.Sort(array, (x,y) => Comparer<uint>.Default.Compare(x.Key, y.Key));
