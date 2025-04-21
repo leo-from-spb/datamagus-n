@@ -10,8 +10,12 @@ internal static class MetaConsts
         {
             { typeof(bool),   "bool" },
             { typeof(byte),   "byte" },
+            { typeof(sbyte),  "sbyte" },
+            { typeof(ushort), "ushort" },
             { typeof(uint),   "uint" },
             { typeof(int),    "int" },
+            { typeof(ulong),  "ulong" },
+            { typeof(long),   "long" },
             { typeof(string), "string" },
         };
 

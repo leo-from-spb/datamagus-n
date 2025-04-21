@@ -21,6 +21,7 @@ internal class LocalSettingService : SettingService
     internal void Sunrise()
     {
         ((RealSystemSettings)SystemSettings).Setup();
+        LoadAllSettings();
     }
 
     internal void SaveAllSettings()

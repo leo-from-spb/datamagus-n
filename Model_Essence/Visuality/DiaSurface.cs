@@ -32,6 +32,21 @@ public interface DiaTemplate : DiaSurface
 /// </summary>
 public interface DiaPage : DiaSurface
 {
+    /// <summary>
+    /// Number of the page.
+    /// Zero means no number.
+    /// </summary>
+    [MatterProperty]
+    ushort PageNr { get; }
 
+    /// <summary>
+    /// Template for this page.
+    /// </summary>
+    MonoRef<DiaTemplate> Template { get; }
+
+    /// <summary>
+    /// The area or physical schema that this page represents.
+    /// </summary>
+    MonoRef<AbSection> RepresentingSection { get; }
 
 }

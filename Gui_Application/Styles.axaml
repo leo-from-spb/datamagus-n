@@ -1,0 +1,41 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Design.PreviewWith>
+        <Border Padding="20">
+            <Panel Classes="AncientGround" Width="600" Height="240">
+                <DockPanel>
+                    <WrapPanel DockPanel.Dock="Bottom" />
+                    <Border Padding="10">
+                        <WrapPanel VerticalAlignment="Center">
+                            <Border Padding="10">
+                                <Panel Classes="Canva">
+                                    <Canvas Classes="Canva" Width="200" Height="200">
+                                        <Rectangle Classes="Paper" Canvas.Left="20" Canvas.Top="20" Width="160" Height="160" ZIndex="-19" />
+                                        <Rectangle Classes="PaperBorder" Canvas.Left="20" Canvas.Top="20" Width="160" Height="160" ZIndex="-16" StrokeThickness="1"/>
+                                        <Path Classes="PaperGrid" Canvas.Left="55" Canvas.Top="55" StrokeThickness="1" Data="F0 M10,100 L100,100 100,50"/>
+                                    </Canvas>
+                                </Panel>
+                            </Border>
+                        </WrapPanel>
+                    </Border>
+                </DockPanel>
+            </Panel>
+        </Border>
+    </Design.PreviewWith>
+
+    <Style Selector="Panel.AncientGround">
+        <Setter Property="Background" Value="Gray" />
+    </Style>
+    <Style Selector="Panel.Canva">
+        <Setter Property="Background" Value="OldLace" />
+    </Style>
+    <Style Selector="Rectangle.Paper">
+        <Setter Property="Fill" Value="White" />
+    </Style>
+    <Style Selector="Rectangle.PaperBorder">
+        <Setter Property="Stroke" Value="DarkGray" />
+    </Style>
+    <Style Selector="Path.PaperGrid">
+        <Setter Property="Stroke" Value="WhiteSmoke" />
+    </Style>
+</Styles>

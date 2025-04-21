@@ -26,7 +26,9 @@ public abstract class Command : ICommand
 
     public abstract bool CanExecute(object? parameter);
 
-    public abstract void Execute(object? parameter);
+    public abstract void Execute();
+
+    public void Execute(object? parameter) => Execute();
 
     public abstract event EventHandler? CanExecuteChanged;
 
@@ -50,11 +52,13 @@ public class BasicCommand : Command
         CanExecuteChanged?.Invoke(this, EventArgs.Empty);
     }
 
-    public sealed override bool CanExecute(object? parameter) => true;
+    public override bool CanExecute(object? parameter) => true;
 
-    public sealed override void Execute(object? parameter) => BasicAction();
+    public override void Execute() => BasicAction();
 
-    public sealed override event EventHandler? CanExecuteChanged;
+    #pragma warning disable CS0067
+    public override event EventHandler? CanExecuteChanged;
+    #pragma warning restore CS0067
 }
 
 
@@ -92,7 +96,7 @@ public class ObjectCommand<O> : Command
 
     public override bool CanExecute(object? parameter) => ActiveStatus;
 
-    public override void Execute(object? parameter)
+    public override void Execute()
     {
         O obj = ObtainObject();
         if (obj is not null)

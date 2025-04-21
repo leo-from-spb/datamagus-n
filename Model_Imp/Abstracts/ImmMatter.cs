@@ -15,6 +15,8 @@ public abstract class ImmMatter : Matter
     public uint Version { get; }
 
     public abstract IEnumerable<Matter> AllInnerMatters { get; }
+
+    public abstract IReadOnlyList<Ref<Matter>> AllRefs { get; }
 }
 
 
