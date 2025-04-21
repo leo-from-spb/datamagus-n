@@ -46,11 +46,11 @@ internal abstract class RealSystemSettings : SystemSettings
 
     public SettingPair[] ExportEntries() =>
     [
-        new SettingPair(nameof(UserName), UserName),
-        new SettingPair(nameof(SystemPreferencesPath), SystemPreferencesPath),
-        new SettingPair(nameof(SystemWorkspacePath), SystemWorkspacePath),
-        new SettingPair(nameof(ActualPersonalSettingsPath), ActualPersonalSettingsPath),
-        new SettingPair(nameof(ActualComputerSettingsPath), ActualComputerSettingsPath)
+        new (nameof(UserName), UserName),
+        new (nameof(SystemPreferencesPath), SystemPreferencesPath),
+        new (nameof(SystemWorkspacePath), SystemWorkspacePath),
+        new (nameof(ActualPersonalSettingsPath), ActualPersonalSettingsPath),
+        new (nameof(ActualComputerSettingsPath), ActualComputerSettingsPath)
     ];
 
     public void ImportEntry(SettingPair entry, out string? error) =>

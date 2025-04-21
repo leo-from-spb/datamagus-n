@@ -26,15 +26,15 @@ public class GeoRectTest
     //    │          │  │          │
     //    └──────────┘  └──────────┘   8
 
-    private GeoRect Rect_A = new GeoRect(_1_cm, _1_cm, _4_cm, _4_cm);
-    private GeoRect Rect_B = new GeoRect(_5_cm, _1_cm, _8_cm, _4_cm);
-    private GeoRect Rect_C = new GeoRect(_1_cm, _5_cm, _4_cm, _8_cm);
-    private GeoRect Rect_D = new GeoRect(_5_cm, _5_cm, _8_cm, _8_cm);
-    private GeoRect Rect_X = new GeoRect(_3_cm, _3_cm, _6_cm, _6_cm);
-    private GeoRect Rect_P = new GeoRect(11, 1, 14, 5, cm);
-    private GeoRect Rect_Q = new GeoRect(12, 2, 13, 3, cm);
-    private GeoRect Rect_R = new GeoRect(14, 2, 16, 3, cm);
-    private GeoRect Rect_Y = new GeoRect(12, 4, 13, 6, cm);
+    private readonly GeoRect Rect_A = new GeoRect(_1_cm, _1_cm, _4_cm, _4_cm);
+    private readonly GeoRect Rect_B = new GeoRect(_5_cm, _1_cm, _8_cm, _4_cm);
+    private readonly GeoRect Rect_C = new GeoRect(_1_cm, _5_cm, _4_cm, _8_cm);
+    private readonly GeoRect Rect_D = new GeoRect(_5_cm, _5_cm, _8_cm, _8_cm);
+    private readonly GeoRect Rect_X = new GeoRect(_3_cm, _3_cm, _6_cm, _6_cm);
+    private readonly GeoRect Rect_P = new GeoRect(11, 1, 14, 5, cm);
+    private readonly GeoRect Rect_Q = new GeoRect(12, 2, 13, 3, cm);
+    private readonly GeoRect Rect_R = new GeoRect(14, 2, 16, 3, cm);
+    private readonly GeoRect Rect_Y = new GeoRect(12, 4, 13, 6, cm);
 
     private GeoRect[] AllRects;
 

@@ -17,7 +17,7 @@ public class ImmFamily<M> : Family<M>
     
     public static ImmFamily<M> Of(params M[] matters) => new ImmFamily<M>(matters);
 
-    public static ImmFamily<M> Empty() => new ImmFamily<M>(Array.Empty<M>());
+    public static ImmFamily<M> Empty() => new (Array.Empty<M>());
 
     public ImmFamily(M[] matters)
     {
@@ -69,9 +69,9 @@ public class ImmFamily<M> : Family<M>
 public class ImmNamingFamily<M> : ImmFamily<M>, NamingFamily<M> 
     where M : class, NamedMatter
 {
-    public new static ImmNamingFamily<M> Of(params M[] matters) => new ImmNamingFamily<M>(matters);
+    public new static ImmNamingFamily<M> Of(params M[] matters) => new (matters);
 
-    public new static ImmNamingFamily<M> Empty() => new ImmNamingFamily<M>(Array.Empty<M>());
+    public new static ImmNamingFamily<M> Empty() => new (Array.Empty<M>());
 
     public ImmNamingFamily(M[] matters) 
         : base(matters)
