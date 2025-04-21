@@ -51,7 +51,9 @@ public class BasicCommand : Command
 
     public override void Execute() => BasicAction();
 
+    #pragma warning disable CS0067
     public override event EventHandler? CanExecuteChanged;
+    #pragma warning restore CS0067
 }
 
 
@@ -82,7 +84,7 @@ public class ObjectCommand<O> : Command
         if (oldStatus != newStatus)
         {
             ActiveStatus = newStatus;
-            CanExecuteChanged?.Invoke(this, new EventArgs());
+            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanExecute)));
         }
     }
