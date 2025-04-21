@@ -17,6 +17,8 @@ public class ImmFamily<M> : Family<M>
     
     public static ImmFamily<M> Of(params M[] matters) => new ImmFamily<M>(matters);
 
+    public static ImmFamily<M> Empty() => new ImmFamily<M>(Array.Empty<M>());
+
     public ImmFamily(M[] matters)
     {
         this.matters = matters;
