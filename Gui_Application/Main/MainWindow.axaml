@@ -1,0 +1,31 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:wb="clr-namespace:Gui.Application.Workbenches"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+        x:Class="Gui.Application.Main.MainWindow"
+        KeyDown="Window_OnKeyDown"
+        PositionChanged="WindowBase_OnPositionChanged"
+        Resized="Window_OnResized"
+        Closing="Window_OnClosing"
+        Title="DataMagus">
+    <Window.Styles>
+         <StyleInclude Source="../Styles.axaml"/>
+    </Window.Styles>
+    <DockPanel Name="PrimaryPanel" Classes="AncientGround">
+        <DockPanel Name="StatusPanel" DockPanel.Dock="Bottom" MinHeight="18" HorizontalAlignment="Stretch">
+            <Label Content="  " DockPanel.Dock="Left"/>
+            <Label Name="StatusLine" DockPanel.Dock="Left"/>
+            <Label Content="  " DockPanel.Dock="Right"/>
+            <Label Name="ScaleLabel" DockPanel.Dock="Right"/>
+            <Label HorizontalAlignment="Stretch"/>
+        </DockPanel>
+        <Panel Classes="AncientGround" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <wb:EaselWorkbench Name="Easel"
+                               VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
+            <wb:ExplorerWorkbench Name="Explorer"
+                                  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
+        </Panel>
+    </DockPanel>
+</Window>
