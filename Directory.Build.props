@@ -1,6 +1,6 @@
 <Project>
     <PropertyGroup>
-        <BaseIntermediateOutputPath>$(SolutionDir)\yonder\obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
-        <BaseOutputPath>$(SolutionDir)\yonder\bin\$(MSBuildProjectName)\</BaseOutputPath>
+        <BaseIntermediateOutputPath>$(SolutionDir)/yonder/obj/$(MSBuildProjectName)/</BaseIntermediateOutputPath>
+        <BaseOutputPath>$(SolutionDir)/yonder/bin/$(MSBuildProjectName)/</BaseOutputPath>
     </PropertyGroup>
 </Project>
