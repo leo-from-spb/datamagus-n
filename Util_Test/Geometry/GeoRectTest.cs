@@ -26,11 +26,11 @@ public class GeoRectTest
     //    │          │  │          │
     //    └──────────┘  └──────────┘   8
 
-    private readonly GeoRect Rect_A = new GeoRect(_1_cm, _1_cm, _4_cm, _4_cm);
-    private readonly GeoRect Rect_B = new GeoRect(_5_cm, _1_cm, _8_cm, _4_cm);
-    private readonly GeoRect Rect_C = new GeoRect(_1_cm, _5_cm, _4_cm, _8_cm);
-    private readonly GeoRect Rect_D = new GeoRect(_5_cm, _5_cm, _8_cm, _8_cm);
-    private readonly GeoRect Rect_X = new GeoRect(_3_cm, _3_cm, _6_cm, _6_cm);
+    private readonly GeoRect Rect_A = new GeoRect(1.cm, 1.cm, 4.cm, 4.cm);
+    private readonly GeoRect Rect_B = new GeoRect(5.cm, 1.cm, 8.cm, 4.cm);
+    private readonly GeoRect Rect_C = new GeoRect(1.cm, 5.cm, 4.cm, 8.cm);
+    private readonly GeoRect Rect_D = new GeoRect(5.cm, 5.cm, 8.cm, 8.cm);
+    private readonly GeoRect Rect_X = new GeoRect(3.cm, 3.cm, 6.cm, 6.cm);
     private readonly GeoRect Rect_P = new GeoRect(11, 1, 14, 5, cm);
     private readonly GeoRect Rect_Q = new GeoRect(12, 2, 13, 3, cm);
     private readonly GeoRect Rect_R = new GeoRect(14, 2, 16, 3, cm);
@@ -48,16 +48,16 @@ public class GeoRectTest
     [Test]
     public void Create_FromPointAndSize()
     {
-        var p = new GeoPoint(_1_mm, _2_mm);
-        var s = new GeoSize(_3_mm, _4_mm);
+        var p = new GeoPoint(1.mm, 2.mm);
+        var s = new GeoSize(3.mm, 4.mm);
         var r = new GeoRect(p, s);
 
         r.ShouldSatisfyAllConditions(() =>
         {
-            r.X1.ShouldBe(_1_mm);
-            r.Y1.ShouldBe(_2_mm);
-            r.X2.ShouldBe(_4_mm);
-            r.Y2.ShouldBe(_6_mm);
+            r.X1.ShouldBe(1.mm);
+            r.Y1.ShouldBe(2.mm);
+            r.X2.ShouldBe(4.mm);
+            r.Y2.ShouldBe(6.mm);
         });
     }
 
@@ -65,20 +65,20 @@ public class GeoRectTest
     [Test]
     public void Corners()
     {
-        GeoRect rect = new GeoRect(_1_cm, _1_mm, _3_cm, _3_mm);
+        GeoRect rect = new GeoRect(1.cm, 1.mm, 3.cm, 3.mm);
 
         rect.ShouldSatisfyAllConditions
         (
-            r => r.Center.ShouldBe(point(_2_cm, _2_mm)),
+            r => r.Center.ShouldBe(point(2.cm, 2.mm)),
 
-            r => r.LT.ShouldBe(point(_1_cm, _1_mm)),
-            r => r.CT.ShouldBe(point(_2_cm, _1_mm)),
-            r => r.RT.ShouldBe(point(_3_cm, _1_mm)),
-            r => r.LC.ShouldBe(point(_1_cm, _2_mm)),
-            r => r.RC.ShouldBe(point(_3_cm, _2_mm)),
-            r => r.LB.ShouldBe(point(_1_cm, _3_mm)),
-            r => r.CB.ShouldBe(point(_2_cm, _3_mm)),
-            r => r.RB.ShouldBe(point(_3_cm, _3_mm))
+            r => r.LT.ShouldBe(point(1.cm, 1.mm)),
+            r => r.CT.ShouldBe(point(2.cm, 1.mm)),
+            r => r.RT.ShouldBe(point(3.cm, 1.mm)),
+            r => r.LC.ShouldBe(point(1.cm, 2.mm)),
+            r => r.RC.ShouldBe(point(3.cm, 2.mm)),
+            r => r.LB.ShouldBe(point(1.cm, 3.mm)),
+            r => r.CB.ShouldBe(point(2.cm, 3.mm)),
+            r => r.RB.ShouldBe(point(3.cm, 3.mm))
         );
     }
 
@@ -87,8 +87,8 @@ public class GeoRectTest
     {
         Rect_X.IsDegenerated.ShouldBeFalse();
 
-        (new GeoRect(_1_cm, _2_cm, _1_cm, _3_cm)).IsDegenerated.ShouldBeTrue();
-        (new GeoRect(_1_cm, _5_cm, _3_cm, _5_cm)).IsDegenerated.ShouldBeTrue();
+        (new GeoRect(1.cm, 2.cm, 1.cm, 3.cm)).IsDegenerated.ShouldBeTrue();
+        (new GeoRect(1.cm, 5.cm, 3.cm, 5.cm)).IsDegenerated.ShouldBeTrue();
     }
 
     [Test]
