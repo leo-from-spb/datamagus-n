@@ -6,6 +6,13 @@ namespace Util.Collections;
 public class ImmListTest
 {
     [Test]
+    public void Sequence_Easy()
+    {
+        ImmSeq<byte> seq = [_3_, _5_, _7_];
+        Verify357seq(seq);
+    }
+
+    [Test]
     public void ArgumentArray_Basic()
     {
         ImmList<byte> list = Imm.ListOf(_3_, _5_, _7_);
@@ -34,8 +41,28 @@ public class ImmListTest
         Verify357(list);
     }
 
+    [Test]
+    public void ByCollectionExpression()
+    {
+        ImmList<byte> list = [_3_, _5_, _7_];
+        Verify357(list);
+    }
+
+    private static void Verify357seq(ImmSeq<byte> sequence)
+    {
+        sequence.Verify
+        (
+            seq => seq.IsEmpty.ShouldBeFalse(),
+            seq => seq.IsNotEmpty.ShouldBeTrue(),
+            seq => seq.First.ShouldBe(_3_),
+            seq => seq.Last.ShouldBe(_7_),
+            seq => seq.Count.ShouldBe(3)
+        );
+    }
+
     private static void Verify357(ImmList<byte> list)
     {
+        Verify357seq(list);
         list.Verify
         (
             l => l[0].ShouldBe(_3_),

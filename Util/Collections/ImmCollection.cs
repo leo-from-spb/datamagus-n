@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Util.Collections.Implementation;
 using static Util.Collections.ImmConst;
 
@@ -12,6 +13,7 @@ namespace Util.Collections;
 /// Any implementation of this class must guarantee that the content is immutable.
 /// </summary>
 /// <typeparam name="T">type of elements.</typeparam>
+[CollectionBuilder(typeof(Imm), nameof(Imm.CreateImmList))]
 public interface ImmCollection<T> : IReadOnlyCollection<T>
 {
     /// <summary>
@@ -50,6 +52,7 @@ public interface ImmCollection<T> : IReadOnlyCollection<T>
 /// Immutable sequence — a collection that preserves the order of elements.
 /// </summary>
 /// <typeparam name="T">type of elements.</typeparam>
+[CollectionBuilder(typeof(Imm), nameof(Imm.CreateImmList))]
 public interface ImmSeq<T> : ImmCollection<T>
 {
     /// <summary>
@@ -73,6 +76,7 @@ public interface ImmSeq<T> : ImmCollection<T>
 /// Immutable list — a collection that preserves the order of elements and also allows the direct access by index.
 /// </summary>
 /// <typeparam name="T">type of elements.</typeparam>
+[CollectionBuilder(typeof(Imm), nameof(Imm.CreateImmList))]
 public interface ImmList<T> : ImmSeq<T>, IReadOnlyList<T>
 {
     /// <summary>
@@ -144,6 +148,7 @@ public interface ImmList<T> : ImmSeq<T>, IReadOnlyList<T>
 /// It also provides fast function <b>Contains(T)</b> that is declared in <see cref="IReadOnlySet{T}"/>.
 /// </summary>
 /// <typeparam name="T">type of elements.</typeparam>
+[CollectionBuilder(typeof(Imm), nameof(Imm.CreateImmListSet))]
 public interface ImmSet<T> : ImmCollection<T>, IReadOnlySet<T>
 {
     /// <summary>
@@ -182,6 +187,7 @@ public interface ImmOrdSet<T> : ImmSet<T>, ImmSeq<T>
 /// Immutable ordered set of elements, that also has direct access by index.
 /// </summary>
 /// <typeparam name="T">type of elements.</typeparam>
+[CollectionBuilder(typeof(Imm), nameof(Imm.CreateImmListSet))]
 public interface ImmListSet<T> : ImmOrdSet<T>, ImmList<T>
 { }
 
@@ -191,6 +197,7 @@ public interface ImmListSet<T> : ImmOrdSet<T>, ImmList<T>
 /// Immutable set where all elements are sorted by default order.
 /// </summary>
 /// <typeparam name="T">type of elements.</typeparam>
+[CollectionBuilder(typeof(Imm), nameof(Imm.CreateImmSortedListSet))]
 public interface ImmSortedSet<T> : ImmOrdSet<T>
     where T : IComparable<T>
 { }
@@ -201,6 +208,7 @@ public interface ImmSortedSet<T> : ImmOrdSet<T>
 /// Immutable set with direct access to its elements and where all elements are sorted by default order.
 /// </summary>
 /// <typeparam name="T">type of elements.</typeparam>
+[CollectionBuilder(typeof(Imm), nameof(Imm.CreateImmSortedListSet))]
 public interface ImmSortedListSet<T> : ImmSortedSet<T>, ImmListSet<T>
     where T : IComparable<T>
 { }

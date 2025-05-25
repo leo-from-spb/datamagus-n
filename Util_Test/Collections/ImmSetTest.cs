@@ -37,6 +37,22 @@ public class ImmSetTest
     }
 
     [Test]
+    public void Set_ByCollectionExpression_1()
+    {
+        ImmListSet<byte> set = [_3_, _5_, _7_];
+        Verify357(set);
+    }
+
+    [Test]
+    public void Set_ByCollectionExpression_2()
+    {
+        ImmSet<byte> set1 = [_3_, _5_, _7_];
+        set1.ShouldBeAssignableTo<ImmListSet<byte>>();
+        ImmListSet<byte> set2 = (set1 as ImmListSet<byte>)!;
+        Verify357(set2);
+    }
+
+    [Test]
     public void SortedSet_ArgumentArray_Basic()
     {
         ImmListSet<byte> set = Imm.SortedSetOf(_7_, _3_, _5_);
@@ -121,6 +137,22 @@ public class ImmSetTest
         yield return 50uL;
     }
 
+
+    [Test]
+    public void Set_Easy_byCollectionExpression_1()
+    {
+        ImmSet<ulong> set = Imm.SetOf(55uL, 66uL, 77uL, 88uL, 99uL);
+        Verify_55_99(set);
+        VerifySets(set);
+    }
+
+    [Test]
+    public void Set_Easy_byCollectionExpression_2()
+    {
+        ImmSet<ulong> set = Imm.SetOf(55uL, 66uL, 77uL, 88uL, 99uL);
+        Verify_55_99(set);
+        VerifySets(set);
+    }
 
     [Test]
     public void Set_Easy_fromTrueEnumerable()
@@ -265,6 +297,31 @@ public class ImmSetTest
             x => x.SetEquals(EnumerableMatch()).ShouldBeTrue()
         );
 
+
+    [Test]
+    public void SortedSet_Easy_byCollectionExpression_1()
+    {
+        ImmSortedListSet<ulong> set = [55uL, 66ul, 77uL, 88uL, 99uL];
+        Verify_Sorted_55_99(set);
+        VerifySets(set);
+    }
+
+    [Test]
+    public void SortedSet_Easy_byCollectionExpression_1s()
+    {
+        ImmSortedListSet<ulong> set = [77uL, 55uL, 99uL, 88uL, 66uL];
+        Verify_Sorted_55_99(set);
+        VerifySets(set);
+    }
+
+    [Test]
+    public void SortedSet_Easy_byCollectionExpression_2()
+    {
+        ImmSortedSet<ulong>     set1 = [55uL, 66ul, 77uL, 88uL, 99uL];
+        ImmSortedListSet<ulong> set2 = (set1 as ImmSortedListSet<ulong>)!;
+        Verify_Sorted_55_99(set2);
+        VerifySets(set2);
+    }
 
     [Test]
     public void SortedSet_Easy_fromArray()

@@ -44,6 +44,20 @@ public static class Imm
     /// <summary>
     /// Creates a snapshot of this array.
     /// </summary>
+    /// <param name="span">the original array.</param>
+    /// <typeparam name="E">type of elements.</typeparam>
+    /// <returns>the snapshot.</returns>
+    public static ImmList<E> ToImmList<E>(this ref readonly ReadOnlySpan<E> span) =>
+        span.Length switch
+        {
+            0 => EmptySet<E>.Instance,
+            1 => new ImmutableSingleton<E>(span[0]),
+            _ => new ImmutableArrayList<E>(span)
+        };
+
+    /// <summary>
+    /// Creates a snapshot of this array.
+    /// </summary>
     /// <param name="array">the original array.</param>
     /// <typeparam name="E">type of elements.</typeparam>
     /// <returns>the snapshot.</returns>
@@ -120,6 +134,22 @@ public static class Imm
 
 
     /// <summary>
+    /// Deduplicates elements and creates a snapshot set of them.
+    /// </summary>
+    /// <param name="span">elements.</param>
+    /// <typeparam name="E">type of elements.</typeparam>
+    /// <returns>the created immutable set.</returns>
+    public static ImmListSet<E> ToImmSet<E>(this ref readonly ReadOnlySpan<E> span)
+    {
+        int n = span.Length;
+        if (n == 0) return EmptySet<E>.Instance;
+        if (n == 1) return new ImmutableSingleton<E>(span[0]);
+
+        return DeduplicateAndPrepareSet<E>(in span, n);
+    }
+
+
+    /// <summary>
     /// Deduplicates elements and creates a snapshot set of this array.
     /// </summary>
     /// <param name="array">elements.</param>
@@ -132,6 +162,28 @@ public static class Imm
         if (n == 1) return new ImmutableSingleton<E>(array[0]);
 
         return DeduplicateAndPrepareSet<E>(array, n);
+    }
+
+
+    private static ImmListSet<E> DeduplicateAndPrepareSet<E>(ref readonly ReadOnlySpan<E> source, int initialCapacity)
+    {
+        var list = new List<E>(initialCapacity);
+        var hset = new HashSet<E>(initialCapacity);
+
+        // deduplicate elements
+        foreach (E element in source)
+        {
+            if (hset.Add(element))
+                list.Add(element);
+        }
+
+        int m = list.Count;
+        if (m == 1) return new ImmutableSingleton<E>(list[0]);
+
+        E[] newArray = list.ToArray();
+        return m <= 3
+            ? new ImmutableMiniSet<E>(newArray)
+            : new ImmutableHashSet<E>(newArray);
     }
 
     private static ImmListSet<E> DeduplicateAndPrepareSet<E>(IEnumerable<E> source, int initialCapacity)
@@ -214,6 +266,25 @@ public static class Imm
         return m <= 3
             ? new ImmutableMiniSet<E>(newArray)
             : new ImmutableHashSet<E>(newArray);
+    }
+
+
+    /// <summary>
+    /// Sorts and deduplicates elements and creates a snapshot set of this <paramref name="span"/>.
+    /// </summary>
+    /// <param name="span">elements.</param>
+    /// <typeparam name="E">type of elements.</typeparam>
+    /// <returns>the created immutable sorted set.</returns>
+    public static ImmSortedListSet<E> ToImmSortedSet<E>(this ref readonly ReadOnlySpan<E> span)
+        where E : IComparable<E>
+    {
+        int n = span.Length;
+        if (n == 0) return EmptySortedSet<E>.Instance;
+        if (n == 1) return new ImmutableSortedSingleton<E>(span[0]);
+
+        E[] newArray = span.ToArray();
+
+        return SortDeduplicateAndPrepareSet(newArray);
     }
 
 
@@ -566,4 +637,23 @@ public static class Imm
         Array.Sort(array, (x,y) => Comparer<uint>.Default.Compare(x.Key, y.Key));
         return new ImmutableSortedDictionary<uint,V>(array);
     }
+
+    /**
+     * Allows to use <see cref="ImmList"/> and <see cref="ImmCollection"/> with a collection expression.
+     */
+    public static ImmList<E> CreateImmList<E>(ReadOnlySpan<E> elements)
+        => elements.ToImmList();
+
+    /**
+     * Allows to use <see cref="ImmSet"/> and <see cref="ImmListSet"/> with a collection expression.
+     */
+    public static ImmListSet<E> CreateImmListSet<E>(ReadOnlySpan<E> elements)
+        => elements.ToImmSet();
+
+    /**
+     * Allows to use <see cref="ImmSortedSet"/> and <see cref="ImmSortedListSet"/> with a collection expression.
+     */
+    public static ImmSortedListSet<E> CreateImmSortedListSet<E>(ReadOnlySpan<E> elements)
+        where E : IComparable<E>
+        => elements.ToImmSortedSet();
 }
