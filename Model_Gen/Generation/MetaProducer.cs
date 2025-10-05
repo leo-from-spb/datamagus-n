@@ -130,7 +130,7 @@ internal class MetaProducer (MetaModel mm)
 
         var realConstructorParameters = m.HasName ? "uint id, uint version, string? name," : "uint id, uint version,";
         var baseConstructorParameters = m.HasName ? "id, version, name" : "id, version";
-        var thisFamilies              = m.AllFamilies.Keys.Select(name => "this." + name.Decap()).JoinToString();
+        var thisFamilies              = m.AllFamilies.Keys.Select(name => "this." + name.Decapitalized).JoinToString();
 
         cb.Phrase(@"// Constructor \\");
         cb.Phrase("public", m.Imm.ClassName, "(" + realConstructorParameters);

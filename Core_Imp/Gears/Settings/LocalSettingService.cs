@@ -73,7 +73,7 @@ internal class LocalSettingService : SettingService
         for (var i = 0; i < lines.Length; i++)
         {
             var line = lines[i].Trim();
-            if (line.IsEmpty()) continue;
+            if (line.IsEmpty) continue;
             if (line.StartsWith('|')) continue; // comment
 
             var m = SettingLinePattern.Match(line);
