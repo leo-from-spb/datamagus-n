@@ -1,5 +1,4 @@
 using System.Diagnostics.CodeAnalysis;
-using Util.Fun;
 
 namespace Util.Extensions;
 
@@ -15,17 +14,17 @@ public static class StringExt
         /// If there are several delimiters in this string, the first one is considered.
         /// </summary>
         /// <param name="delimiter">the delimiter.</param>
-        /// <param name="whenNoMarker">what to return when there is no delimiter.</param>
+        /// <param name="whenNoDelimiter">what to return when there is no delimiter.</param>
         /// <param name="trim">also trim the result.</param>
         /// <returns>the part before the delimiter.</returns>
-        public string PartBefore(char delimiter, string whenNoMarker = "", bool trim = false)
+        public string PartBefore(char delimiter, string whenNoDelimiter = "", bool trim = false)
         {
             int p = str.IndexOf(delimiter);
             return p switch
                    {
                        > 0 => str[..p].ModifyIf(trim, s => s.Trim()),
                        0   => "",
-                       < 0 => whenNoMarker
+                       < 0 => whenNoDelimiter
                    };
         }
 
@@ -35,17 +34,17 @@ public static class StringExt
         /// If there are several delimiters in this string, the whole string after the first delimiter is returned.
         /// </summary>
         /// <param name="delimiter">the delimiter.</param>
-        /// <param name="whenNoMarker">what to return when there is no delimiter.</param>
+        /// <param name="whenNoDelimiter">what to return when there is no delimiter.</param>
         /// <param name="trim">also trim the result.</param>
         /// <returns>the part after the (first) delimiter.</returns>
-        public string PartAfter(char delimiter, string whenNoMarker = "", bool trim = false)
+        public string PartAfter(char delimiter, string whenNoDelimiter = "", bool trim = false)
         {
             int p = str.IndexOf(delimiter);
             return p switch
                    {
                        > 0 => str[(p+1)..].ModifyIf(trim, s => s.Trim()),
                        0   => "",
-                       < 0 => whenNoMarker
+                       < 0 => whenNoDelimiter
                    };
         }
 

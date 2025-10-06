@@ -24,7 +24,7 @@ public class StringExtTest
     public void PartBefore_NoMarker()
     {
         string? text = "Something unexpectable";
-        var     part = text.PartBefore('|', whenNoMarker: "X");
+        var     part = text.PartBefore('|', whenNoDelimiter: "X");
         part.ShouldBe("X");
     }
 
@@ -48,7 +48,7 @@ public class StringExtTest
     public void PartAfter_NoMarker()
     {
         string? text = "Something unexpectable";
-        var     part = text.PartAfter('|', whenNoMarker: "X");
+        var     part = text.PartAfter('|', whenNoDelimiter: "X");
         part.ShouldBe("X");
     }
 
