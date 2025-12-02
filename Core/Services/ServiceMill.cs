@@ -4,7 +4,11 @@ using System.Reflection;
 
 namespace Core.Services;
 
-
+/// <summary>
+/// Services Facade.
+/// It allows finding and getting services.
+/// This base class has one production implementation and can have also test ones.
+/// </summary>
 public abstract class ServiceMill
 {
 

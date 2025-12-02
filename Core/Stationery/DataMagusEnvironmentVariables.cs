@@ -1,5 +1,8 @@
 namespace Core.Stationery;
 
+/// <summary>
+/// OS Environment Variables that are used in this application.
+/// </summary>
 public static class DataMagusEnvironmentVariables
 {
 

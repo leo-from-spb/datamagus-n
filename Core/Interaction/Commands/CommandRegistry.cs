@@ -5,6 +5,9 @@ using Core.Services;
 namespace Core.Interaction.Commands;
 
 
+/// <summary>
+/// Registry of all existing commands in the system.
+/// </summary>
 [Service]
 public abstract class CommandRegistry
 {

@@ -24,7 +24,10 @@ public interface AbstractSettings
 }
 
 
-
+/// <summary>
+/// Settings that relate to the computer on which this software is installed.
+/// These settings are computed automatically and could not be changed by the user.
+/// </summary>
 public interface SystemSettings : AbstractSettings
 {
     public string UserName                   { get; }
@@ -35,6 +38,10 @@ public interface SystemSettings : AbstractSettings
 }
 
 
+/// <summary>
+/// Settings that relate to the user's workspace, for example, position of windows, last typed text, etc.
+/// These settings are remembered automatically and transparently to the user; there's no UI for changing these settings.
+/// </summary>
 public interface WorkspaceSettings : AbstractSettings
 {
 

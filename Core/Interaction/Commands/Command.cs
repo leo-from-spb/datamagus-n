@@ -8,6 +8,7 @@ namespace Core.Interaction.Commands;
 
 /// <summary>
 /// Abstract command.
+/// An instance of this class is a definition of a command.
 /// </summary>
 public abstract class Command : ICommand
 {
