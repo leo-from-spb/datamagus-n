@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using Core.Services;
+using Core.Stationery;
 
 namespace DataMagus.App;
 
@@ -13,6 +14,7 @@ public static class Program
     [STAThread]
     public static void Main(string[] args)
     {
+        SayHello();
         Sunrise();
 
         try
@@ -23,6 +25,16 @@ public static class Program
         {
             Thread.Sleep(1);
             Shutdown();
+            SayGoodbye();
+        }
+    }
+
+
+    private static void SayHello()
+    {
+        if (DataMagusInfo.InDebug)
+        {
+            Console.WriteLine($"DataMagus version {DataMagusInfo.ProductVersion} is in the Debug mode.");
         }
     }
 
@@ -37,4 +49,14 @@ public static class Program
     {
         CoreServiceMaster.Shutdown();
     }
+
+
+    private static void SayGoodbye()
+    {
+        if (DataMagusInfo.InDebug)
+        {
+            Console.WriteLine("Goodbye!");
+        }
+    }
+
 }
