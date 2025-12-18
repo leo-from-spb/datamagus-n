@@ -1,7 +1,12 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using Core.Services;
 using Core.Stationery;
+using NLog;
+using NLog.Config;
+using NLog.Targets;
+using Util.Extensions;
 
 namespace DataMagus.App;
 
@@ -11,10 +16,12 @@ namespace DataMagus.App;
 /// </summary>
 public static class Program
 {
+    private static Logger? Log = null;
+
     [STAThread]
     public static void Main(string[] args)
     {
-        SayHello();
+        SetupLogger();
         Sunrise();
 
         try
@@ -30,12 +37,24 @@ public static class Program
     }
 
 
-    private static void SayHello()
+    private static void SetupLogger()
     {
-        if (DataMagusInfo.InDebug)
-        {
-            Console.WriteLine($"DataMagus version {DataMagusInfo.ProductVersion} is in the Debug mode.");
-        }
+        bool debug = DataMagusInfo.InDebug;
+
+        var config     = new LoggingConfiguration();
+        var logLevel = debug ? LogLevel.Trace : LogLevel.Info;
+
+        var logConsole = new ConsoleTarget("console")
+                         {
+                             Layout = @"${date:format=HH\:mm\:ss} ${level:uppercase=true} ${logger:shortName=true}: ${message}"
+                         };
+
+        config.AddRule(logLevel, LogLevel.Fatal, logConsole);
+        LogManager.Configuration = config;
+
+        Log = LogManager.GetLogger("Application.Boot");
+        Log.Info($"DataMagus version {DataMagusInfo.ProductVersion} {(debug ? "in debug mode" : "")}");
+        Log.Debug($"Command-line options: {DataMagusInfo.CommandLineOptions.ActualOptions.Select(o => o.Code).JoinToString()}");
     }
 
 
@@ -53,10 +72,7 @@ public static class Program
 
     private static void SayGoodbye()
     {
-        if (DataMagusInfo.InDebug)
-        {
-            Console.WriteLine("Goodbye!");
-        }
+        Log?.Info("Goodbye!");
     }
-
+    
 }
