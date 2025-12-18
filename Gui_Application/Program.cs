@@ -1,26 +1,19 @@
 ﻿using System;
-using System.Threading;
 using Avalonia;
 using Avalonia.Controls;
-using Core.Services;
 
 namespace Gui.Application;
 
+/// <summary>
+/// This "Program" is for compatibility with Avalonia Tools only.
+/// Run the Program in the <b>DataMagus_App</b> module.
+/// </summary>
 public static class Program
 {
     [STAThread]
     public static void Main(string[] args)
     {
-        CoreServiceMaster.Sunrise();
-        try
-        {
             RunAvaloniaApp(args);
-        }
-        finally
-        {
-            Thread.Sleep(1);
-            CoreServiceMaster.Shutdown();
-        }
     }
 
     private static void RunAvaloniaApp(string[] args)

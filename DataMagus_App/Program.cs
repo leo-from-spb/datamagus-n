@@ -1,12 +1,40 @@
 ﻿using System;
+using System.Threading;
+using Core.Services;
 
-namespace DataMagus_App;
+namespace DataMagus.App;
 
-class Program
+
+/// <summary>
+/// DataMagus Application bootstrap class.
+/// </summary>
+public static class Program
 {
     [STAThread]
     public static void Main(string[] args)
     {
-        Gui.Application.Program.Main(args);
+        Sunrise();
+
+        try
+        {
+            Gui.Application.Program.Main(args);
+        }
+        finally
+        {
+            Thread.Sleep(1);
+            Shutdown();
+        }
+    }
+
+
+    private static void Sunrise()
+    {
+        CoreServiceMaster.Sunrise();
+    }
+
+
+    private static void Shutdown()
+    {
+        CoreServiceMaster.Shutdown();
     }
 }
