@@ -47,7 +47,7 @@ public static class Imm
     /// <param name="span">the original array.</param>
     /// <typeparam name="E">type of elements.</typeparam>
     /// <returns>the snapshot.</returns>
-    public static ImmList<E> ToImmList<E>(this ref readonly ReadOnlySpan<E> span) =>
+    public static ImmList<E> ToImmList<E>(this ReadOnlySpan<E> span) =>
         span.Length switch
         {
             0 => EmptySet<E>.Instance,
@@ -139,13 +139,13 @@ public static class Imm
     /// <param name="span">elements.</param>
     /// <typeparam name="E">type of elements.</typeparam>
     /// <returns>the created immutable set.</returns>
-    public static ImmListSet<E> ToImmSet<E>(this ref readonly ReadOnlySpan<E> span)
+    public static ImmListSet<E> ToImmSet<E>(this ReadOnlySpan<E> span)
     {
         int n = span.Length;
         if (n == 0) return EmptySet<E>.Instance;
         if (n == 1) return new ImmutableSingleton<E>(span[0]);
 
-        return DeduplicateAndPrepareSet<E>(in span, n);
+        return DeduplicateAndPrepareSet<E>(span, n);
     }
 
 
@@ -165,7 +165,7 @@ public static class Imm
     }
 
 
-    private static ImmListSet<E> DeduplicateAndPrepareSet<E>(ref readonly ReadOnlySpan<E> source, int initialCapacity)
+    private static ImmListSet<E> DeduplicateAndPrepareSet<E>(ReadOnlySpan<E> source, int initialCapacity)
     {
         var list = new List<E>(initialCapacity);
         var hset = new HashSet<E>(initialCapacity);
@@ -275,7 +275,7 @@ public static class Imm
     /// <param name="span">elements.</param>
     /// <typeparam name="E">type of elements.</typeparam>
     /// <returns>the created immutable sorted set.</returns>
-    public static ImmSortedListSet<E> ToImmSortedSet<E>(this ref readonly ReadOnlySpan<E> span)
+    public static ImmSortedListSet<E> ToImmSortedSet<E>(this ReadOnlySpan<E> span)
         where E : IComparable<E>
     {
         int n = span.Length;
@@ -398,10 +398,10 @@ public static class Imm
     /// <summary>
     /// Makes an immutables dictionary of a couple of pairs.
     /// </summary>
-    /// <param name="key1">the key of the pair 1.</param>
-    /// <param name="value1">the value of the pair 1.</param>
-    /// <param name="key2">the key of the pair 2.</param>
-    /// <param name="value2">the value of the pair 2.</param>
+    /// <param name="key1">the key of pair 1.</param>
+    /// <param name="value1">the value of pair 1.</param>
+    /// <param name="key2">the key of pair 2.</param>
+    /// <param name="value2">the value of pair 2.</param>
     /// <typeparam name="K">type of the key.</typeparam>
     /// <typeparam name="V">type of the value.</typeparam>
     /// <returns>the just created immutable dictionary.</returns>
@@ -414,12 +414,12 @@ public static class Imm
     /// <summary>
     /// Makes an immutables dictionary of three pairs.
     /// </summary>
-    /// <param name="key1">the key of the pair 1.</param>
-    /// <param name="value1">the value of the pair 1.</param>
-    /// <param name="key2">the key of the pair 2.</param>
-    /// <param name="value2">the value of the pair 2.</param>
-    /// <param name="key3">the key of the pair 3.</param>
-    /// <param name="value3">the value of the pair 3.</param>
+    /// <param name="key1">the key of pair 1.</param>
+    /// <param name="value1">the value of pair 1.</param>
+    /// <param name="key2">the key of pair 2.</param>
+    /// <param name="value2">the value of pair 2.</param>
+    /// <param name="key3">the key of pair 3.</param>
+    /// <param name="value3">the value of pair 3.</param>
     /// <typeparam name="K">type of the key.</typeparam>
     /// <typeparam name="V">type of the value.</typeparam>
     /// <returns>the just created immutable dictionary.</returns>
