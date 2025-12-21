@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Util.Collections.Implementation;
@@ -191,6 +192,16 @@ public class ImmSetTest
     }
 
     [Test]
+    public void Set_Easy_fromSpan()
+    {
+        ulong[]             array = [55, 66, 77, 88, 99];
+        ReadOnlySpan<ulong> span  = array;
+        var                 set   = span.ToImmSet();
+        Verify_55_99(set);
+        VerifySets(set);
+    }
+
+    [Test]
     public void Set_Easy_fromCollection()
     {
         IReadOnlyCollection<ulong> collection = new List<ulong> { 77L, 55L, 99L, 88L, 66L };
@@ -333,11 +344,30 @@ public class ImmSetTest
     }
 
     [Test]
+    public void SortedSet_Easy_fromSpan()
+    {
+        ulong[]             array = [77L, 55L, 99L, 88L, 66L];
+        ReadOnlySpan<ulong> span  = array.AsSpan();
+        var                 set   = span.ToImmSortedSet();
+        Verify_Sorted_55_99(set);
+        VerifySets(set);
+    }
+
+    [Test]
     public void SortedSet_Easy_fromCollection()
     {
         IReadOnlyCollection<ulong> collection = new List<ulong> { 77L, 55L, 99L, 88L, 66L };
 
         var set = collection.ToImmSortedSet();
+        Verify_Sorted_55_99(set);
+        VerifySets(set);
+    }
+
+    [Test]
+    public void SortedSet_Easy_fromReadOnlySet()
+    {
+        IReadOnlySet<ulong> ss  = new HashSet<ulong> { 55L, 66L, 77L, 88L, 99L };
+        var set = ss.ToImmSortedSet();
         Verify_Sorted_55_99(set);
         VerifySets(set);
     }

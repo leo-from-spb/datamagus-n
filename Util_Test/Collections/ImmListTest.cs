@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Util.Collections;
@@ -93,6 +94,15 @@ public class ImmListTest
     {
         var enumerable = new List<ulong> { 26uL, 42uL, 74uL };
         var list       = enumerable.ToImmList();
+        BasicTest(list);
+    }
+
+    [Test]
+    public void Basic_ToImmList_FromSpan()
+    {
+        ulong[]             array = [26uL, 42uL, 74uL];
+        ReadOnlySpan<ulong> span  = array;
+        var                 list  = span.ToImmList();
         BasicTest(list);
     }
 

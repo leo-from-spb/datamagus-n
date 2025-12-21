@@ -45,21 +45,21 @@ public class ImmDictTest
     [Test]
     public void Basic1_1_Param()
     {
-        var dict = Imm.Dict("thing", 42uL);
+        var dict = Imm.DictOf("thing", 42uL);
         VerifyBasic1(dict);
     }
 
     [Test]
     public void Basic1_2_ParamsSame()
     {
-        var dict = Imm.Dict("thing", 42uL, "thing", 13uL);
+        var dict = Imm.DictOf("thing", 42uL, "thing", 13uL);
         VerifyBasic1(dict);
     }
 
     [Test]
     public void Basic1_3_ParamsSame()
     {
-        var dict = Imm.Dict("thing", 42uL, "thing", 13uL, "thing", 1uL);
+        var dict = Imm.DictOf("thing", 42uL, "thing", 13uL, "thing", 1uL);
         VerifyBasic1(dict);
     }
 
@@ -164,7 +164,7 @@ public class ImmDictTest
     [Test]
     public void Basic3_Param()
     {
-        var dict = Imm.Dict("один", 1uL, "пара", 2uL, "тройка", 3uL);
+        var dict = Imm.DictOf("один", 1uL, "пара", 2uL, "тройка", 3uL);
         VerifyBasic3(dict);
     }
 
