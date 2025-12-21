@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core_Imp", "Core_Imp\Core_I
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core_Test", "Core_Test\Core_Test.csproj", "{1C32F970-B585-4001-B2F0-D7176817390C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataMagus_App", "DataMagus_App\DataMagus_App.csproj", "{2FE2940A-19C1-4FE9-A034-B8FD57BC0D4C}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gui_Application", "Gui_Application\Gui_Application.csproj", "{28B7DE5D-AC64-4C7A-B27E-1F2955284003}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model_Essence", "Model_Essence\Model_Essence.csproj", "{D152FBD6-B8E8-49B2-8C89-30AB03CB3A9E}"
@@ -40,6 +42,10 @@ Global
 		{1C32F970-B585-4001-B2F0-D7176817390C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C32F970-B585-4001-B2F0-D7176817390C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C32F970-B585-4001-B2F0-D7176817390C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2FE2940A-19C1-4FE9-A034-B8FD57BC0D4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FE2940A-19C1-4FE9-A034-B8FD57BC0D4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FE2940A-19C1-4FE9-A034-B8FD57BC0D4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FE2940A-19C1-4FE9-A034-B8FD57BC0D4C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{28B7DE5D-AC64-4C7A-B27E-1F2955284003}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{28B7DE5D-AC64-4C7A-B27E-1F2955284003}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{28B7DE5D-AC64-4C7A-B27E-1F2955284003}.Release|Any CPU.ActiveCfg = Release|Any CPU

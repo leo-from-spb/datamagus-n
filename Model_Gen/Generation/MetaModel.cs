@@ -38,9 +38,9 @@ internal class MetaMatter
     internal          bool        IsAbstract => !IsConcrete;
     internal readonly string      Prefix;
     internal readonly string      Name;
-    internal          string      Names    => Name.Plural();
-    internal          string      LowName  => Name.Decap();
-    internal          string      LowNames => LowName.Plural();
+    internal          string      Names    => Name.Plural;
+    internal          string      LowName  => Name.Decapitalized;
+    internal          string      LowNames => LowName.Plural;
 
     internal readonly HashSet<Type>                    AllBaseIntfs        = [];
     internal readonly HashSet<Type>                    OwnBaseIntfs        = [];
@@ -118,7 +118,7 @@ internal class MetaFamily
     internal readonly bool       Owned;
     
     internal bool   IsAbstract    => Child.IsAbstract;
-    internal string FamilyVarName => FamilyName.Decap();
+    internal string FamilyVarName => FamilyName.Decapitalized;
     
     internal MetaFamily(MetaMatter matter, MetaMatter child, Type familyType, string familyName)
         : this(matter, child, familyType, familyName, true) { }
@@ -145,7 +145,7 @@ internal class MetaRef
 {
     internal readonly MetaMatter Matter;
     internal readonly string     RefName;
-    internal          string     RefLowName => RefName.Decap();
+    internal          string     RefLowName => RefName.Decapitalized;
     internal readonly bool       Poly;
     internal readonly MetaMatter TargetMatter;
 
@@ -166,7 +166,7 @@ internal class MetaProperty
 {
     internal readonly MetaMatter Matter;
     internal readonly string     ProName;
-    internal          string     ProVarName => ProName.Decap();
+    internal          string     ProVarName => ProName.Decapitalized;
     internal readonly Type       ProType;
     internal readonly string     ProTypeName;
 

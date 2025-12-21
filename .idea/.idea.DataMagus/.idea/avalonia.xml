@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AvaloniaProject">
+    <option name="projectPerEditor">
+      <map>
+        <entry key="Gui_Application/Main/AboutWindow.axaml" value="DataMagus_App/DataMagus_App.csproj" />
+        <entry key="Gui_Application/Main/MainWindow.axaml" value="DataMagus_App/DataMagus_App.csproj" />
+      </map>
+    </option>
+  </component>
+</project>

@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net10.0</TargetFramework>
+        <LangVersion>14</LangVersion>
+        
+        <Nullable>enable</Nullable>
+        <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+        <ApplicationManifest>app.manifest</ApplicationManifest>
+        <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+        <RootNamespace>DataMagus.App</RootNamespace>
+    </PropertyGroup>
+
+
+    <ItemGroup>
+      <ProjectReference Include="..\Core\Core.csproj" />
+      <ProjectReference Include="..\Core_Imp\Core_Imp.csproj" />
+      <ProjectReference Include="..\Gui_Application\Gui_Application.csproj" />
+      <ProjectReference Include="..\Model_Essence\Model_Essence.csproj" />
+      <ProjectReference Include="..\Model_Imp\Model_Imp.csproj" />
+      <ProjectReference Include="..\Util\Util.csproj" />
+    </ItemGroup>
+</Project>

@@ -113,39 +113,19 @@ public readonly struct Dim : IEquatable<Dim>, IComparable<Dim>
 
 public static class Dimensions
 {
-    public static Dim mk(this int length) => new Dim(length, Unit.mk);
-    public static Dim mm(this int length) => new Dim(length, Unit.mm);
-    public static Dim cm(this int length) => new Dim(length, Unit.cm);
-    public static Dim dm(this int length) => new Dim(length, Unit.dm);
+    extension(int length) {
+        public Dim mk => new Dim(length, Unit.mk);
+        public Dim mm => new Dim(length, Unit.mm);
+        public Dim cm => new Dim(length, Unit.cm);
+        public Dim dm => new Dim(length, Unit.dm);
+    }
 
-    public static Dim mk(this double length) => new Dim(length, Unit.mk);
-    public static Dim mm(this double length) => new Dim(length, Unit.mm);
-    public static Dim cm(this double length) => new Dim(length, Unit.cm);
-    public static Dim dm(this double length) => new Dim(length, Unit.dm);
-
-
-    public static readonly Dim _0_mk = 0.mk();
-    public static readonly Dim _1_mk = 1.mk();
-
-    public static readonly Dim _1_mm = 1.mm();
-    public static readonly Dim _2_mm = 2.mm();
-    public static readonly Dim _3_mm = 3.mm();
-    public static readonly Dim _4_mm = 4.mm();
-    public static readonly Dim _5_mm = 5.mm();
-    public static readonly Dim _6_mm = 6.mm();
-    public static readonly Dim _7_mm = 7.mm();
-    public static readonly Dim _8_mm = 8.mm();
-    public static readonly Dim _9_mm = 9.mm();
-
-    public static readonly Dim _1_cm = 1.cm();
-    public static readonly Dim _2_cm = 2.cm();
-    public static readonly Dim _3_cm = 3.cm();
-    public static readonly Dim _4_cm = 4.cm();
-    public static readonly Dim _5_cm = 5.cm();
-    public static readonly Dim _6_cm = 6.cm();
-    public static readonly Dim _7_cm = 7.cm();
-    public static readonly Dim _8_cm = 8.cm();
-    public static readonly Dim _9_cm = 9.cm();
+    extension(double length) {
+        public Dim mk => new Dim(length, Unit.mk);
+        public Dim mm => new Dim(length, Unit.mm);
+        public Dim cm => new Dim(length, Unit.cm);
+        public Dim dm => new Dim(length, Unit.dm);
+    }
 
 
     /// <summary>
