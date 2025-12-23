@@ -404,12 +404,7 @@ public static class ImmExtensions
             if (n == 0) return EmptyDictionary<K,V>.Instance;
 
             KeyValuePair<K,V>[] pairs = dictionary.ToArray();
-            return n switch
-                   {
-                       1    => new ImmutableSingletonDictionary<K,V>(pairs[0].Key, pairs[0].Value),
-                       <= 4 => new ImmutableMiniDictionary<K,V>(pairs),
-                       _    => new ImmutableHashDictionary<K,V>(pairs)
-                   };
+            return ImmutableArrayDictionary<K,V>.MakeListDict(pairs);
         }
     }
 
@@ -432,7 +427,7 @@ public static class ImmExtensions
             if (dictionary is ImmSortedDict<K,V> alreadyDict) return alreadyDict;
             if (dictionary.Count == 0) return EmptySortedDictionary<K,V>.Instance;
             KeyValuePair<K,V>[] pairs = dictionary.ToArray();
-            return SortingLogic.MakeSortedDict(pairs);
+            return SortingLogic.MakeImmSortedDict(pairs);
         }
     }
 
@@ -455,12 +450,7 @@ public static class ImmExtensions
             if (n == 0) return EmptyDictionary<K,V>.Instance;
 
             KeyValuePair<K,V>[] pairs = dictionary.ToArray();
-            return n switch
-                   {
-                       1    => new ImmutableSingletonDictionary<K,V>(pairs[0].Key, pairs[0].Value),
-                       <= 4 => new ImmutableMiniDictionary<K,V>(pairs),
-                       _    => new ImmutableHashDictionary<K,V>(pairs)
-                   };
+            return ImmutableArrayDictionary<K,V>.MakeListDict(pairs);
         }
     }
 
@@ -482,7 +472,7 @@ public static class ImmExtensions
         {
             if (dictionary.Count == 0) return EmptySortedDictionary<K,V>.Instance;
             KeyValuePair<K,V>[] pairs = dictionary.ToArray();
-            return SortingLogic.MakeSortedDict(pairs);
+            return SortingLogic.MakeImmSortedDict(pairs);
         }
     }
 
@@ -509,12 +499,7 @@ public static class ImmExtensions
             if (n == 0) return EmptyDictionary<K,V>.Instance;
 
             KeyValuePair<K,V>[] pairs = dictionary.ToArray();
-            return n switch
-                   {
-                       1    => new ImmutableSingletonDictionary<K,V>(pairs[0]),
-                       <= 4 => new ImmutableMiniDictionary<K,V>(pairs),
-                       _    => new ImmutableHashDictionary<K,V>(pairs)
-                   };
+            return ImmutableArrayDictionary<K,V>.MakeListDict(pairs);
         }
     }
 

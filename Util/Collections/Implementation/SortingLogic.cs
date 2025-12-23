@@ -119,7 +119,7 @@ internal static class SortingLogic
     }
 
 
-    internal static ImmSortedDict<K,V> MakeSortedDict<K,V>(KeyValuePair<K,V>[] pairs)
+    internal static ImmSortedDict<K,V> MakeImmSortedDict<K,V>(KeyValuePair<K,V>[] pairs)
         where K : IComparable<K>
     {
         if (pairs.Length == 1) return new ImmutableSingletonSortedDictionary<K,V>(pairs[0]);

@@ -32,6 +32,22 @@ internal abstract class ImmutableArrayDictionary<K,V> : ImmutableDictionary<K,V>
     public override int Count { get; }
 
 
+    /// <summary>
+    /// Makes a proper dictionary from the given prepared array of pairs.
+    /// The given array must not be shared, the created dictionary takes the ownership on it.
+    /// </summary>
+    /// <param name="pairs">array of the pairs.</param>
+    /// <returns>the created dictionary.</returns>
+    internal static ImmListDict<K,V> MakeListDict(KeyValuePair<K,V>[] pairs)
+        => pairs.Length switch
+           {
+               0    => EmptyDictionary<K,V>.Instance,
+               1    => new ImmutableSingletonDictionary<K,V>(pairs[0].Key, pairs[0].Value),
+               <= 4 => new ImmutableMiniDictionary<K,V>(pairs),
+               _    => new ImmutableHashDictionary<K,V>(pairs)
+           };
+    
+
     protected ImmutableArrayDictionary(KeyValuePair<K,V>[] pairs)
     {
         Debug.Assert(pairs.Length > 0);
@@ -42,8 +58,8 @@ internal abstract class ImmutableArrayDictionary<K,V> : ImmutableDictionary<K,V>
     public bool IsNotEmpty => true;
     public bool IsEmpty    => false;
 
-    public KeyValuePair<K, V> FirstEntry => Pairs[0];
-    public KeyValuePair<K, V> LastEntry  => Pairs[^1];
+    public KeyValuePair<K,V> FirstEntry => Pairs[0];
+    public KeyValuePair<K,V> LastEntry  => Pairs[^1];
 
     public abstract bool ContainsKey(K key);
 
