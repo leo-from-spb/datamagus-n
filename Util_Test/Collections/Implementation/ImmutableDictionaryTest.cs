@@ -32,7 +32,7 @@ public class ImmutableDictionaryTest
         VerifyCommonFunctionality(dict);
     }
 
-    private static void VerifyCommonFunctionality(ImmutableDictionary<string, long> dict)
+    private static void VerifyCommonFunctionality(ImmutableArrayDictionary<string, long> dict)
     {
         dict.Verify
         (

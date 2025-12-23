@@ -17,7 +17,7 @@ namespace Util.Collections.Implementation;
 /// </summary>
 /// <typeparam name="K">type of the key.</typeparam>
 /// <typeparam name="V">type of the associated value.</typeparam>
-internal abstract class ImmutableDictionary<K,V> : Collections.ImmutableDictionary<K,V>, ImmListDict<K,V>
+internal abstract class ImmutableArrayDictionary<K,V> : ImmutableDictionary<K,V>, ImmListDict<K,V>
 {
     protected override string DictionaryWord => "ArrayDictionary";
 
@@ -32,7 +32,7 @@ internal abstract class ImmutableDictionary<K,V> : Collections.ImmutableDictiona
     public override int Count { get; }
 
 
-    protected ImmutableDictionary(KeyValuePair<K,V>[] pairs)
+    protected ImmutableArrayDictionary(KeyValuePair<K,V>[] pairs)
     {
         Debug.Assert(pairs.Length > 0);
         Pairs = pairs;
@@ -71,11 +71,11 @@ internal abstract class ImmutableDictionary<K,V> : Collections.ImmutableDictiona
 
     private class KeySet : ImmutableCollection<K>, ImmListSet<K>
     {
-        private readonly ImmutableDictionary<K,V> Dict;
+        private readonly ImmutableArrayDictionary<K,V> Dict;
 
         protected override string CollectionWord =>  Dict.DictionaryWord + "KeySet";
 
-        internal KeySet(ImmutableDictionary<K,V> dict)
+        internal KeySet(ImmutableArrayDictionary<K,V> dict)
         {
             Dict = dict;
         }
@@ -121,11 +121,11 @@ internal abstract class ImmutableDictionary<K,V> : Collections.ImmutableDictiona
 
     private class ValueCollection : ImmutableCollection<V>, ImmList<V>
     {
-        private readonly ImmutableDictionary<K,V> Dict;
+        private readonly ImmutableArrayDictionary<K,V> Dict;
 
         protected override string CollectionWord => Dict.DictionaryWord + "ValueCollection";
 
-        internal ValueCollection(ImmutableDictionary<K,V> dict)
+        internal ValueCollection(ImmutableArrayDictionary<K,V> dict)
         {
             Dict = dict;
         }
@@ -162,7 +162,7 @@ internal abstract class ImmutableDictionary<K,V> : Collections.ImmutableDictiona
 
 
 
-internal sealed class ImmutableMiniDictionary<K,V> : ImmutableDictionary<K,V>
+internal sealed class ImmutableMiniDictionary<K,V> : ImmutableArrayDictionary<K,V>
 {
     protected override string DictionaryWord => "MiniDictionary";
 
@@ -188,7 +188,7 @@ internal sealed class ImmutableMiniDictionary<K,V> : ImmutableDictionary<K,V>
 
 
 
-internal sealed class ImmutableHashDictionary<K,V> : ImmutableDictionary<K,V>
+internal sealed class ImmutableHashDictionary<K,V> : ImmutableArrayDictionary<K,V>
 {
     protected override string DictionaryWord => "HashDictionary";
 
@@ -229,7 +229,7 @@ internal sealed class ImmutableHashDictionary<K,V> : ImmutableDictionary<K,V>
 /// <summary>
 /// Sorted dictionary.
 /// </summary>
-internal sealed class ImmutableSortedDictionary<K,V> : ImmutableDictionary<K,V>, ImmSortedDict<K,V>
+internal sealed class ImmutableSortedDictionary<K,V> : ImmutableArrayDictionary<K,V>, ImmSortedDict<K,V>
     where K : IComparable<K>
 {
     protected override string DictionaryWord => "SortedDictionary";
