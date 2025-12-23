@@ -92,6 +92,22 @@ public class ImmDictTest
         VerifyBasic1(dict);
     }
 
+    [Test]
+    public void Basic1_From_Array_byKey()
+    {
+        ulong[] array42 = [42uL];
+        ImmOrdDict<string, ulong> dict = array42.ToImmDict(_ => "thing");
+        VerifyBasic1(dict);
+    }
+
+    [Test]
+    public void Basic1_From_Array_byKeyAndValue()
+    {
+        byte[] arrayX = [_26_];
+        ImmOrdDict<string, ulong> dict = arrayX.ToImmDict(_ => "thing", x => (ulong)(x + 16u));
+        VerifyBasic1(dict);
+    }
+
     private static void VerifyBasic1(ImmOrdDict<string,ulong> dict)
     {
         dict.Verify
@@ -165,6 +181,44 @@ public class ImmDictTest
     public void Basic3_Param()
     {
         var dict = Imm.DictOf("один", 1uL, "пара", 2uL, "тройка", 3uL);
+        VerifyBasic3(dict);
+    }
+
+    [Test]
+    public void Basic3_From_Array_byKey()
+    {
+        ulong[] array123 = [1uL, 2uL, 3uL];
+        ImmListDict<string, ulong> dict =
+            array123.ToImmDict(x => x switch { 1uL => "один", 2uL => "пара", 3uL => "тройка", _ => "?" });
+        VerifyBasic3(dict);
+    }
+
+    [Test]
+    public void Basic3_From_Array_byKeyAndValue()
+    {
+        byte[] array123 = [_1_, _2_, _3_];
+        ImmListDict<string, ulong> dict =
+            array123.ToImmDict(x => x switch { _1_ => "один", _2_ => "пара", _3_ => "тройка", _ => "?" },
+                               y => y switch { _1_ => 1uL,    _2_ => 2uL,    _3_ => 3uL,      _ => 0uL });
+        VerifyBasic3(dict);
+    }
+
+    [Test]
+    public void Basic3_From_IEnumerable_byKey()
+    {
+        IEnumerable<ulong> ie123 = new List<ulong> { 1uL, 2uL, 3uL };
+        ImmListDict<string, ulong> dict =
+            ie123.ToImmDict(x => x switch { 1uL => "один", 2uL => "пара", 3uL => "тройка", _ => "?" });
+        VerifyBasic3(dict);
+    }
+
+    [Test]
+    public void Basic3_From_IEnumerable_byKeyAndValue()
+    {
+        IEnumerable<byte> ie123 = new List<byte> { _1_, _2_, _3_ };
+        ImmListDict<string, ulong> dict =
+            ie123.ToImmDict(x => x switch { _1_ => "один", _2_ => "пара", _3_ => "тройка", _ => "?" },
+                            y => y switch { _1_ => 1uL,    _2_ => 2uL,    _3_ => 3uL,      _ => 0uL });
         VerifyBasic3(dict);
     }
 
@@ -309,6 +363,49 @@ public class ImmDictTest
     {
         var dictionary = new Dictionary<uint,string> { {26u, "Lipetsk"}, {33u, "Piter"}, {42u, "Moscow"}, {66u, "Tambov"}, {74u, "Elets"} };
         var dict       = dictionary.ToImmSortedDict();
+        VerifySortedDict5(dict);
+    }
+
+    [Test]
+    public void Uint5_FromArray_byKey()
+    {
+        var helpingDictionary =
+            new Dictionary<string, uint> { {"Lipetsk", 26u}, {"Piter", 33u}, {"Moscow", 42u}, {"Tambov", 66u}, {"Elets", 74u} };
+        string[] array = ["Lipetsk", "Piter", "Moscow", "Tambov", "Elets"];
+        var dict = array.ToImmSortedDict(k => helpingDictionary[k]);
+        VerifySortedDict5(dict);
+    }
+
+    [Test]
+    public void Uint5_FromArray_byKeyAndValue()
+    {
+        var helpingDictionary =
+            new Dictionary<int, string> { {26, "Lipetsk"}, {33, "Piter"}, {42, "Moscow"}, {66, "Tambov"}, {74, "Elets"} };
+        int[] array = [26, 74, 42, 33, 66];
+        var   dict  = array.ToImmSortedDict(x => (uint)x, x => helpingDictionary[x]);
+        VerifySortedDict5(dict);
+    }
+
+    [Test]
+    public void Uint5_FromEnumerable_byKey()
+    {
+        var helpingDictionary =
+            new Dictionary<string, uint> { {"Lipetsk", 26u}, {"Piter", 33u}, {"Moscow", 42u}, {"Tambov", 66u}, {"Elets", 74u} };
+        IEnumerable<string> ie   =
+            new HashSet<string> {"Lipetsk", "Piter", "Moscow", "Tambov", "Elets"};
+        var              dict = ie.ToImmSortedDict(k => helpingDictionary[k]);
+        VerifySortedDict5(dict);
+    }
+
+    [Test]
+    public void Uint5_FromEnumerable_byKeyAndValue()
+    {
+        var helpingDictionary =
+            new Dictionary<int, string> { {26, "Lipetsk"}, {33, "Piter"}, {42, "Moscow"}, {66, "Tambov"}, {74, "Elets"} };
+        IEnumerable<int> ie
+            = new HashSet<int> {26, 74, 42, 33, 66};
+        ImmSortedDict<uint, string> dict
+            = ie.ToImmSortedDict(x => (uint)x, x => helpingDictionary[x]);
         VerifySortedDict5(dict);
     }
 

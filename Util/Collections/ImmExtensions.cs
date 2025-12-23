@@ -109,6 +109,79 @@ public static class ImmExtensions
 
             return SortingLogic.DeduplicateAndPrepareSet<E>(span, n);
         }
+
+        /// <summary>
+        /// Associates elements by their keys. The order is preserved.
+        /// All keys must be unique.
+        /// </summary>
+        /// <param name="keySelector">the function that extract the key from the given element.</param>
+        /// <typeparam name="K">type of the key.</typeparam>
+        /// <returns>the just created dictionary.</returns>
+        public ImmListDict<K,E> ToImmDict<K>(Func<E,K> keySelector)
+            where K : notnull
+        {
+            int n     = span.Length;
+            if (n == 0) return EmptyDictionary<K,E>.Instance;
+            if (n == 1) return new ImmutableSingletonDictionary<K,E>(keySelector(span[0]), span[0]);
+
+            var pairs = ArrayLogic.PreparePairs(span, keySelector);
+            return ImmutableArrayDictionary<K,E>.MakeListDict(pairs);
+        }
+
+        /// <summary>
+        /// Converts a span or an array to a dictionary. The order is preserved.
+        /// All keys must be unique.
+        /// </summary>
+        /// <param name="keySelector">the function that extract the key from the given element.</param>
+        /// <param name="valueSelector">the function that extract the value from the given element.</param>
+        /// <typeparam name="K">type of the key.</typeparam>
+        /// <typeparam name="V">type of the value.</typeparam>
+        /// <returns>the just created dictionary.</returns>
+        public ImmListDict<K,V> ToImmDict<K,V>(Func<E,K> keySelector, Func<E,V> valueSelector)
+            where K : notnull
+        {
+            int n     = span.Length;
+            if (n == 0) return EmptyDictionary<K,V>.Instance;
+            if (n == 1) return new ImmutableSingletonDictionary<K,V>(keySelector(span[0]), valueSelector(span[0]));
+
+            var pairs = ArrayLogic.PreparePairs(span, keySelector, valueSelector);
+            return ImmutableArrayDictionary<K,V>.MakeListDict(pairs);
+        }
+
+        /// <summary>
+        /// Converts a span or an array to a sorted dictionary.
+        /// </summary>
+        /// <param name="keySelector">the function that extract the key from the given element.</param>
+        /// <typeparam name="K">type of the key.</typeparam>
+        /// <returns>the just created sorted dictionary.</returns>
+        public ImmSortedDict<K,E> ToImmSortedDict<K>(Func<E,K> keySelector)
+            where K : IComparable<K>
+        {
+            int n     = span.Length;
+            if (n == 0) return EmptySortedDictionary<K,E>.Instance;
+            if (n == 1) return new ImmutableSingletonSortedDictionary<K,E>(keySelector(span[0]), span[0]);
+
+            var pairs = ArrayLogic.PreparePairs(span, keySelector);
+            return SortingLogic.MakeImmSortedDict(pairs);
+        }
+
+        /// <summary>
+        /// Converts a span or an array to a sorted dictionary.
+        /// </summary>
+        /// <param name="keySelector">the function that extract the key from the given element.</param>
+        /// <param name="valueSelector">the function that extract the value from the given element.</param>
+        /// <typeparam name="K">type of the key.</typeparam>
+        /// <typeparam name="V">type of the value.</typeparam>
+        /// <returns>the just created sorted dictionary.</returns>
+        public ImmSortedDict<K,V> ToImmSortedDict<K,V>(Func<E,K> keySelector, Func<E,V> valueSelector)
+            where K : IComparable<K>
+        {
+            int n     = span.Length;
+            if (n == 0) return EmptySortedDictionary<K,V>.Instance;
+
+            var pairs = ArrayLogic.PreparePairs(span, keySelector, valueSelector);
+            return SortingLogic.MakeImmSortedDict(pairs);
+        }
     }
 
 
@@ -173,6 +246,75 @@ public static class ImmExtensions
                        _                           => SortingLogic.DeduplicateAndPrepareSet<E>(source, 0)
                    };
         }
+
+        /// <summary>
+        /// Collect elements from this source and associate them by their keys. The order is preserved.
+        /// All keys must be unique.
+        /// </summary>
+        /// <param name="keySelector">the function that extract the key from the given element.</param>
+        /// <typeparam name="K">type of the key.</typeparam>
+        /// <returns>the just created dictionary.</returns>
+        public ImmListDict<K,E> ToImmDict<K>(Func<E,K> keySelector)
+            where K : notnull
+        {
+            IReadOnlyList<E> list =
+                source switch
+                {
+                    IReadOnlyList<E> alreadyList => alreadyList,
+                    _                            => source.ToList()
+                };
+            return list.ToImmDict(keySelector);
+        }
+
+        /// <summary>
+        /// Collect elements from this source and make a dictionary from them. The order is preserved.
+        /// All keys must be unique.
+        /// </summary>
+        /// <param name="keySelector">the function that extract the key from the given element.</param>
+        /// <param name="valueSelector">the function that extract the value from the given element.</param>
+        /// <typeparam name="K">type of the key.</typeparam>
+        /// <typeparam name="V">type of the value.</typeparam>
+        /// <returns>the just created dictionary.</returns>
+        public ImmListDict<K,V> ToImmDict<K,V>(Func<E,K> keySelector, Func<E,V> valueSelector)
+            where K : notnull
+        {
+            IReadOnlyList<E> list =
+                source switch
+                {
+                    IReadOnlyList<E> alreadyList => alreadyList,
+                    _                            => source.ToList()
+                };
+            return list.ToImmDict(keySelector, valueSelector);
+        }
+
+        /// <summary>
+        /// Collect elements from this source, sort them and make a dictionary from them.
+        /// </summary>
+        /// <param name="keySelector">the function that extract the key from the given element.</param>
+        /// <typeparam name="K">type of the key.</typeparam>
+        /// <returns>the just created sorted dictionary.</returns>
+        public ImmSortedDict<K,E> ToImmSortedDict<K>(Func<E,K> keySelector)
+            where K : IComparable<K>
+        {
+            var pairs = ArrayLogic.PreparePairs(source, keySelector);
+            return SortingLogic.MakeImmSortedDict(pairs);
+        }
+
+        /// <summary>
+        /// Collect elements from this source, sort them and make a dictionary from them.
+        /// </summary>
+        /// <param name="keySelector">the function that extract the key from the given element.</param>
+        /// <param name="valueSelector">the function that extract the value from the given element.</param>
+        /// <typeparam name="K">type of the key.</typeparam>
+        /// <typeparam name="V">type of the value.</typeparam>
+        /// <returns>the just created sorted dictionary.</returns>
+        public ImmSortedDict<K,V> ToImmSortedDict<K,V>(Func<E,K> keySelector, Func<E,V> valueSelector)
+            where K : IComparable<K>
+        {
+            var pairs = ArrayLogic.PreparePairs(source, keySelector, valueSelector);
+            return SortingLogic.MakeImmSortedDict(pairs);
+        }
+
     }
 
 
@@ -298,6 +440,45 @@ public static class ImmExtensions
                 ? new ImmutableMiniSet<E>(newArray)
                 : new ImmutableHashSet<E>(newArray);
         }
+
+        /// <summary>
+        /// Associates elements by their keys. The order is preserved.
+        /// All keys must be unique.
+        /// </summary>
+        /// <param name="keySelector">the function that extract the key from the given element.</param>
+        /// <typeparam name="K">type of the key.</typeparam>
+        /// <returns>the just created dictionary.</returns>
+        public ImmListDict<K,E> ToImmDict<K>(Func<E,K> keySelector)
+            where K : notnull
+        {
+            int n     = list.Count;
+            if (n == 0) return EmptyDictionary<K,E>.Instance;
+            if (n == 1) return new ImmutableSingletonDictionary<K,E>(keySelector(list[0]), list[0]);
+
+            var pairs = ArrayLogic.PreparePairs(list, keySelector);
+            return ImmutableArrayDictionary<K,E>.MakeListDict(pairs);
+        }
+
+        /// <summary>
+        /// Converts a list to a dictionary. The order is preserved.
+        /// All keys must be unique.
+        /// </summary>
+        /// <param name="keySelector">the function that extract the key from the given element.</param>
+        /// <param name="valueSelector">the function that extract the value from the given element.</param>
+        /// <typeparam name="K">type of the key.</typeparam>
+        /// <typeparam name="V">type of the value.</typeparam>
+        /// <returns>the just created dictionary.</returns>
+        public ImmListDict<K,V> ToImmDict<K,V>(Func<E,K> keySelector, Func<E,V> valueSelector)
+            where K : notnull
+        {
+            int n = list.Count;
+            if (n == 0) return EmptyDictionary<K,V>.Instance;
+            if (n == 1) return new ImmutableSingletonDictionary<K,V>(keySelector(list[0]), valueSelector(list[0]));
+
+            var pairs = ArrayLogic.PreparePairs(list, keySelector, valueSelector);
+            return ImmutableArrayDictionary<K,V>.MakeListDict(pairs);
+        }
+
     }
 
 
