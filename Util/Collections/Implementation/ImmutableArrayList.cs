@@ -12,6 +12,8 @@ namespace Util.Collections.Implementation;
 /// </summary>
 internal class ImmutableArrayList<T> : ImmutableCollection<T>, ImmList<T>
 {
+    internal override byte CascadingLevel => 1;
+
     protected override string CollectionWord => "ArrayList";
 
     /// <summary>

@@ -68,7 +68,9 @@ public class ImmListTest
         (
             l => l[0].ShouldBe(_3_),
             l => l[1].ShouldBe(_5_),
-            l => l[2].ShouldBe(_7_)
+            l => l[2].ShouldBe(_7_),
+            l => l.Imp.CascadingLevel.ShouldBe(_1_),
+            l => l.ToString()!.ShouldContain("<d1>")
         );
     }
 

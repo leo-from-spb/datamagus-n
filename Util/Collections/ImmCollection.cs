@@ -19,7 +19,7 @@ public interface ImmCollection<T> : IReadOnlyCollection<T>
     /// <summary>
     /// Inner implementation.
     /// </summary>
-    protected ImmutableCollection<T> Imp { get; }
+    internal ImmutableCollection<T> Imp { get; }
 
     /// <summary>
     /// This collection has at least one element.

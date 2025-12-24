@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Util.Collections.Implementation;
 
-internal class ArrayLogic
+internal static class ArrayLogic
 {
 
     internal static KeyValuePair<K,V>[] PreparePairs<K,V>(ReadOnlySpan<V> values, Func<V,K> keySelector)

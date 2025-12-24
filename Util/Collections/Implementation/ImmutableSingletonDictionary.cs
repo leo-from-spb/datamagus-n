@@ -1,12 +1,16 @@
 using System;
 using System.Collections.Generic;
+using static Util.Fun.NumberConstants;
 
 namespace Util.Collections.Implementation;
 
 
 
-internal class ImmutableSingletonDictionary<K,V> : Collections.ImmutableDictionary<K,V>, ImmListDict<K,V>
+internal class ImmutableSingletonDictionary<K,V> : ImmutableDictionary<K,V>, ImmListDict<K,V>
 {
+    public ImmutableDictionary<K,V> Imp => this;
+
+    internal override  byte   CascadingLevel => _1_;
     protected override string DictionaryWord => "SingletonDictionary";
 
     protected readonly K Key;
@@ -18,7 +22,7 @@ internal class ImmutableSingletonDictionary<K,V> : Collections.ImmutableDictiona
         Value = value;
     }
 
-    internal ImmutableSingletonDictionary(KeyValuePair<K, V> pair)
+    internal ImmutableSingletonDictionary(KeyValuePair<K,V> pair)
     {
         this.Key   = pair.Key;
         this.Value = pair.Value;
@@ -29,8 +33,8 @@ internal class ImmutableSingletonDictionary<K,V> : Collections.ImmutableDictiona
 
     public override int Count => 1;
 
-    public KeyValuePair<K, V> FirstEntry => new KeyValuePair<K,V>(Key, Value);
-    public KeyValuePair<K, V> LastEntry  => new KeyValuePair<K,V>(Key, Value);
+    public KeyValuePair<K,V> FirstEntry => new KeyValuePair<K,V>(Key, Value);
+    public KeyValuePair<K,V> LastEntry  => new KeyValuePair<K,V>(Key, Value);
 
     public bool ContainsKey(K key) => keyEq.Equals(key, Key);
 
@@ -53,7 +57,7 @@ internal class ImmutableSingletonSortedDictionary<K,V> : ImmutableSingletonDicti
 {
     internal ImmutableSingletonSortedDictionary(K key, V value) : base(key, value) { }
 
-    internal ImmutableSingletonSortedDictionary(KeyValuePair<K, V> pair) : base(pair) { }
+    internal ImmutableSingletonSortedDictionary(KeyValuePair<K,V> pair) : base(pair) { }
 
     public K MinKey => Key;
     public K MaxKey => Key;

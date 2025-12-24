@@ -7,6 +7,7 @@ using Util.Extensions;
 using static Util.Collections.ImmConst;
 using static Util.Collections.Implementation.CollectionLogic;
 using static Util.Collections.Implementation.HashTableLogic;
+using static Util.Fun.NumberConstants;
 
 
 namespace Util.Collections.Implementation;
@@ -19,6 +20,9 @@ namespace Util.Collections.Implementation;
 /// <typeparam name="V">type of the associated value.</typeparam>
 internal abstract class ImmutableArrayDictionary<K,V> : ImmutableDictionary<K,V>, ImmListDict<K,V>
 {
+    public ImmutableDictionary<K,V> Imp => this;
+
+    internal override  byte   CascadingLevel => _1_;
     protected override string DictionaryWord => "ArrayDictionary";
 
     /// <summary>
@@ -30,7 +34,6 @@ internal abstract class ImmutableArrayDictionary<K,V> : ImmutableDictionary<K,V>
     /// Number of pairs.
     /// </summary>
     public override int Count { get; }
-
 
     /// <summary>
     /// Makes a proper dictionary from the given prepared array of pairs.
@@ -46,7 +49,7 @@ internal abstract class ImmutableArrayDictionary<K,V> : ImmutableDictionary<K,V>
                <= 4 => new ImmutableMiniDictionary<K,V>(pairs),
                _    => new ImmutableHashDictionary<K,V>(pairs)
            };
-    
+
 
     protected ImmutableArrayDictionary(KeyValuePair<K,V>[] pairs)
     {
@@ -89,7 +92,8 @@ internal abstract class ImmutableArrayDictionary<K,V> : ImmutableDictionary<K,V>
     {
         private readonly ImmutableArrayDictionary<K,V> Dict;
 
-        protected override string CollectionWord =>  Dict.DictionaryWord + "KeySet";
+        internal override  byte   CascadingLevel => _2_;
+        protected override string CollectionWord => Dict.DictionaryWord + "KeySet";
 
         internal KeySet(ImmutableArrayDictionary<K,V> dict)
         {
@@ -139,6 +143,7 @@ internal abstract class ImmutableArrayDictionary<K,V> : ImmutableDictionary<K,V>
     {
         private readonly ImmutableArrayDictionary<K,V> Dict;
 
+        internal override  byte   CascadingLevel => _2_;
         protected override string CollectionWord => Dict.DictionaryWord + "ValueCollection";
 
         internal ValueCollection(ImmutableArrayDictionary<K,V> dict)
@@ -180,6 +185,7 @@ internal abstract class ImmutableArrayDictionary<K,V> : ImmutableDictionary<K,V>
 
 internal sealed class ImmutableMiniDictionary<K,V> : ImmutableArrayDictionary<K,V>
 {
+    internal override  byte   CascadingLevel => _1_;
     protected override string DictionaryWord => "MiniDictionary";
 
     internal ImmutableMiniDictionary(KeyValuePair<K,V>[] entries) : base(entries) { }

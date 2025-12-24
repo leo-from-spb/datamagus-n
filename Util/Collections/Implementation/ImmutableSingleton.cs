@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using static Util.Collections.ImmConst;
 using static Util.Collections.Implementation.CollectionLogic;
+using static Util.Fun.NumberConstants;
 
 
 namespace Util.Collections.Implementation;
@@ -11,6 +12,8 @@ namespace Util.Collections.Implementation;
 
 public class ImmutableSingleton<T> : ImmutableCollection<T>, ImmListSet<T>
 {
+    internal override byte CascadingLevel => _1_;
+
     /// <summary>
     /// The element.
     /// </summary>

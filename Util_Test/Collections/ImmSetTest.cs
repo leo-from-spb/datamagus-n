@@ -88,7 +88,8 @@ public class ImmSetTest
         (
             s => s[0].ShouldBe(_3_),
             s => s[1].ShouldBe(_5_),
-            s => s[2].ShouldBe(_7_)
+            s => s[2].ShouldBe(_7_),
+            s => s.Imp.CascadingLevel.ShouldBe(_1_)
         );
     }
 

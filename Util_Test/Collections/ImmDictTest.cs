@@ -12,6 +12,46 @@ using UIntStringPair = KeyValuePair<uint,string>;
 [TestFixture]
 public class ImmDictTest
 {
+    #region 0 ELEMENTS
+
+    [Test]
+    public void Basic0_FromDictionary()
+    {
+        var d1 = new Dictionary<string,byte>();
+        var d2 = d1.ToImmDict();
+        VerifyBasic0(d2);
+    }
+
+    [Test]
+    public void Basic0_FromArray_byKey()
+    {
+        byte[] a = [];
+        var    d = a.ToImmDict(b => "");
+        VerifyBasic0(d);
+    }
+
+    [Test]
+    public void Basic0_FromArray_byKeyAndValue()
+    {
+        int[] a = [];
+        var   d = a.ToImmDict(x => "", x => _255_);
+        VerifyBasic0(d);
+    }
+
+    private void VerifyBasic0(ImmDict<string,byte> dict)
+    {
+        dict.Verify
+        (
+            d => d.IsNotEmpty.ShouldBeFalse(),
+            d => d.IsEmpty.ShouldBeTrue(),
+            d => d.Count.ShouldBe(0),
+            d => d.Imp.CascadingLevel.ShouldBe(_0_)
+        );
+    }
+
+    #endregion
+
+
     #region 1 ELEMENT
 
     [Test]
@@ -120,7 +160,9 @@ public class ImmDictTest
             d => d.Find("thing").ShouldBe(new Found<ulong>(true, 42uL)),
             d => d.Find("nothing").ShouldBe(new Found<ulong>(false, 0)),
             d => d.ContainsKey("thing").ShouldBeTrue(),
-            d => d.ContainsKey("nothing").ShouldBeFalse()
+            d => d.ContainsKey("nothing").ShouldBeFalse(),
+            d => d.Imp.CascadingLevel.ShouldBe(_1_),
+            d => d.ToString()!.ShouldContain("<d1>")
         );
 
         dict.Keys.Verify
