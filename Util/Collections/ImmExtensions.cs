@@ -783,4 +783,30 @@ public static class ImmExtensions
             => SortingLogic.MakeImmSortedDict(dictionary, dictionary.Count);
     }
 
+
+    /// <summary>
+    /// Additional functions for ImmDict.
+    /// </summary>
+    extension<K,V>(ImmDict<K,V> dict)
+    {
+        /// <summary>
+        /// Patches this dictionary.
+        /// </summary>
+        /// <param name="patch">entries to add/change.</param>
+        /// <param name="removed">keys to remove.</param>
+        /// <returns>new dictionary.</returns>
+        public ImmDict<K,V> Patch(ImmDict<K,V> patch, ImmSet<K> removed)
+        {
+            int n = dict.Count;
+            int m = patch.Count;
+            int r = removed.Count;
+            if (m == 0 && r == 0) return dict;
+
+            var newDict = new ImmutablePatchedDict<K,V>(dict, patch, removed);
+            return newDict.CascadingLevel <= 4 && (m + r) * 4 < n
+                ? newDict
+                : newDict.Repack();
+        }
+    }
+
 }

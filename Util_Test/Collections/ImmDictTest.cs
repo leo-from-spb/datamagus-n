@@ -528,4 +528,116 @@ public class ImmDictTest
     }
 
     #endregion
+
+
+    #region Patch
+
+    [Test]
+    public void Patch_Basic()
+    {
+        var original = Imm.DictOf(1, 'a', 2, 'b', 3, 'c');
+        var patch    = Imm.DictOf(1, 'A', 4, 'D', 5, 'E');
+        var removed  = Imm.SetOf(0, 3);
+        var patched  = original.Patch(patch, removed);
+        patched.Verify(
+            p => p.Keys.ToArray().ShouldBe([1, 2, 4, 5]),
+            p => p.Values.ToArray().ShouldBe(['A', 'b', 'D', 'E'])
+        );
+    }
+
+    [Test]
+    public void Patch_HardPatch1000_ulong()
+    {
+        var originalDictionary = new Dictionary<ulong,int>(1000);
+        for (int i = 1; i <= 1000; i++)
+            originalDictionary[(ulong)i] = -i;
+        var original = originalDictionary.ToImmDict();
+
+        ImmDict<ulong,int> patched = original;
+        for (int i = 0; i <= 9; i++)
+        {
+            var patchDictionary = new Dictionary<ulong,int>(100);
+            for (int j = 1; j <= 100; j++)
+            {
+                int x = i * 100 + j;
+                patchDictionary[(ulong)x] = x;
+            }
+
+            var patchDict = patchDictionary.ToImmDict();
+            patched = patched.Patch(patchDict, EmptySet<ulong>.Instance);
+        }
+
+        patched.Verify(
+            p => p[1uL].ShouldBe(1),
+            p => p[2uL].ShouldBe(2),
+            p => p[100uL].ShouldBe(100),
+            p => p[101uL].ShouldBe(101),
+            p => p[200uL].ShouldBe(200),
+            p => p[201uL].ShouldBe(201),
+            p => p[300uL].ShouldBe(300),
+            p => p[301uL].ShouldBe(301),
+            p => p[400uL].ShouldBe(400),
+            p => p[401uL].ShouldBe(401),
+            p => p[500uL].ShouldBe(500),
+            p => p[501uL].ShouldBe(501),
+            p => p[600uL].ShouldBe(600),
+            p => p[601uL].ShouldBe(601),
+            p => p[700uL].ShouldBe(700),
+            p => p[701uL].ShouldBe(701),
+            p => p[800uL].ShouldBe(800),
+            p => p[801uL].ShouldBe(801),
+            p => p[900uL].ShouldBe(900),
+            p => p[901uL].ShouldBe(901),
+            p => p[1000uL].ShouldBe(1000)
+        );
+    }
+
+    [Test]
+    public void Patch_HardPatch1000_uint()
+    {
+        var originalDictionary = new Dictionary<uint,int>(1000);
+        for (int i = 1; i <= 1000; i++)
+            originalDictionary[(uint)i] = -i;
+        var original = originalDictionary.ToImmDict();
+
+        ImmDict<uint,int> patched = original;
+        for (int i = 0; i <= 9; i++)
+        {
+            var patchDictionary = new Dictionary<uint,int>(100);
+            for (int j = 1; j <= 100; j++)
+            {
+                int x = i * 100 + j;
+                patchDictionary[(uint)x] = x;
+            }
+
+            var patchDict = patchDictionary.ToImmDict();
+            patched = patched.Patch(patchDict, EmptySet<uint>.Instance);
+        }
+
+        patched.Verify(
+            p => p[1u].ShouldBe(1),
+            p => p[2u].ShouldBe(2),
+            p => p[100u].ShouldBe(100),
+            p => p[101u].ShouldBe(101),
+            p => p[200u].ShouldBe(200),
+            p => p[201u].ShouldBe(201),
+            p => p[300u].ShouldBe(300),
+            p => p[301u].ShouldBe(301),
+            p => p[400u].ShouldBe(400),
+            p => p[401u].ShouldBe(401),
+            p => p[500u].ShouldBe(500),
+            p => p[501u].ShouldBe(501),
+            p => p[600u].ShouldBe(600),
+            p => p[601u].ShouldBe(601),
+            p => p[700u].ShouldBe(700),
+            p => p[701u].ShouldBe(701),
+            p => p[800u].ShouldBe(800),
+            p => p[801u].ShouldBe(801),
+            p => p[900u].ShouldBe(900),
+            p => p[901u].ShouldBe(901),
+            p => p[1000u].ShouldBe(1000)
+        );
+    }
+
+    #endregion
 }
