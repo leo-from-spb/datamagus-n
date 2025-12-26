@@ -56,8 +56,7 @@ internal class MetaProducer (MetaModel mm)
 
         var segmentMatters = from m in mm.Matters
                              where m.SegmKind == segmentKind
-                                && !m.Imm.ManuallyImplemented
-                                && !m.IsAbstract   
+                                && m.Imm.ToImplement
                              select m;
 
         foreach (var matter in segmentMatters)
@@ -72,7 +71,7 @@ internal class MetaProducer (MetaModel mm)
     {
         string classModifier = m.IsConcrete ? "sealed" : "abstract";
         cb.EmptyLine();
-        cb.Phrase("///", m.Name, @"\\\");
+        ProduceImmMatterGreatComment(cb, m);
         cb.Phrase("public", classModifier, "class", m.Imm.ClassName, ":", m.Imm.BaseClassName + ",", m.IntfName);
 
         using (cb.CurlyBlock(true))
@@ -82,6 +81,38 @@ internal class MetaProducer (MetaModel mm)
             ProduceImmMatterFamilies(cb, m);
             ProduceImmMatterRefrences(cb, m);
             ProduceImmMatterProperties(cb, m);
+        }
+    }
+
+    private static void ProduceImmMatterGreatComment(CodeBuilder cb, MetaMatter m)
+    {
+        using (cb.Indenting("/// "))
+        {
+            cb.Phrase("<summary>");
+            cb.Phrase("Immutable matter", m.Name.InTag("b"), "interface", $"<see cref='{m.IntfName}'/>", "<br/>");
+
+            cb.Phrase("Base matters:");
+            cb.Phrase("<ul>");
+            foreach (var bm in m.DeclaredBaseMatters.OrderBy(b => b.OrderNum))
+            {
+                var interfaceStr = $"interface <see cref='{bm.Intf.Name}'/>";
+                var imm          = bm.Imm;
+                var classStr     = imm.ToImplement || imm.ManuallyImplemented ? $", class <see cref='{imm.ClassName}'/>" : null;
+                cb.Phrase("    <li>", bm.Name.InTag("b"), ":", interfaceStr, classStr, "</li>");
+            }
+            cb.Phrase("</ul>");
+
+            var families = m.AllFamilies.Values;
+            if (families.IsNotEmpty())
+            {
+                cb.Phrase("Families:");
+                cb.Phrase("<ul>");
+                foreach (var f in families)
+                    cb.Phrase("    <li>", f.FamilyName.InTag("b"), "</li>");
+                cb.Phrase("</ul>");
+            }
+
+            cb.Phrase("</summary>");
         }
     }
 

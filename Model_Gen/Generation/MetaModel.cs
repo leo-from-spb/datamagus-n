@@ -46,6 +46,7 @@ internal class MetaMatter
     internal readonly HashSet<Type>                    OwnBaseIntfs        = [];
     internal readonly List<MetaMatter>                 DeclaredBaseMatters = [];
     internal readonly List<MetaMatter>                 BaseMatters         = [];
+    internal readonly List<MetaMatter>                 DirectInheritors    = [];
     internal readonly HashSet<MetaFamily>              OwnFamilies         = [];
     internal readonly Dictionary<string, MetaFamily>   AllFamilies         = [];
     internal readonly List<MetaRef>                    OwnRefs             = [];
@@ -68,6 +69,8 @@ internal class MetaMatter
         internal          string     ClassName     = "?";
         internal          string     BaseClassName = "?";
         internal          bool       ManuallyImplemented;
+
+        internal bool ToImplement => !Matter.IsAbstract && !ManuallyImplemented;
     }
     
     internal MetaMatter(Type intf, bool isConcrete, byte level)

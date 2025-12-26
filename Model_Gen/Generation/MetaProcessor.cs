@@ -55,6 +55,7 @@ internal class MetaProcessor (MetaModel mm)
             
             // base matters
             m.BaseMatters.AddRange(m.DeclaredBaseMatters);
+            m.DeclaredBaseMatters.ForEach(b => b.DirectInheritors.Add(m));
             
             // families
             foreach (var bm in m.BaseMatters)
