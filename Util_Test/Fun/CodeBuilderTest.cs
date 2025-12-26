@@ -8,44 +8,44 @@ public class CodeBuilderTest
     private readonly string nl = Environment.NewLine;
 
     [Test]
-    public void Append_1Line()
+    public void Text_1Line()
     {
         CodeBuilder cb = new CodeBuilder();
-        cb.Append("One_Line");
+        cb.Text("One_Line");
         cb.Result.ShouldBe($"One_Line{nl}");
     }
     
     [Test]
-    public void Append_3Lines()
+    public void Text_3Lines()
     {
         string text   = $"First_Line{nl}Second_Line{nl}Third_Line";
         string result = $"First_Line{nl}Second_Line{nl}Third_Line{nl}";
 
         CodeBuilder cb = new CodeBuilder();
-        cb.Append(text);
+        cb.Text(text);
         cb.Result.ShouldBe(result);
     }
     
     [Test]
-    public void Append_3LinesWithEOL()
+    public void Text_3LinesWithEOL()
     {
         string text   = $"First_Line{nl}Second_Line{nl}Third_Line{nl}";
         string result = $"First_Line{nl}Second_Line{nl}Third_Line{nl}";
 
         CodeBuilder cb = new CodeBuilder();
-        cb.Append(text);
+        cb.Text(text);
         cb.Result.ShouldBe(result);
     }
     
     [Test]
-    public void Append_3LinesIndented()
+    public void Text_3LinesIndented()
     {
         string text   = $"First_Line{nl}Second_Line{nl}Third_Line";
         string result = $"\tFirst_Line{nl}\tSecond_Line{nl}\tThird_Line{nl}";
 
         CodeBuilder cb = new CodeBuilder();
         cb.Indent();
-        cb.Append(text);
+        cb.Text(text);
         cb.Unindent();
         cb.Result.ShouldBe(result);
     }

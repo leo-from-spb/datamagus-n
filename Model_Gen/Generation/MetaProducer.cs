@@ -43,15 +43,15 @@ internal class MetaProducer (MetaModel mm)
     private void ProduceImmutableClasses(SegmentKind segmentKind, string filePath)
     {
         CodeBuilder cb = new CodeBuilder();
-        cb.Append("""
-                  using System.Collections.Generic;
-                  using System.Linq;
-                  using Model.Abstracts;
-                  using Model.Concept;
-                  using Model.Visuality;
-                  
-                  namespace Model.Imm;
-                  """);
+        cb.Text("""
+                using System.Collections.Generic;
+                using System.Linq;
+                using Model.Abstracts;
+                using Model.Concept;
+                using Model.Visuality;
+                
+                namespace Model.Imm;
+                """);
         cb.EmptyLine();
 
         var segmentMatters = from m in mm.Matters
@@ -74,23 +74,23 @@ internal class MetaProducer (MetaModel mm)
         cb.EmptyLine();
         cb.Phrase("///", m.Name, @"\\\");
         cb.Phrase("public", classModifier, "class", m.Imm.ClassName, ":", m.Imm.BaseClassName + ",", m.IntfName);
-        cb.Block("{", "}", () =>
-                           {
-                               ProduceLocalVariablesOnTop(cb, m);
-                               ProduceImmMatterConstructor(cb, m);
-                               ProduceImmMatterFamilies(cb, m);
-                               ProduceImmMatterRefrences(cb, m);
-                               ProduceImmMatterProperties(cb, m);
-                           });
-        cb.EmptyLine();
+
+        using (cb.CurlyBlock(true))
+        {
+            ProduceLocalVariablesOnTop(cb, m);
+            ProduceImmMatterConstructor(cb, m);
+            ProduceImmMatterFamilies(cb, m);
+            ProduceImmMatterRefrences(cb, m);
+            ProduceImmMatterProperties(cb, m);
+        }
     }
 
     private void ProduceLocalVariablesOnTop(CodeBuilder cb, MetaMatter m)
     {
         if (m.IsMedium && m.IsConcrete)
         {
-            cb.Phrase("private readonly Family<Matter>[] families;");
-            cb.Phrase("public override IReadOnlyList<Family<Matter>> Families => families;");
+            cb.Text("private readonly Family<Matter>[] families;",
+                    "public override IReadOnlyList<Family<Matter>> Families => families;");
             cb.EmptyLine();
         }
     }
@@ -134,18 +134,17 @@ internal class MetaProducer (MetaModel mm)
 
         cb.Phrase(@"// Constructor \\");
         cb.Phrase("public", m.Imm.ClassName, "(" + realConstructorParameters);
-        cb.Indent();
-        for (var i = 0; i < parameters.Count; i++) cb.Phrase(parameters[i] + (i < parameters.Count - 1 ? "," : ")"));
-        cb.Phrase(": base(", baseConstructorParameters, ")");
-        cb.Unindent();
-        cb.Phrase("{");
 
-        cb.Indent();
-        assignments.ForEach(a => cb.Phrase(a));
-        if (m.IsMedium && m.IsConcrete) cb.Phrase("families = new Family<Matter>[] {", thisFamilies, "};");
-        cb.Unindent();
-
-        cb.Phrase("}");
+        using (cb.Indenting())
+        {
+            for (var i = 0; i < parameters.Count; i++) cb.Phrase(parameters[i] + (i < parameters.Count - 1 ? "," : ")"));
+            cb.Phrase(": base(", baseConstructorParameters, ")");
+        }
+        using (cb.CurlyBlock(true))
+        {
+            cb.Text(assignments);
+            if (m.IsMedium && m.IsConcrete) cb.Phrase("families = new Family<Matter>[] {", thisFamilies, "};");
+        }
     }
 
     private void ProduceImmMatterFamilies(CodeBuilder cb, MetaMatter m)
@@ -160,8 +159,8 @@ internal class MetaProducer (MetaModel mm)
             string     iTypeStr   = $"{f.FamilyTypeName}<{child.IntfName}>";
             cb.EmptyLine();
             cb.Phrase("//", child.Names);
-            cb.Append($"private readonly {immTypeStr} {f.FamilyVarName};");
-            cb.Append($"public {iTypeStr} {f.FamilyName} => {f.FamilyVarName};");
+            cb.Text($"private readonly {immTypeStr} {f.FamilyVarName};",
+                    $"public {iTypeStr} {f.FamilyName} => {f.FamilyVarName};");
         }
     }
 
@@ -193,7 +192,7 @@ internal class MetaProducer (MetaModel mm)
     {
         if (m.AllProperties.IsEmpty()) return;
         cb.EmptyLine();
-        cb.Phrase(@"// Properties \\");        
+        cb.Text(@"// Properties \\");        
         foreach (var p in m.AllProperties.Values)
         {
             if (p.ImplementedInMatter) continue;

@@ -11,52 +11,80 @@ public class CodeBuilder
     private readonly StringBuilder Buf = new StringBuilder();
     
     
-    // settings
+    // Settings \\
 
     public string Indentation = "\t";
 
     
-    // state
+    // State \\
 
     private string CurrIndentation = "";
 
-    private Stack<string> Indentations = new Stack<string>();
+    private readonly Stack<string> Indentations = new Stack<string>();
 
-    
-    // Methods
 
-    public void Block(string header, string footer, Action action)
+    // Auxiliary Classes \\
+
+    public class IndentationBlockMarker : IDisposable
     {
-        Append(header);
-        Indent();
-        try
+        private readonly CodeBuilder codeBuilder;
+        private readonly string?     footer;
+        private readonly bool        thenSkipLine;
+
+        internal IndentationBlockMarker(CodeBuilder codeBuilder, string? footer = null, bool theSkipLine = false)
         {
-            action();
+            this.codeBuilder  = codeBuilder;
+            this.footer       = footer;
+            this.thenSkipLine = theSkipLine;
         }
-        finally
+
+        #pragma warning disable CA1816
+        public void Dispose()
         {
-            Unindent();
-            Append(footer);
+            codeBuilder.Unindent();
+            if (footer is not null)
+                codeBuilder.Text(footer);
+            if (thenSkipLine)
+                codeBuilder.EmptyLine();
         }
+        #pragma warning restore CA1816
     }
-    
-    public void Indenting(Action action)
+
+
+    // Methods \\
+
+    /// <summary>
+    /// Indent the block wrapping with optional <paramref name="header"/> and <paramref name="footer"/>.
+    /// The header and footer are not indented, only the text generated inside the code block.
+    /// </summary>
+    /// <param name="header">optional header to include before indentation.</param>
+    /// <param name="footer">optional footer to include after indentation.</param>
+    /// <param name="withIndentation">unusual indentation, or null for the usual one.</param>
+    /// <param name="thenSkipLine">add empty line after the block.</param>
+    public IndentationBlockMarker Block(string? header = null,
+                                        string? footer = null,
+                                        string? withIndentation = null,
+                                        bool thenSkipLine = false)
     {
-        Indent();
-        try
-        {
-            action();
-        }
-        finally
-        {
-            Unindent();
-        }
+        if (header is not null)
+            Text(header);
+        Indent(withIndentation);
+        return new IndentationBlockMarker(this, footer, thenSkipLine);
     }
-    
-    public void Indent()
+
+    public IndentationBlockMarker CurlyBlock(bool thenSkipLine = false) => Block("{", "}", null, thenSkipLine);
+
+    public IndentationBlockMarker Indenting(string? withIndentation = null)
+    {
+        Indent(withIndentation);
+        return new IndentationBlockMarker(this);
+    }
+
+    public void Indent(string? withIndentation = null)
     {
         Indentations.Push(CurrIndentation);
-        CurrIndentation += Indentation;
+        string theIndentation = withIndentation ?? Indentation;
+        CurrIndentation += theIndentation;
     }
 
     public void Unindent()
@@ -65,7 +93,13 @@ public class CodeBuilder
         CurrIndentation = Indentations.Pop();
     }
 
-
+    /// <summary>
+    /// Adds one line that contains of the given words separated with spaces.
+    /// Null words are ignored.
+    /// If all the given words are null — the whole line is ignored.
+    /// </summary>
+    /// <param name="words">words to add; nulls are ignored.</param>
+    /// <seealso cref="Text"/>
     public void Phrase(params string?[] words)
     {
         // check whether at least one word exists
@@ -84,10 +118,39 @@ public class CodeBuilder
         Buf.AppendLine();
     }
 
-
-    public void Append(string? text)
+    /// <summary>
+    /// Adds one or several lines of text.
+    /// Each argument is one line, or several lines (they can contain the '\n' character).
+    /// </summary>
+    /// <param name="text">lines of the text.</param>
+    /// <seealso cref="Phrase"/>
+    public void Text(params string?[] text)
     {
-        if (text is null) return;
+        foreach (string? str in text)
+            if (str is not null)
+                AppendText(str);
+    }
+
+    /// <summary>
+    /// Adds one or several lines of text.
+    /// Each argument is one line, or several lines (they can contain the '\n' character).
+    /// </summary>
+    /// <param name="text">lines of the text.</param>
+    /// <seealso cref="Phrase"/>
+    public void Text(IEnumerable<string?> text)
+    {
+        foreach (string? str in text)
+            if (str is not null)
+                AppendText(str);
+    }
+
+    /// <summary>
+    /// Adjusts the text according to the current indentation,
+    /// and then appends it to the buffer.
+    /// </summary>
+    /// <param name="text">the text to append, can be multiline.</param>
+    private void AppendText(string text)
+    {
         if (text.Contains('\n'))
         {
             var lines = text.Split('\n');
@@ -106,12 +169,19 @@ public class CodeBuilder
         }
     }
 
+    /// <summary>
+    /// Appends one empty line.
+    /// </summary>
     public void EmptyLine()
     {
         EnsureEoL();
         Buf.AppendLine();
     }
 
+    /// <summary>
+    /// Ensures that the last line has the end-of-line character.
+    /// Appends one if not appended yet.
+    /// </summary>
     public void EnsureEoL()
     {
         if (Buf.Length == 0) return;
@@ -120,6 +190,10 @@ public class CodeBuilder
 
     public string Result => Buf.ToString();
 
+    /// <summary>
+    /// The last character in the buffer.
+    /// Or '\0' if the buffer is empty.
+    /// </summary>
     public char LastChar
     {
         get
