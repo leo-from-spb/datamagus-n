@@ -77,7 +77,7 @@ internal sealed class ImmutablePatchedDict<K,V> : ImmutableDictionary<K,V>, ImmD
     public ImmListDict<K,V> Repack()
     {
         var entries = EnumerateEntries().ToArray();
-        return ImmutableArrayDictionary<K,V>.MakeListDict(entries);
+        return ImmutableArrayDictionary<K,V>.MakeListDict(entries, false);
     }
 
 

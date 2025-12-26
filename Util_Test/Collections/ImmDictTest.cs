@@ -64,14 +64,14 @@ public class ImmDictTest
     [Test]
     public void Basic1_Mini()
     {
-        var dict = new ImmutableMiniDictionary<string,ulong>([new("thing", 42uL)]);
+        var dict = new ImmutableMiniDictionary<string,ulong>([new("thing", 42uL)], true);
         VerifyBasic1(dict);
     }
 
     [Test]
     public void Basic1_Hash()
     {
-        var dict = new ImmutableHashDictionary<string,ulong>([new("thing", 42uL)]);
+        var dict = new ImmutableHashDictionary<string,ulong>([new("thing", 42uL)], false);
         VerifyBasic1(dict);
     }
 
@@ -201,14 +201,14 @@ public class ImmDictTest
     [Test]
     public void Basic3_Mini()
     {
-        var dict = new ImmutableMiniDictionary<string,ulong>(Pairs3);
+        var dict = new ImmutableMiniDictionary<string,ulong>(Pairs3, true);
         VerifyBasic3(dict);
     }
 
     [Test]
     public void Basic3_Hash()
     {
-        var dict = new ImmutableHashDictionary<string,ulong>(Pairs3);
+        var dict = new ImmutableHashDictionary<string,ulong>(Pairs3, true);
         VerifyBasic3(dict);
     }
 
@@ -327,14 +327,14 @@ public class ImmDictTest
     [Test]
     public void Uint5_Mini()
     {
-        var dict = new ImmutableMiniDictionary<uint,string>(Uints5);
+        var dict = new ImmutableMiniDictionary<uint,string>(Uints5, true);
         VerifyDict5(dict);
     }
 
     [Test]
     public void Uint5_Hash()
     {
-        var dict = new ImmutableHashDictionary<uint,string>(Uints5);
+        var dict = new ImmutableHashDictionary<uint,string>(Uints5, true);
         VerifyDict5(dict);
     }
 
@@ -343,6 +343,19 @@ public class ImmDictTest
     {
         var dict = new ImmutableFlatDictionary<string>(Uints5);
         VerifySortedDict5(dict);
+    }
+
+    [Test]
+    public void Uint5_Imm()
+    {
+        var dict = Imm.DictBuilder<uint,string>()
+                      .Add(26u, "Lipetsk")
+                      .Add(33u, "Piter")
+                      .Add(42u, "Moscow")
+                      .Add(66u, "Tambov")
+                      .Add(74u, "Elets")
+                      .Build();
+        VerifyDict5(dict);
     }
 
     [Test]

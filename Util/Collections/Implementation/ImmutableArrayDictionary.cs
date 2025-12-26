@@ -41,13 +41,13 @@ internal abstract class ImmutableArrayDictionary<K,V> : ImmutableDictionary<K,V>
     /// </summary>
     /// <param name="pairs">array of the pairs.</param>
     /// <returns>the created dictionary.</returns>
-    internal static ImmListDict<K,V> MakeListDict(KeyValuePair<K,V>[] pairs)
+    internal static ImmListDict<K,V> MakeListDict(KeyValuePair<K,V>[] pairs, bool checkForDuplicates)
         => pairs.Length switch
            {
                0    => EmptyDictionary<K,V>.Instance,
                1    => new ImmutableSingletonDictionary<K,V>(pairs[0].Key, pairs[0].Value),
-               <= 4 => new ImmutableMiniDictionary<K,V>(pairs),
-               _    => new ImmutableHashDictionary<K,V>(pairs)
+               <= 4 => new ImmutableMiniDictionary<K,V>(pairs, checkForDuplicates),
+               _    => new ImmutableHashDictionary<K,V>(pairs, checkForDuplicates)
            };
 
 
@@ -188,7 +188,24 @@ internal sealed class ImmutableMiniDictionary<K,V> : ImmutableArrayDictionary<K,
     internal override  byte   CascadingLevel => _1_;
     protected override string DictionaryWord => "MiniDictionary";
 
-    internal ImmutableMiniDictionary(KeyValuePair<K,V>[] entries) : base(entries) { }
+    internal ImmutableMiniDictionary(KeyValuePair<K,V>[] entries, bool checkForDuplicates)
+        : base(entries)
+    {
+        if (checkForDuplicates)
+        {
+            int n = entries.Length;
+            if (n >= 2)
+            {
+                for (int i = 0; i < n - 1; i++)
+                {
+                    K key1 = entries[i].Key;
+                    for (int j = i + 1; j < n; j++)
+                        if (keyEq.Equals(entries[j].Key, key1))
+                            throw new KeyDuplicationException(i, j, key1);
+                }
+            }
+        }
+    }
 
     public override int IndexOfKey(K key, int notFound) =>
         Pairs.IndexOf(e => keyEq.Equals(e.Key, key), notFound: notFound);
@@ -216,10 +233,10 @@ internal sealed class ImmutableHashDictionary<K,V> : ImmutableArrayDictionary<K,
 
     private readonly HashTableEntry[] HashTable;
 
-    internal ImmutableHashDictionary(KeyValuePair<K,V>[] pairs)
+    internal ImmutableHashDictionary(KeyValuePair<K,V>[] pairs, bool checkForDuplicates)
         : base(pairs)
     {
-        BuildHashTable<KeyValuePair<K,V>,K>(Pairs, e => e.Key, keyEq, out HashTable);
+        BuildHashTable<KeyValuePair<K,V>,K>(Pairs, e => e.Key, keyEq, checkForDuplicates, out HashTable);
     }
 
     public override int IndexOfKey(K key, int notFound)

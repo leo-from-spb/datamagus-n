@@ -125,7 +125,7 @@ public static class ImmExtensions
             if (n == 1) return new ImmutableSingletonDictionary<K,E>(keySelector(span[0]), span[0]);
 
             var pairs = ArrayLogic.PreparePairs(span, keySelector);
-            return ImmutableArrayDictionary<K,E>.MakeListDict(pairs);
+            return ImmutableArrayDictionary<K,E>.MakeListDict(pairs, true);
         }
 
         /// <summary>
@@ -145,7 +145,7 @@ public static class ImmExtensions
             if (n == 1) return new ImmutableSingletonDictionary<K,V>(keySelector(span[0]), valueSelector(span[0]));
 
             var pairs = ArrayLogic.PreparePairs(span, keySelector, valueSelector);
-            return ImmutableArrayDictionary<K,V>.MakeListDict(pairs);
+            return ImmutableArrayDictionary<K,V>.MakeListDict(pairs, true);
         }
 
         /// <summary>
@@ -456,7 +456,7 @@ public static class ImmExtensions
             if (n == 1) return new ImmutableSingletonDictionary<K,E>(keySelector(list[0]), list[0]);
 
             var pairs = ArrayLogic.PreparePairs(list, keySelector);
-            return ImmutableArrayDictionary<K,E>.MakeListDict(pairs);
+            return ImmutableArrayDictionary<K,E>.MakeListDict(pairs, true);
         }
 
         /// <summary>
@@ -476,7 +476,7 @@ public static class ImmExtensions
             if (n == 1) return new ImmutableSingletonDictionary<K,V>(keySelector(list[0]), valueSelector(list[0]));
 
             var pairs = ArrayLogic.PreparePairs(list, keySelector, valueSelector);
-            return ImmutableArrayDictionary<K,V>.MakeListDict(pairs);
+            return ImmutableArrayDictionary<K,V>.MakeListDict(pairs, true);
         }
 
     }
@@ -585,7 +585,7 @@ public static class ImmExtensions
             if (n == 0) return EmptyDictionary<K,V>.Instance;
 
             KeyValuePair<K,V>[] pairs = dictionary.ToArray();
-            return ImmutableArrayDictionary<K,V>.MakeListDict(pairs);
+            return ImmutableArrayDictionary<K,V>.MakeListDict(pairs, false);
         }
     }
 
@@ -631,7 +631,7 @@ public static class ImmExtensions
             if (n == 0) return EmptyDictionary<K,V>.Instance;
 
             KeyValuePair<K,V>[] pairs = dictionary.ToArray();
-            return ImmutableArrayDictionary<K,V>.MakeListDict(pairs);
+            return ImmutableArrayDictionary<K,V>.MakeListDict(pairs, false);
         }
     }
 
@@ -680,7 +680,7 @@ public static class ImmExtensions
             if (n == 0) return EmptyDictionary<K,V>.Instance;
 
             KeyValuePair<K,V>[] pairs = dictionary.ToArray();
-            return ImmutableArrayDictionary<K,V>.MakeListDict(pairs);
+            return ImmutableArrayDictionary<K,V>.MakeListDict(pairs, false);
         }
     }
 

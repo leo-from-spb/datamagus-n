@@ -6,12 +6,16 @@ namespace Util.Collections.Implementation;
 internal static class HashTableLogic
 {
 
-    internal static void BuildHashTable<E,K>(ArraySegment<E> data, Func<E,K> keyGet, EqualityComparer<K> comparer, out HashTableEntry[] hashTable)
+    internal static void BuildHashTable<E,K>(ArraySegment<E> data,
+                                             Func<E,K> keyGet,
+                                             EqualityComparer<K> comparer,
+                                             bool checkForDuplicates,
+                                             out HashTableEntry[] hashTable)
     {
         int N = data.Count;
         uint M = CalculateM(N);
 
-        HashTableEntry[]  ht = new HashTableEntry[M];
+        HashTableEntry[] ht = new HashTableEntry[M];
         Array.Fill(ht, ZeroEntry);
 
         // the queue for unhappy entries' indices
@@ -29,6 +33,8 @@ internal static class HashTableLogic
             }
             else
             {
+                if (checkForDuplicates)
+                    CheckForDuplicates(data, keyGet, comparer, ht, key, k, i);
                 rest.Add(i);
             }
         }
@@ -50,6 +56,29 @@ internal static class HashTableLogic
 
         // done
         hashTable = ht;
+    }
+
+    private static void CheckForDuplicates<E,K>(ArraySegment<E>     data,
+                                                Func<E,K>           keyGet,
+                                                EqualityComparer<K> comparer,
+                                                HashTableEntry[]    hashTable,
+                                                K                   key,
+                                                uint                hashIndex,
+                                                int                 entryIndex)
+    {
+        uint k = hashIndex;
+        bool toContinue;
+        do
+        {
+            var e          = hashTable[k];
+            int dataIndex  = e.TargetIndex;
+            E   dataEntry  = data[dataIndex];
+            K   anotherKey = keyGet(dataEntry);
+            if (comparer.Equals(anotherKey, key))
+                throw new KeyDuplicationException(dataIndex, entryIndex, key);
+            k          = e.NextIndex;
+            toContinue = e.HasNext;
+        } while (toContinue);
     }
 
 

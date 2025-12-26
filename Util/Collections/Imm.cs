@@ -64,7 +64,7 @@ public static class Imm
         where K : IEquatable<K>
         => EqualityComparer<K>.Default.Equals(key1, key2)
             ? new ImmutableSingletonDictionary<K,V>(key1, value1)
-            : new ImmutableMiniDictionary<K,V>([new(key1, value1), new(key2, value2)]);
+            : new ImmutableMiniDictionary<K,V>([new(key1, value1), new(key2, value2)], false);
 
     /// <summary>
     /// Makes an immutables dictionary of three pairs.
@@ -87,10 +87,21 @@ public static class Imm
         if (eq.Equals(key2, key3)) return DictOf(key1, value1, key2, value2);
 
         KeyValuePair<K,V>[] pairs =
-            new KeyValuePair<K,V>[]{ new(key1,value1), new(key2,value2), new(key3,value3) };
-        return new ImmutableMiniDictionary<K,V>(pairs);
+            new KeyValuePair<K,V>[] { new(key1,value1), new(key2,value2), new(key3,value3) };
+        return new ImmutableMiniDictionary<K,V>(pairs, false);
     }
 
+
+    /// <summary>
+    /// Make a dictionary builder.
+    /// </summary>
+    /// <typeparam name="K">type of the key.</typeparam>
+    /// <typeparam name="V">type of the value.</typeparam>
+    /// <returns>the builder.</returns>
+    /// <seealso cref="ImmDictBuilder.Build"/>
+    public static ImmDictBuilder<K,V> DictBuilder<K,V>()
+        where K : IEquatable<K>
+        => new ImmDictBuilder<K,V>();
 
 
     /**
