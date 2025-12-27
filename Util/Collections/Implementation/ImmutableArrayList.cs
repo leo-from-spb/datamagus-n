@@ -55,7 +55,7 @@ internal class ImmutableArrayList<T> : ImmutableCollection<T>, ImmList<T>
     internal T[] ShareElementsArray() => Elements;
 
 
-    public bool IsNotEmpty => true;
+    public bool Any => true;
     public bool IsEmpty    => false;
 
     int IReadOnlyCollection<T>.Count => Count;

@@ -106,7 +106,7 @@ internal static class CollectionLogic
     }
 
 
-    internal static bool IsNotEmpty<E>(this IEnumerable<E> source)
+    internal static bool Any<E>(this IEnumerable<E> source)
     {
         if (source is IReadOnlyCollection<E> collection)
         {
@@ -119,7 +119,7 @@ internal static class CollectionLogic
         }
     }
 
-    internal static bool IsEmpty<E>(this IEnumerable<E> source) => !source.IsNotEmpty();
+    internal static bool IsEmpty<E>(this IEnumerable<E> source) => !source.Any();
 
 
     internal static int CountTrues(this BitArray bits)

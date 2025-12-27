@@ -42,7 +42,7 @@ public class ImmDictTest
     {
         dict.Verify
         (
-            d => d.IsNotEmpty.ShouldBeFalse(),
+            d => d.Any.ShouldBeFalse(),
             d => d.IsEmpty.ShouldBeTrue(),
             d => d.Count.ShouldBe(0),
             d => d.Imp.CascadingLevel.ShouldBe(_0_)
@@ -152,7 +152,7 @@ public class ImmDictTest
     {
         dict.Verify
         (
-            d => d.IsNotEmpty.ShouldBeTrue(),
+            d => d.Any.ShouldBeTrue(),
             d => d.IsEmpty.ShouldBeFalse(),
             d => d.Count.ShouldBe(1),
             d => d.FirstEntry.ShouldBe(new StringULongPair("thing", 42uL)),
@@ -167,7 +167,7 @@ public class ImmDictTest
 
         dict.Keys.Verify
         (
-            ks => ks.IsNotEmpty.ShouldBeTrue(),
+            ks => ks.Any.ShouldBeTrue(),
             ks => ks.IsEmpty.ShouldBeFalse(),
             ks => ks.Count.ShouldBe(1),
             ks => ks.First.ShouldBe("thing"),
@@ -179,7 +179,7 @@ public class ImmDictTest
 
         dict.Values.Verify
         (
-            vs => vs.IsNotEmpty.ShouldBeTrue(),
+            vs => vs.Any.ShouldBeTrue(),
             vs => vs.IsEmpty.ShouldBeFalse(),
             vs => vs.Count.ShouldBe(1),
             vs => vs.First.ShouldBe(42uL),
@@ -268,7 +268,7 @@ public class ImmDictTest
     {
         dict.Verify
         (
-            d => d.IsNotEmpty.ShouldBeTrue(),
+            d => d.Any.ShouldBeTrue(),
             d => d.IsEmpty.ShouldBeFalse(),
             d => d.Count.ShouldBe(3),
             d => d.FirstEntry.ShouldBe(Pairs3[0]),
@@ -285,7 +285,7 @@ public class ImmDictTest
 
         dict.Keys.Verify
         (
-            ks => ks.IsNotEmpty.ShouldBeTrue(),
+            ks => ks.Any.ShouldBeTrue(),
             ks => ks.IsEmpty.ShouldBeFalse(),
             ks => ks.Count.ShouldBe(3),
             ks => ks.First.ShouldBe("один"),
@@ -302,7 +302,7 @@ public class ImmDictTest
 
         dict.Values.Verify
         (
-            vs => vs.IsNotEmpty.ShouldBeTrue(),
+            vs => vs.Any.ShouldBeTrue(),
             vs => vs.IsEmpty.ShouldBeFalse(),
             vs => vs.Count.ShouldBe(3),
             vs => vs[0].ShouldBe(1uL),
@@ -493,7 +493,7 @@ public class ImmDictTest
     {
         dict.Verify
         (
-            d => d.IsNotEmpty.ShouldBeTrue(),
+            d => d.Any.ShouldBeTrue(),
             d => d.IsEmpty.ShouldBeFalse(),
             d => d.Count.ShouldBe(5),
             d => d.Find(26u).ShouldBe(new Found<string>(true, "Lipetsk")),
@@ -509,7 +509,7 @@ public class ImmDictTest
 
         dict.Keys.Verify
         (
-            ks => ks.IsNotEmpty.ShouldBeTrue(),
+            ks => ks.Any.ShouldBeTrue(),
             ks => ks.IsEmpty.ShouldBeFalse(),
             ks => ks.Count.ShouldBe(5),
             ks => ks.Contains(26u).ShouldBeTrue(),
@@ -527,7 +527,7 @@ public class ImmDictTest
 
         dict.Values.Verify
         (
-            vs => vs.IsNotEmpty.ShouldBeTrue(),
+            vs => vs.Any.ShouldBeTrue(),
             vs => vs.IsEmpty.ShouldBeFalse(),
             vs => vs.Count.ShouldBe(5),
             vs => vs.Contains("Lipetsk").ShouldBeTrue(),
