@@ -13,13 +13,34 @@ namespace Util.Collections;
 /// <typeparam name="V">type of associated values.</typeparam>
 public interface ImmDict<K,V> : IReadOnlyDictionary<K,V>
 {
+    /// <summary>
+    /// Inner implementation.
+    /// </summary>
+    internal ImmutableDictionary<K,V> Imp { get; }
 
+    /// <summary>
+    /// This dictionary has at least one entry.
+    /// </summary>
     public bool IsNotEmpty { get; }
 
+    /// <summary>
+    /// This dictionary is empty.
+    /// </summary>
     public bool IsEmpty { get; }
 
+    /// <summary>
+    /// Looks for an entry with the given key.
+    /// </summary>
+    /// <param name="key">the key to look for.</param>
+    /// <returns>the result.</returns>
     public Found<V> Find(K key);
 
+    /// <summary>
+    /// Looks for an entry with the given key.
+    /// </summary>
+    /// <param name="key">the key to look for.</param>
+    /// <param name="notFound">the value to return when the key is not found.</param>
+    /// <returns>the result value if found or the specified value if not found.</returns>
     public V Find(K key, V notFound) =>
         #pragma warning disable CS8604
         Find(key) | notFound;
@@ -32,7 +53,7 @@ public interface ImmDict<K,V> : IReadOnlyDictionary<K,V>
         return f.Ok;
     }
 
-    V IReadOnlyDictionary<K, V>.this[K key] => Find(key).Item;
+    V IReadOnlyDictionary<K,V>.this[K key] => Find(key).Item;
 
 
     /// <summary>
@@ -51,10 +72,10 @@ public interface ImmDict<K,V> : IReadOnlyDictionary<K,V>
     public ImmCollection<KeyValuePair<K,V>> Entries { get; }
 
 
-    IEnumerable<K> IReadOnlyDictionary<K, V>.Keys   => Keys;
-    IEnumerable<V> IReadOnlyDictionary<K, V>.Values => Values;
+    IEnumerable<K> IReadOnlyDictionary<K,V>.Keys   => Keys;
+    IEnumerable<V> IReadOnlyDictionary<K,V>.Values => Values;
 
-    IEnumerator<KeyValuePair<K, V>> IEnumerable<KeyValuePair<K, V>>.GetEnumerator() => Entries.GetEnumerator();
+    IEnumerator<KeyValuePair<K,V>> IEnumerable<KeyValuePair<K,V>>.GetEnumerator() => Entries.GetEnumerator();
     IEnumerator IEnumerable.GetEnumerator() => Entries.GetEnumerator();
 }
 
@@ -141,7 +162,7 @@ public interface ImmListDict<K,V> : ImmOrdDict<K,V>
 /// </summary>
 /// <typeparam name="K">type of keys.</typeparam>
 /// <typeparam name="V">type of associated values.</typeparam>
-public interface ImmSortedDict<K, V> : ImmOrdDict<K, V>
+public interface ImmSortedDict<K,V> : ImmOrdDict<K,V>
     where K : IComparable<K>
 {
     /// <summary>

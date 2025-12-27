@@ -2,9 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Util.Collections.Implementation;
+using static Util.Fun.NumberConstants;
 
-namespace Util.Collections;
+namespace Util.Collections.Implementation;
 
 /// <summary>
 /// Empty set and list.
@@ -12,6 +12,8 @@ namespace Util.Collections;
 public class EmptySet<T> : ImmutableCollection<T>, ImmListSet<T>
 {
     public static readonly EmptySet<T> Instance = new();
+
+    internal override byte CascadingLevel => _0_;
 
     protected override string CollectionWord => "EmptySet";
 

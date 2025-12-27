@@ -85,7 +85,7 @@ internal class MetaCollector (MetaModel mm)
         var propType = prop.PropertyType;
         var propIntf = propType.GenericTypeArguments[0];
         if (!mm.Intfs.ContainsKey(propIntf)) 
-            HandleInterface(propIntf, true, parentLevel.Succ());
+            HandleInterface(propIntf, true, parentLevel.Succ);
         var child = mm.Intfs[propIntf];
         Debug.Assert(child is not null);
         var family = new MetaFamily(parent, child, propType, prop.Name);

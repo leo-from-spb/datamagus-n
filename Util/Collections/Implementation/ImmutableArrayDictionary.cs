@@ -7,6 +7,7 @@ using Util.Extensions;
 using static Util.Collections.ImmConst;
 using static Util.Collections.Implementation.CollectionLogic;
 using static Util.Collections.Implementation.HashTableLogic;
+using static Util.Fun.NumberConstants;
 
 
 namespace Util.Collections.Implementation;
@@ -17,8 +18,11 @@ namespace Util.Collections.Implementation;
 /// </summary>
 /// <typeparam name="K">type of the key.</typeparam>
 /// <typeparam name="V">type of the associated value.</typeparam>
-internal abstract class ImmutableDictionary<K,V> : Collections.ImmutableDictionary<K,V>, ImmListDict<K,V>
+internal abstract class ImmutableArrayDictionary<K,V> : ImmutableDictionary<K,V>, ImmListDict<K,V>
 {
+    public ImmutableDictionary<K,V> Imp => this;
+
+    internal override  byte   CascadingLevel => _1_;
     protected override string DictionaryWord => "ArrayDictionary";
 
     /// <summary>
@@ -31,8 +35,23 @@ internal abstract class ImmutableDictionary<K,V> : Collections.ImmutableDictiona
     /// </summary>
     public override int Count { get; }
 
+    /// <summary>
+    /// Makes a proper dictionary from the given prepared array of pairs.
+    /// The given array must not be shared, the created dictionary takes the ownership on it.
+    /// </summary>
+    /// <param name="pairs">array of the pairs.</param>
+    /// <returns>the created dictionary.</returns>
+    internal static ImmListDict<K,V> MakeListDict(KeyValuePair<K,V>[] pairs, bool checkForDuplicates)
+        => pairs.Length switch
+           {
+               0    => EmptyDictionary<K,V>.Instance,
+               1    => new ImmutableSingletonDictionary<K,V>(pairs[0].Key, pairs[0].Value),
+               <= 4 => new ImmutableMiniDictionary<K,V>(pairs, checkForDuplicates),
+               _    => new ImmutableHashDictionary<K,V>(pairs, checkForDuplicates)
+           };
 
-    protected ImmutableDictionary(KeyValuePair<K,V>[] pairs)
+
+    protected ImmutableArrayDictionary(KeyValuePair<K,V>[] pairs)
     {
         Debug.Assert(pairs.Length > 0);
         Pairs = pairs;
@@ -42,8 +61,8 @@ internal abstract class ImmutableDictionary<K,V> : Collections.ImmutableDictiona
     public bool IsNotEmpty => true;
     public bool IsEmpty    => false;
 
-    public KeyValuePair<K, V> FirstEntry => Pairs[0];
-    public KeyValuePair<K, V> LastEntry  => Pairs[^1];
+    public KeyValuePair<K,V> FirstEntry => Pairs[0];
+    public KeyValuePair<K,V> LastEntry  => Pairs[^1];
 
     public abstract bool ContainsKey(K key);
 
@@ -71,11 +90,12 @@ internal abstract class ImmutableDictionary<K,V> : Collections.ImmutableDictiona
 
     private class KeySet : ImmutableCollection<K>, ImmListSet<K>
     {
-        private readonly ImmutableDictionary<K,V> Dict;
+        private readonly ImmutableArrayDictionary<K,V> Dict;
 
-        protected override string CollectionWord =>  Dict.DictionaryWord + "KeySet";
+        internal override  byte   CascadingLevel => _2_;
+        protected override string CollectionWord => Dict.DictionaryWord + "KeySet";
 
-        internal KeySet(ImmutableDictionary<K,V> dict)
+        internal KeySet(ImmutableArrayDictionary<K,V> dict)
         {
             Dict = dict;
         }
@@ -121,11 +141,12 @@ internal abstract class ImmutableDictionary<K,V> : Collections.ImmutableDictiona
 
     private class ValueCollection : ImmutableCollection<V>, ImmList<V>
     {
-        private readonly ImmutableDictionary<K,V> Dict;
+        private readonly ImmutableArrayDictionary<K,V> Dict;
 
+        internal override  byte   CascadingLevel => _2_;
         protected override string CollectionWord => Dict.DictionaryWord + "ValueCollection";
 
-        internal ValueCollection(ImmutableDictionary<K,V> dict)
+        internal ValueCollection(ImmutableArrayDictionary<K,V> dict)
         {
             Dict = dict;
         }
@@ -162,11 +183,29 @@ internal abstract class ImmutableDictionary<K,V> : Collections.ImmutableDictiona
 
 
 
-internal sealed class ImmutableMiniDictionary<K,V> : ImmutableDictionary<K,V>
+internal sealed class ImmutableMiniDictionary<K,V> : ImmutableArrayDictionary<K,V>
 {
+    internal override  byte   CascadingLevel => _1_;
     protected override string DictionaryWord => "MiniDictionary";
 
-    internal ImmutableMiniDictionary(KeyValuePair<K,V>[] entries) : base(entries) { }
+    internal ImmutableMiniDictionary(KeyValuePair<K,V>[] entries, bool checkForDuplicates)
+        : base(entries)
+    {
+        if (checkForDuplicates)
+        {
+            int n = entries.Length;
+            if (n >= 2)
+            {
+                for (int i = 0; i < n - 1; i++)
+                {
+                    K key1 = entries[i].Key;
+                    for (int j = i + 1; j < n; j++)
+                        if (keyEq.Equals(entries[j].Key, key1))
+                            throw new KeyDuplicationException(i, j, key1);
+                }
+            }
+        }
+    }
 
     public override int IndexOfKey(K key, int notFound) =>
         Pairs.IndexOf(e => keyEq.Equals(e.Key, key), notFound: notFound);
@@ -188,16 +227,16 @@ internal sealed class ImmutableMiniDictionary<K,V> : ImmutableDictionary<K,V>
 
 
 
-internal sealed class ImmutableHashDictionary<K,V> : ImmutableDictionary<K,V>
+internal sealed class ImmutableHashDictionary<K,V> : ImmutableArrayDictionary<K,V>
 {
     protected override string DictionaryWord => "HashDictionary";
 
     private readonly HashTableEntry[] HashTable;
 
-    internal ImmutableHashDictionary(KeyValuePair<K,V>[] pairs)
+    internal ImmutableHashDictionary(KeyValuePair<K,V>[] pairs, bool checkForDuplicates)
         : base(pairs)
     {
-        BuildHashTable<KeyValuePair<K,V>,K>(Pairs, e => e.Key, keyEq, out HashTable);
+        BuildHashTable<KeyValuePair<K,V>,K>(Pairs, e => e.Key, keyEq, checkForDuplicates, out HashTable);
     }
 
     public override int IndexOfKey(K key, int notFound)
@@ -229,7 +268,7 @@ internal sealed class ImmutableHashDictionary<K,V> : ImmutableDictionary<K,V>
 /// <summary>
 /// Sorted dictionary.
 /// </summary>
-internal sealed class ImmutableSortedDictionary<K,V> : ImmutableDictionary<K,V>, ImmSortedDict<K,V>
+internal sealed class ImmutableSortedDictionary<K,V> : ImmutableArrayDictionary<K,V>, ImmSortedDict<K,V>
     where K : IComparable<K>
 {
     protected override string DictionaryWord => "SortedDictionary";

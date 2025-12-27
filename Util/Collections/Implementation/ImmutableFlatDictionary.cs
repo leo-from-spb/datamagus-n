@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Util.Structures;
 using static Util.Collections.ImmConst;
 using static Util.Collections.Implementation.CollectionLogic;
+using static Util.Fun.NumberConstants;
 
 using UIntInterval = Util.Structures.Interval<uint>;
 
@@ -16,17 +17,20 @@ namespace Util.Collections.Implementation;
 /// This dictionary doesn't preserve the original order, it sorts the keys instead.
 /// </summary>
 /// <typeparam name="V">type of the value.</typeparam>
-internal class ImmutableFlatDictionary<V> : Collections.ImmutableDictionary<uint,V>, ImmSortedDict<uint,V>
+internal class ImmutableFlatDictionary<V> : ImmutableDictionary<uint,V>, ImmSortedDict<uint,V>
 {
+    public ImmutableDictionary<uint,V> Imp => this;
+
+    internal override  byte   CascadingLevel => _1_;
     protected override string DictionaryWord => "FlatDictionary";
 
-    private  readonly BitArray Spots;
-    private  readonly V[]      Cells;
-    internal readonly uint     Capacity;
-    private  readonly int      Cnt;
+    private  readonly BitArray                     Spots;
+    private  readonly V[]                          Cells;
+    internal readonly uint                         Capacity;
+    private  readonly int                          Cnt;
 
-    public uint MinKey { init; get; }
-    public uint MaxKey { init; get; }
+    public uint MinKey { get; }
+    public uint MaxKey { get; }
 
 
     internal ImmutableFlatDictionary(IReadOnlyDictionary<uint,V> source)
@@ -90,8 +94,8 @@ internal class ImmutableFlatDictionary<V> : Collections.ImmutableDictionary<uint
     public bool IsNotEmpty => Cnt != 0;
     public bool IsEmpty    => Cnt == 0;
 
-    public KeyValuePair<uint, V> FirstEntry => new KeyValuePair<uint,V>(MinKey, Cells[0]);
-    public KeyValuePair<uint, V> LastEntry  => new KeyValuePair<uint,V>(MaxKey, Cells[^1]);
+    public KeyValuePair<uint,V> FirstEntry => new KeyValuePair<uint,V>(MinKey, Cells[0]);
+    public KeyValuePair<uint,V> LastEntry  => new KeyValuePair<uint,V>(MaxKey, Cells[^1]);
 
     public int IndexOfKey(uint key) => IndexOfKey(key, notFoundIndex);
 
@@ -124,6 +128,7 @@ internal class ImmutableFlatDictionary<V> : Collections.ImmutableDictionary<uint
 
     private sealed class KeySet : ImmutableCollection<uint>, ImmOrdSet<uint>
     {
+        internal override  byte   CascadingLevel => _2_;
         protected override string CollectionWord => "FlatDictionaryKeySet";
 
         private readonly ImmutableFlatDictionary<V> Dict;
@@ -200,6 +205,7 @@ internal class ImmutableFlatDictionary<V> : Collections.ImmutableDictionary<uint
 
     private sealed class ValueCollection : ImmutableCollection<V>, ImmSeq<V>
     {
+        internal override  byte   CascadingLevel => _2_;
         protected override string CollectionWord => "FlatDictionaryValueCollection";
 
         private readonly ImmutableFlatDictionary<V> Dict;
@@ -244,6 +250,7 @@ internal class ImmutableFlatDictionary<V> : Collections.ImmutableDictionary<uint
 
     private sealed class EntryCollection : ImmutableCollection<KeyValuePair<uint,V>>, ImmSeq<KeyValuePair<uint,V>>
     {
+        internal override  byte   CascadingLevel => _2_;
         protected override string CollectionWord => "FlatDictionaryEntryCollection";
 
         private readonly ImmutableFlatDictionary<V> Dict;

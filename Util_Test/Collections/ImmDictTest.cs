@@ -12,6 +12,46 @@ using UIntStringPair = KeyValuePair<uint,string>;
 [TestFixture]
 public class ImmDictTest
 {
+    #region 0 ELEMENTS
+
+    [Test]
+    public void Basic0_FromDictionary()
+    {
+        var d1 = new Dictionary<string,byte>();
+        var d2 = d1.ToImmDict();
+        VerifyBasic0(d2);
+    }
+
+    [Test]
+    public void Basic0_FromArray_byKey()
+    {
+        byte[] a = [];
+        var    d = a.ToImmDict(b => "");
+        VerifyBasic0(d);
+    }
+
+    [Test]
+    public void Basic0_FromArray_byKeyAndValue()
+    {
+        int[] a = [];
+        var   d = a.ToImmDict(x => "", x => _255_);
+        VerifyBasic0(d);
+    }
+
+    private void VerifyBasic0(ImmDict<string,byte> dict)
+    {
+        dict.Verify
+        (
+            d => d.IsNotEmpty.ShouldBeFalse(),
+            d => d.IsEmpty.ShouldBeTrue(),
+            d => d.Count.ShouldBe(0),
+            d => d.Imp.CascadingLevel.ShouldBe(_0_)
+        );
+    }
+
+    #endregion
+
+
     #region 1 ELEMENT
 
     [Test]
@@ -24,14 +64,14 @@ public class ImmDictTest
     [Test]
     public void Basic1_Mini()
     {
-        var dict = new ImmutableMiniDictionary<string,ulong>([new("thing", 42uL)]);
+        var dict = new ImmutableMiniDictionary<string,ulong>([new("thing", 42uL)], true);
         VerifyBasic1(dict);
     }
 
     [Test]
     public void Basic1_Hash()
     {
-        var dict = new ImmutableHashDictionary<string,ulong>([new("thing", 42uL)]);
+        var dict = new ImmutableHashDictionary<string,ulong>([new("thing", 42uL)], false);
         VerifyBasic1(dict);
     }
 
@@ -45,21 +85,21 @@ public class ImmDictTest
     [Test]
     public void Basic1_1_Param()
     {
-        var dict = Imm.Dict("thing", 42uL);
+        var dict = Imm.DictOf("thing", 42uL);
         VerifyBasic1(dict);
     }
 
     [Test]
     public void Basic1_2_ParamsSame()
     {
-        var dict = Imm.Dict("thing", 42uL, "thing", 13uL);
+        var dict = Imm.DictOf("thing", 42uL, "thing", 13uL);
         VerifyBasic1(dict);
     }
 
     [Test]
     public void Basic1_3_ParamsSame()
     {
-        var dict = Imm.Dict("thing", 42uL, "thing", 13uL, "thing", 1uL);
+        var dict = Imm.DictOf("thing", 42uL, "thing", 13uL, "thing", 1uL);
         VerifyBasic1(dict);
     }
 
@@ -92,6 +132,22 @@ public class ImmDictTest
         VerifyBasic1(dict);
     }
 
+    [Test]
+    public void Basic1_From_Array_byKey()
+    {
+        ulong[] array42 = [42uL];
+        ImmOrdDict<string, ulong> dict = array42.ToImmDict(_ => "thing");
+        VerifyBasic1(dict);
+    }
+
+    [Test]
+    public void Basic1_From_Array_byKeyAndValue()
+    {
+        byte[] arrayX = [_26_];
+        ImmOrdDict<string, ulong> dict = arrayX.ToImmDict(_ => "thing", x => (ulong)(x + 16u));
+        VerifyBasic1(dict);
+    }
+
     private static void VerifyBasic1(ImmOrdDict<string,ulong> dict)
     {
         dict.Verify
@@ -104,7 +160,9 @@ public class ImmDictTest
             d => d.Find("thing").ShouldBe(new Found<ulong>(true, 42uL)),
             d => d.Find("nothing").ShouldBe(new Found<ulong>(false, 0)),
             d => d.ContainsKey("thing").ShouldBeTrue(),
-            d => d.ContainsKey("nothing").ShouldBeFalse()
+            d => d.ContainsKey("nothing").ShouldBeFalse(),
+            d => d.Imp.CascadingLevel.ShouldBe(_1_),
+            d => d.ToString()!.ShouldContain("<d1>")
         );
 
         dict.Keys.Verify
@@ -143,14 +201,14 @@ public class ImmDictTest
     [Test]
     public void Basic3_Mini()
     {
-        var dict = new ImmutableMiniDictionary<string,ulong>(Pairs3);
+        var dict = new ImmutableMiniDictionary<string,ulong>(Pairs3, true);
         VerifyBasic3(dict);
     }
 
     [Test]
     public void Basic3_Hash()
     {
-        var dict = new ImmutableHashDictionary<string,ulong>(Pairs3);
+        var dict = new ImmutableHashDictionary<string,ulong>(Pairs3, true);
         VerifyBasic3(dict);
     }
 
@@ -164,7 +222,45 @@ public class ImmDictTest
     [Test]
     public void Basic3_Param()
     {
-        var dict = Imm.Dict("один", 1uL, "пара", 2uL, "тройка", 3uL);
+        var dict = Imm.DictOf("один", 1uL, "пара", 2uL, "тройка", 3uL);
+        VerifyBasic3(dict);
+    }
+
+    [Test]
+    public void Basic3_From_Array_byKey()
+    {
+        ulong[] array123 = [1uL, 2uL, 3uL];
+        ImmListDict<string, ulong> dict =
+            array123.ToImmDict(x => x switch { 1uL => "один", 2uL => "пара", 3uL => "тройка", _ => "?" });
+        VerifyBasic3(dict);
+    }
+
+    [Test]
+    public void Basic3_From_Array_byKeyAndValue()
+    {
+        byte[] array123 = [_1_, _2_, _3_];
+        ImmListDict<string, ulong> dict =
+            array123.ToImmDict(x => x switch { _1_ => "один", _2_ => "пара", _3_ => "тройка", _ => "?" },
+                               y => y switch { _1_ => 1uL,    _2_ => 2uL,    _3_ => 3uL,      _ => 0uL });
+        VerifyBasic3(dict);
+    }
+
+    [Test]
+    public void Basic3_From_IEnumerable_byKey()
+    {
+        IEnumerable<ulong> ie123 = new List<ulong> { 1uL, 2uL, 3uL };
+        ImmListDict<string, ulong> dict =
+            ie123.ToImmDict(x => x switch { 1uL => "один", 2uL => "пара", 3uL => "тройка", _ => "?" });
+        VerifyBasic3(dict);
+    }
+
+    [Test]
+    public void Basic3_From_IEnumerable_byKeyAndValue()
+    {
+        IEnumerable<byte> ie123 = new List<byte> { _1_, _2_, _3_ };
+        ImmListDict<string, ulong> dict =
+            ie123.ToImmDict(x => x switch { _1_ => "один", _2_ => "пара", _3_ => "тройка", _ => "?" },
+                            y => y switch { _1_ => 1uL,    _2_ => 2uL,    _3_ => 3uL,      _ => 0uL });
         VerifyBasic3(dict);
     }
 
@@ -231,14 +327,14 @@ public class ImmDictTest
     [Test]
     public void Uint5_Mini()
     {
-        var dict = new ImmutableMiniDictionary<uint,string>(Uints5);
+        var dict = new ImmutableMiniDictionary<uint,string>(Uints5, true);
         VerifyDict5(dict);
     }
 
     [Test]
     public void Uint5_Hash()
     {
-        var dict = new ImmutableHashDictionary<uint,string>(Uints5);
+        var dict = new ImmutableHashDictionary<uint,string>(Uints5, true);
         VerifyDict5(dict);
     }
 
@@ -247,6 +343,19 @@ public class ImmDictTest
     {
         var dict = new ImmutableFlatDictionary<string>(Uints5);
         VerifySortedDict5(dict);
+    }
+
+    [Test]
+    public void Uint5_Imm()
+    {
+        var dict = Imm.DictBuilder<uint,string>()
+                      .Add(26u, "Lipetsk")
+                      .Add(33u, "Piter")
+                      .Add(42u, "Moscow")
+                      .Add(66u, "Tambov")
+                      .Add(74u, "Elets")
+                      .Build();
+        VerifyDict5(dict);
     }
 
     [Test]
@@ -309,6 +418,49 @@ public class ImmDictTest
     {
         var dictionary = new Dictionary<uint,string> { {26u, "Lipetsk"}, {33u, "Piter"}, {42u, "Moscow"}, {66u, "Tambov"}, {74u, "Elets"} };
         var dict       = dictionary.ToImmSortedDict();
+        VerifySortedDict5(dict);
+    }
+
+    [Test]
+    public void Uint5_FromArray_byKey()
+    {
+        var helpingDictionary =
+            new Dictionary<string, uint> { {"Lipetsk", 26u}, {"Piter", 33u}, {"Moscow", 42u}, {"Tambov", 66u}, {"Elets", 74u} };
+        string[] array = ["Lipetsk", "Piter", "Moscow", "Tambov", "Elets"];
+        var dict = array.ToImmSortedDict(k => helpingDictionary[k]);
+        VerifySortedDict5(dict);
+    }
+
+    [Test]
+    public void Uint5_FromArray_byKeyAndValue()
+    {
+        var helpingDictionary =
+            new Dictionary<int, string> { {26, "Lipetsk"}, {33, "Piter"}, {42, "Moscow"}, {66, "Tambov"}, {74, "Elets"} };
+        int[] array = [26, 74, 42, 33, 66];
+        var   dict  = array.ToImmSortedDict(x => (uint)x, x => helpingDictionary[x]);
+        VerifySortedDict5(dict);
+    }
+
+    [Test]
+    public void Uint5_FromEnumerable_byKey()
+    {
+        var helpingDictionary =
+            new Dictionary<string, uint> { {"Lipetsk", 26u}, {"Piter", 33u}, {"Moscow", 42u}, {"Tambov", 66u}, {"Elets", 74u} };
+        IEnumerable<string> ie   =
+            new HashSet<string> {"Lipetsk", "Piter", "Moscow", "Tambov", "Elets"};
+        var              dict = ie.ToImmSortedDict(k => helpingDictionary[k]);
+        VerifySortedDict5(dict);
+    }
+
+    [Test]
+    public void Uint5_FromEnumerable_byKeyAndValue()
+    {
+        var helpingDictionary =
+            new Dictionary<int, string> { {26, "Lipetsk"}, {33, "Piter"}, {42, "Moscow"}, {66, "Tambov"}, {74, "Elets"} };
+        IEnumerable<int> ie
+            = new HashSet<int> {26, 74, 42, 33, 66};
+        ImmSortedDict<uint, string> dict
+            = ie.ToImmSortedDict(x => (uint)x, x => helpingDictionary[x]);
         VerifySortedDict5(dict);
     }
 
@@ -385,6 +537,118 @@ public class ImmDictTest
             vs => vs.Contains("Elets").ShouldBeTrue(),
             vs => vs.Contains("X").ShouldBeFalse(),
             vs => vs.ToArray().ShouldContainAll("Lipetsk", "Piter", "Moscow", "Tambov", "Elets")
+        );
+    }
+
+    #endregion
+
+
+    #region Patch
+
+    [Test]
+    public void Patch_Basic()
+    {
+        var original = Imm.DictOf(1, 'a', 2, 'b', 3, 'c');
+        var patch    = Imm.DictOf(1, 'A', 4, 'D', 5, 'E');
+        var removed  = Imm.SetOf(0, 3);
+        var patched  = original.Patch(patch, removed);
+        patched.Verify(
+            p => p.Keys.ToArray().ShouldBe([1, 2, 4, 5]),
+            p => p.Values.ToArray().ShouldBe(['A', 'b', 'D', 'E'])
+        );
+    }
+
+    [Test]
+    public void Patch_HardPatch1000_ulong()
+    {
+        var originalDictionary = new Dictionary<ulong,int>(1000);
+        for (int i = 1; i <= 1000; i++)
+            originalDictionary[(ulong)i] = -i;
+        var original = originalDictionary.ToImmDict();
+
+        ImmDict<ulong,int> patched = original;
+        for (int i = 0; i <= 9; i++)
+        {
+            var patchDictionary = new Dictionary<ulong,int>(100);
+            for (int j = 1; j <= 100; j++)
+            {
+                int x = i * 100 + j;
+                patchDictionary[(ulong)x] = x;
+            }
+
+            var patchDict = patchDictionary.ToImmDict();
+            patched = patched.Patch(patchDict, EmptySet<ulong>.Instance);
+        }
+
+        patched.Verify(
+            p => p[1uL].ShouldBe(1),
+            p => p[2uL].ShouldBe(2),
+            p => p[100uL].ShouldBe(100),
+            p => p[101uL].ShouldBe(101),
+            p => p[200uL].ShouldBe(200),
+            p => p[201uL].ShouldBe(201),
+            p => p[300uL].ShouldBe(300),
+            p => p[301uL].ShouldBe(301),
+            p => p[400uL].ShouldBe(400),
+            p => p[401uL].ShouldBe(401),
+            p => p[500uL].ShouldBe(500),
+            p => p[501uL].ShouldBe(501),
+            p => p[600uL].ShouldBe(600),
+            p => p[601uL].ShouldBe(601),
+            p => p[700uL].ShouldBe(700),
+            p => p[701uL].ShouldBe(701),
+            p => p[800uL].ShouldBe(800),
+            p => p[801uL].ShouldBe(801),
+            p => p[900uL].ShouldBe(900),
+            p => p[901uL].ShouldBe(901),
+            p => p[1000uL].ShouldBe(1000)
+        );
+    }
+
+    [Test]
+    public void Patch_HardPatch1000_uint()
+    {
+        var originalDictionary = new Dictionary<uint,int>(1000);
+        for (int i = 1; i <= 1000; i++)
+            originalDictionary[(uint)i] = -i;
+        var original = originalDictionary.ToImmDict();
+
+        ImmDict<uint,int> patched = original;
+        for (int i = 0; i <= 9; i++)
+        {
+            var patchDictionary = new Dictionary<uint,int>(100);
+            for (int j = 1; j <= 100; j++)
+            {
+                int x = i * 100 + j;
+                patchDictionary[(uint)x] = x;
+            }
+
+            var patchDict = patchDictionary.ToImmDict();
+            patched = patched.Patch(patchDict, EmptySet<uint>.Instance);
+        }
+
+        patched.Verify(
+            p => p[1u].ShouldBe(1),
+            p => p[2u].ShouldBe(2),
+            p => p[100u].ShouldBe(100),
+            p => p[101u].ShouldBe(101),
+            p => p[200u].ShouldBe(200),
+            p => p[201u].ShouldBe(201),
+            p => p[300u].ShouldBe(300),
+            p => p[301u].ShouldBe(301),
+            p => p[400u].ShouldBe(400),
+            p => p[401u].ShouldBe(401),
+            p => p[500u].ShouldBe(500),
+            p => p[501u].ShouldBe(501),
+            p => p[600u].ShouldBe(600),
+            p => p[601u].ShouldBe(601),
+            p => p[700u].ShouldBe(700),
+            p => p[701u].ShouldBe(701),
+            p => p[800u].ShouldBe(800),
+            p => p[801u].ShouldBe(801),
+            p => p[900u].ShouldBe(900),
+            p => p[901u].ShouldBe(901),
+            p => p[1000u].ShouldBe(1000)
         );
     }
 

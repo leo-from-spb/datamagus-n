@@ -12,6 +12,8 @@ namespace Util.Collections.Implementation;
 /// </summary>
 internal class ImmutableArrayList<T> : ImmutableCollection<T>, ImmList<T>
 {
+    internal override byte CascadingLevel => 1;
+
     protected override string CollectionWord => "ArrayList";
 
     /// <summary>
@@ -23,6 +25,16 @@ internal class ImmutableArrayList<T> : ImmutableCollection<T>, ImmList<T>
     ///Number of elements.
     /// </summary>
     public override int Count { get; }
+
+    /// <summary>
+    /// Creates an immutable collection as copying elements from the given span.
+    /// </summary>
+    /// <param name="elements">span with elements.</param>
+    public ImmutableArrayList(ReadOnlySpan<T> elements)
+    {
+        Elements = elements.ToArray();
+        Count    = elements.Length;
+    }
 
     /// <summary>
     /// Internal constructor — takes the given arrays as is and doesn't copy it.

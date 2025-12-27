@@ -21,18 +21,18 @@ public class ImmutableDictionaryTest
     [Test]
     public void Common_Mini()
     {
-        var dict = new ImmutableMiniDictionary<string,long>(Pairs5);
+        var dict = new ImmutableMiniDictionary<string,long>(Pairs5, true);
         VerifyCommonFunctionality(dict);
     }
 
     [Test]
     public void Common_Hash()
     {
-        var dict = new ImmutableMiniDictionary<string,long>(Pairs5);
+        var dict = new ImmutableMiniDictionary<string,long>(Pairs5, true);
         VerifyCommonFunctionality(dict);
     }
 
-    private static void VerifyCommonFunctionality(ImmutableDictionary<string, long> dict)
+    private static void VerifyCommonFunctionality(ImmutableArrayDictionary<string, long> dict)
     {
         dict.Verify
         (

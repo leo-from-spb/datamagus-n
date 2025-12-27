@@ -10,11 +10,11 @@ public class NumbersTest
     [Test]
     public static void Byte_PredAndSucc() => Verify
     (
-        () => _9_.Pred().ShouldBe(_8_),
-        () => _1_.Pred().ShouldBe(_0_),
+        () => _9_.Pred.ShouldBe(_8_),
+        () => _1_.Pred.ShouldBe(_0_),
 
-        () => _3_.Succ().ShouldBe(_4_),
-        () => _254_.Succ().ShouldBe(_255_)
+        () => _3_.Succ.ShouldBe(_4_),
+        () => _254_.Succ.ShouldBe(_255_)
     );
 
     [Test]
@@ -22,7 +22,7 @@ public class NumbersTest
     {
         Should.Throw<OverflowException>
         (
-            () => _0_.Pred()
+            () => _0_.Pred
         );
     }
 
@@ -31,7 +31,7 @@ public class NumbersTest
     {
         Should.Throw<OverflowException>
         (
-            () => _255_.Succ()
+            () => _255_.Succ
         );
     }
 

@@ -9,7 +9,15 @@ namespace Util.Collections;
 /// </summary>
 public abstract class Immutable
 {
-
+    /// <summary>
+    /// Internal property, denoting how deep is the data.<br/>
+    /// For example:<br/>
+    /// 0 — no data at all,<br/>
+    /// 1 — all data are stored in this object,<br/>
+    /// 2 — some (or all) data is stored in the delegated object,<br/>
+    /// etc.
+    /// </summary>
+    internal abstract byte CascadingLevel { get; }
 }
 
 
@@ -53,7 +61,7 @@ public abstract class ImmutableCollection<T> : Immutable, IReadOnlyCollection<T>
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
     public override string ToString() =>
-        $"An immutable {CollectionWord} of {Count} elements";
+        $"Immutable {CollectionWord} <d{CascadingLevel}> of {Count} elements";
 }
 
 
@@ -85,5 +93,5 @@ public abstract class ImmutableDictionary<K,V> : Immutable
     public abstract int Count { get; }
 
     public override string ToString() =>
-        $"An immutable {DictionaryWord} of {Count} elements";
+        $"Immutable {DictionaryWord} <d{CascadingLevel}> of {Count} entries";
 }

@@ -58,7 +58,7 @@ internal class ImmutableHashSet<T> : ImmutableArraySet<T>
 
     public ImmutableHashSet(T[] array) : base(array)
     {
-        HashTableLogic.BuildHashTable<T,T>(Elements, e => e, eq, out HashTable);
+        HashTableLogic.BuildHashTable<T,T>(Elements, e => e, eq, false, out HashTable);
     }
 
     public override bool Contains(T element)

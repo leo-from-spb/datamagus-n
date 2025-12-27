@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Util.Collections;
@@ -5,6 +6,13 @@ namespace Util.Collections;
 [TestFixture]
 public class ImmListTest
 {
+    [Test]
+    public void Sequence_Easy()
+    {
+        ImmSeq<byte> seq = [_3_, _5_, _7_];
+        Verify357seq(seq);
+    }
+
     [Test]
     public void ArgumentArray_Basic()
     {
@@ -34,13 +42,35 @@ public class ImmListTest
         Verify357(list);
     }
 
+    [Test]
+    public void ByCollectionExpression()
+    {
+        ImmList<byte> list = [_3_, _5_, _7_];
+        Verify357(list);
+    }
+
+    private static void Verify357seq(ImmSeq<byte> sequence)
+    {
+        sequence.Verify
+        (
+            seq => seq.IsEmpty.ShouldBeFalse(),
+            seq => seq.IsNotEmpty.ShouldBeTrue(),
+            seq => seq.First.ShouldBe(_3_),
+            seq => seq.Last.ShouldBe(_7_),
+            seq => seq.Count.ShouldBe(3)
+        );
+    }
+
     private static void Verify357(ImmList<byte> list)
     {
+        Verify357seq(list);
         list.Verify
         (
             l => l[0].ShouldBe(_3_),
             l => l[1].ShouldBe(_5_),
-            l => l[2].ShouldBe(_7_)
+            l => l[2].ShouldBe(_7_),
+            l => l.Imp.CascadingLevel.ShouldBe(_1_),
+            l => l.ToString()!.ShouldContain("<d1>")
         );
     }
 
@@ -66,6 +96,15 @@ public class ImmListTest
     {
         var enumerable = new List<ulong> { 26uL, 42uL, 74uL };
         var list       = enumerable.ToImmList();
+        BasicTest(list);
+    }
+
+    [Test]
+    public void Basic_ToImmList_FromSpan()
+    {
+        ulong[]             array = [26uL, 42uL, 74uL];
+        ReadOnlySpan<ulong> span  = array;
+        var                 list  = span.ToImmList();
         BasicTest(list);
     }
 
