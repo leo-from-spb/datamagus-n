@@ -61,7 +61,6 @@ public static class Imm
     /// <typeparam name="V">type of the value.</typeparam>
     /// <returns>the just created immutable dictionary.</returns>
     public static ImmListDict<K,V> DictOf<K,V>(K key1, V value1, K key2, V value2)
-        where K : IEquatable<K>
         => EqualityComparer<K>.Default.Equals(key1, key2)
             ? new ImmutableSingletonDictionary<K,V>(key1, value1)
             : new ImmutableMiniDictionary<K,V>([new(key1, value1), new(key2, value2)], false);
@@ -79,7 +78,6 @@ public static class Imm
     /// <typeparam name="V">type of the value.</typeparam>
     /// <returns>the just created immutable dictionary.</returns>
     public static ImmListDict<K,V> DictOf<K,V>(K key1, V value1, K key2, V value2, K key3, V value3)
-        where K : IEquatable<K>
     {
         var eq = EqualityComparer<K>.Default;
         if (eq.Equals(key1, key2)) return DictOf(key1, value1, key3, value3);
@@ -100,7 +98,6 @@ public static class Imm
     /// <returns>the builder.</returns>
     /// <seealso cref="ImmDictBuilder.Build"/>
     public static ImmDictBuilder<K,V> DictBuilder<K,V>()
-        where K : IEquatable<K>
         => new ImmDictBuilder<K,V>();
 
 

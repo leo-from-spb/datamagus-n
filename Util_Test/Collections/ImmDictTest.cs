@@ -543,6 +543,40 @@ public class ImmDictTest
     #endregion
 
 
+    #region ENUM
+
+    private enum MyEnum : byte
+    {
+        kindA = 1,
+        kindB = 2,
+        kindC = 3,
+        kindD = 4,
+    }
+
+    [Test]
+    public void Enum_MakeDict_Imm()
+    {
+        Imm.DictOf(MyEnum.kindA, 33, MyEnum.kindB, 44);
+    }
+
+    [Test]
+    public void Enum_MakeDict_Builder()
+    {
+        var dict = Imm.DictBuilder<MyEnum, int>()
+                      .Add(MyEnum.kindA, 111)
+                      .Add(MyEnum.kindB, 222, MyEnum.kindC, 333)
+                      .Build();
+        dict.Verify(
+            d => d[MyEnum.kindA].ShouldBe(111),
+            d => d[MyEnum.kindB].ShouldBe(222),
+            d => d[MyEnum.kindC].ShouldBe(333),
+            d => d.Find(MyEnum.kindD).Ok.ShouldBeFalse()
+        );
+    }
+
+    #endregion
+
+
     #region Patch
 
     [Test]
