@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Util.Collections;
 using Util.Extensions;
 using Util.Fun;
 
@@ -42,8 +43,10 @@ internal class MetaMatter
     internal          string      LowName  => Name.Decapitalized;
     internal          string      LowNames => LowName.Plural;
 
-    internal readonly HashSet<Type>                    AllBaseIntfs        = [];
-    internal readonly HashSet<Type>                    OwnBaseIntfs        = [];
+    internal ImmList<Type> DeclaredBaseIntfs = [];
+    internal ImmSet<Type>  IndirectBaseIntfs = [];
+    internal ImmSet<Type>  AllBaseIntfs      = [];
+
     internal readonly List<MetaMatter>                 DeclaredBaseMatters = [];
     internal readonly List<MetaMatter>                 BaseMatters         = [];
     internal readonly List<MetaMatter>                 DirectInheritors    = [];

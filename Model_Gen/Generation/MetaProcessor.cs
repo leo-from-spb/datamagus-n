@@ -44,7 +44,7 @@ internal class MetaProcessor (MetaModel mm)
             m.BaseMatter = baseMatter;
             
             // handle base interfaces
-            foreach (var bi in m.AllBaseIntfs)
+            foreach (var bi in m.DeclaredBaseIntfs)
             {
                 var bm = mm.Intfs.Get(bi);
                 if (bm is not null)

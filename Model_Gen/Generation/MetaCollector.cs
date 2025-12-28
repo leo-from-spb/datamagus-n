@@ -1,9 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using Model.Abstracts;
+using Util.Collections;
+using Util.Extensions;
 using Util.Fun;
 
 namespace Model.Generation;
@@ -30,11 +31,12 @@ internal class MetaCollector (MetaModel mm)
     {
         Debug.Assert(intf.IsInterface);
 
-        List<Type> baseIntfs;
-        HandleBaseInterfaces(intf, level, out baseIntfs);
-        
         var m = new MetaMatter(intf, isConcrete, level);
-        m.AllBaseIntfs.UnionWith(baseIntfs);
+        HandleBaseInterfaces(intf,
+                             level,
+                             out m.DeclaredBaseIntfs,
+                             out m.IndirectBaseIntfs,
+                             out m.AllBaseIntfs);
         mm.Add(m);
 
         if (intf.IsAssignableTo(matterType))
@@ -67,17 +69,30 @@ internal class MetaCollector (MetaModel mm)
         }
     }
 
-    private void HandleBaseInterfaces(Type intf, byte level, out List<Type> intfs)
+    private void HandleBaseInterfaces(Type intf,
+                                      byte level,
+                                      out ImmList<Type> declaredBaseIntfs,
+                                      out ImmSet<Type> indirectBaseIntfs,
+                                      out ImmSet<Type> allBaseIntfs)
     {
-        List<Type> baseInterfaces = (
-            from i in intf.GetInterfaces()
-            where i.IsAssignableTo(matterType)
-            select i
-        ).ToList();
-        foreach (var i in baseInterfaces)
+        ImmList<Type> allBaseInterfaces =
+            intf.GetInterfaces()
+                .Where(i => i.IsAssignableTo(matterType))
+                .ToImmList();
+        ImmSet<Type> indirectBaseInterfaces =
+            allBaseInterfaces
+               .SelectMany(i => i.GetInterfaces())
+               .ToImmSet();
+        ImmList<Type> declaredBaseInterfaces =
+            allBaseInterfaces
+               .Where(i => i.IsNotIn(indirectBaseInterfaces))
+               .ToImmList();
+        foreach (var i in declaredBaseInterfaces)
             if (!mm.Intfs.ContainsKey(i))
                 HandleInterface(i, false, level);
-        intfs = baseInterfaces;
+        declaredBaseIntfs = declaredBaseInterfaces;
+        indirectBaseIntfs = indirectBaseInterfaces;
+        allBaseIntfs = allBaseInterfaces.ToImmSet();
     }
 
     private void HandleFamily(MetaMatter parent, PropertyInfo prop, byte parentLevel)

@@ -188,6 +188,9 @@ public class CodeBuilder
         if (LastChar != '\n') Buf.AppendLine();
     }
 
+    /// <summary>
+    /// The generated text.
+    /// </summary>
     public string Result => Buf.ToString();
 
     /// <summary>

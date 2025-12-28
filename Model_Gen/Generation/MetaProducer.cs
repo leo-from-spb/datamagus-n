@@ -8,7 +8,7 @@ using Util.Fun;
 namespace Model.Generation;
 
 
-internal class MetaProducer (MetaModel mm)
+internal class MetaProducer (MetaModel mm) : MetaFileProducer
 {
     private const string ModuleDirPath        = "./Model_Imp";
     private const string ImmDirPath           = ModuleDirPath + "/_generated_";
@@ -231,12 +231,4 @@ internal class MetaProducer (MetaModel mm)
         }
     }
 
-
-    private static void WriteFile(string filePath, string text)
-    {
-        using (StreamWriter outputFile = new StreamWriter(filePath))
-        {
-            outputFile.Write(text);
-        }        
-    }
 }
