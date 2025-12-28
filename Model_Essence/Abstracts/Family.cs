@@ -5,14 +5,14 @@ namespace Model.Abstracts;
 /// <summary>
 /// Family of similar matters.
 /// </summary>
-/// <typeparam name="M"></typeparam>
+/// <typeparam name="M"><type of the matter./typeparam>
 public interface Family<out M> : Node, IEnumerable<M>
     where M: Matter
 {
     /// <summary>
     /// This family has children.
     /// </summary>
-    bool IsNotEmpty { get; }
+    bool Any { get; }
 
     /// <summary>
     /// This family is empty.

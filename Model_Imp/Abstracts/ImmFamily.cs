@@ -24,9 +24,9 @@ public class ImmFamily<M> : Family<M>
         this.matters = matters;
     }
 
-    public bool IsNotEmpty => matters.Length > 0;
-    public bool IsEmpty    => matters.Length == 0;
-    public int  Count      => matters.Length;
+    public bool Any     => matters.Length > 0;
+    public bool IsEmpty => matters.Length == 0;
+    public int  Count   => matters.Length;
 
     public M? ById(uint id)
     {

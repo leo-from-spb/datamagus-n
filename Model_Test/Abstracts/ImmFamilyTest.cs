@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Shouldly;
 using Testing.Appliance.Assertions;
 using Util.Extensions;
@@ -23,6 +24,26 @@ public class ImmFamilyTest
         rabbitsABC = [rabbitA, rabbitB, rabbitC];
     }
 
+
+    [Test]
+    public void Basic()
+    {
+        var rabbitFamily = ImmFamily<TestRabbit>.Of(rabbitsABC);
+        rabbitFamily.Verify(
+            f => f.Any.ShouldBeTrue(),
+            f => f.IsEmpty.ShouldBeFalse(),
+            f => f.Count.ShouldBe(3)
+        );
+    }
+
+    [Test]
+    public void BasicAsEnumerable()
+    {
+        Family<TestRabbit>      rabbitFamily = ImmFamily<TestRabbit>.Of(rabbitsABC);
+        IEnumerable<TestRabbit> enumerable   = rabbitFamily;
+        TestRabbit[]            array        = enumerable.ToArray();
+        array.ShouldBe(rabbitsABC);
+    }
 
     [Test]
     public void ById()
