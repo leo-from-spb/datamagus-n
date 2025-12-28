@@ -21,7 +21,7 @@ public interface ImmDict<K,V> : IReadOnlyDictionary<K,V>
     /// <summary>
     /// This dictionary has at least one entry.
     /// </summary>
-    public bool IsNotEmpty { get; }
+    public bool Any { get; }
 
     /// <summary>
     /// This dictionary is empty.

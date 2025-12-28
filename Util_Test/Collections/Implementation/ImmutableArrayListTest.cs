@@ -14,7 +14,7 @@ public class ImmutableArrayListTest
         Verify
         (
             () => list.Count.ShouldBe(3),
-            () => list.IsNotEmpty.ShouldBeTrue(),
+            () => list.Any.ShouldBeTrue(),
             () => list.IsEmpty.ShouldBeFalse(),
             () => list.First.ShouldBe(55L),
             () => list.Last.ShouldBe(99L),
@@ -52,7 +52,7 @@ public class ImmutableArrayListTest
         Verify
         (
             () => list.Count.ShouldBe(1),
-            () => list.IsNotEmpty.ShouldBeTrue(),
+            () => list.Any.ShouldBeTrue(),
             () => list.IsEmpty.ShouldBeFalse(),
             () => list.First.ShouldBe(42L),
             () => list.Last.ShouldBe(42L),

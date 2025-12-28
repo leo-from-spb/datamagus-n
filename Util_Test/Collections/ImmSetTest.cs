@@ -295,7 +295,7 @@ public class ImmSetTest
     private void Verify_55_99(ImmSet<ulong> set) =>
         set.Verify
         (
-            x => x.IsNotEmpty.ShouldBeTrue(),
+            x => x.Any.ShouldBeTrue(),
             x => x.IsEmpty.ShouldBeFalse(),
             x => x.Count.ShouldBe(5),
             x => x.Contains(55uL).ShouldBeTrue(),
@@ -394,7 +394,7 @@ public class ImmSetTest
     private void Verify_Sorted_55_99(ImmSortedListSet<ulong> set) =>
         set.Verify
         (
-            x => x.IsNotEmpty.ShouldBeTrue(),
+            x => x.Any.ShouldBeTrue(),
             x => x.IsEmpty.ShouldBeFalse(),
             x => x.Count.ShouldBe(5),
             x => x.IndexOf(55uL).ShouldBe(0),
@@ -454,7 +454,7 @@ public class ImmSetTest
         set.Verify
         (
             x => x.IsEmpty.ShouldBeTrue(),
-            x => x.IsNotEmpty.ShouldBeFalse(),
+            x => x.Any.ShouldBeFalse(),
             x => x.Count.ShouldBe(0),
             x => x.IndexOf(1380L).ShouldBeNegative(),
             x => x.Contains(99L).ShouldBeFalse()

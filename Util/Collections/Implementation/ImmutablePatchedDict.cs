@@ -34,7 +34,7 @@ internal sealed class ImmutablePatchedDict<K,V> : ImmutableDictionary<K,V>, ImmD
         Count = Origin.Count + newCnt - deletedCnt;
     }
 
-    public bool IsNotEmpty => Count != 0;
+    public bool Any => Count != 0;
     public bool IsEmpty    => Count == 0;
 
     public bool ContainsKey(K key) => Patch.ContainsKey(key)
@@ -102,7 +102,7 @@ internal sealed class ImmutablePatchedDict<K,V> : ImmutableDictionary<K,V>, ImmD
         }
 
         public override int  Count      => Dict.Count;
-        public          bool IsNotEmpty => Dict.IsNotEmpty;
+        public          bool Any => Dict.Any;
         public          bool IsEmpty    => Dict.IsEmpty;
 
         public bool Contains(K item) => Dict.ContainsKey(item);
@@ -168,7 +168,7 @@ internal sealed class ImmutablePatchedDict<K,V> : ImmutableDictionary<K,V>, ImmD
         }
 
         public override int  Count      => Dict.Count;
-        public          bool IsNotEmpty => Dict.IsNotEmpty;
+        public          bool Any => Dict.Any;
         public          bool IsEmpty    => Dict.IsEmpty;
 
         public override IEnumerator<V> GetEnumerator() =>
@@ -201,7 +201,7 @@ internal sealed class ImmutablePatchedDict<K,V> : ImmutableDictionary<K,V>, ImmD
         }
 
         public override int  Count      => Dict.Count;
-        public          bool IsNotEmpty => Dict.IsNotEmpty;
+        public          bool Any => Dict.Any;
         public          bool IsEmpty    => Dict.IsEmpty;
 
         public override IEnumerator<KeyValuePair<K,V>> GetEnumerator() =>

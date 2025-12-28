@@ -32,7 +32,7 @@ public class ImmutableSingleton<T> : ImmutableCollection<T>, ImmListSet<T>
 
     public override int Count => 1;
 
-    public bool IsNotEmpty => true;
+    public bool Any => true;
     public bool IsEmpty    => false;
     public T    First      => Element;
     public T    Last       => Element;

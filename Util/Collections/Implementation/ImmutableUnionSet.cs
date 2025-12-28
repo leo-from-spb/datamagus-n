@@ -58,7 +58,7 @@ internal class ImmutableUnionSet<T> : ImmutableCollection<T>, ImmSet<T>
 
     internal override byte CascadingLevel => Math.Max(A.Imp.CascadingLevel, B.Imp.CascadingLevel).Succ;
 
-    public bool IsNotEmpty => Count != 0;
+    public bool Any => Count != 0;
     public bool IsEmpty    => Count == 0;
 
     public bool Contains(T item)

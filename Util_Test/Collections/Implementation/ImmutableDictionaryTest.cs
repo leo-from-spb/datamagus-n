@@ -36,7 +36,7 @@ public class ImmutableDictionaryTest
     {
         dict.Verify
         (
-            d => d.IsNotEmpty.ShouldBeTrue(),
+            d => d.Any.ShouldBeTrue(),
             d => d.IsEmpty.ShouldBeFalse(),
             d => d.Count.ShouldBe(5),
             d => d.IndexOfKey("einz").ShouldBe(0),
@@ -63,7 +63,7 @@ public class ImmutableDictionaryTest
 
         dict.Keys.Verify
         (
-            ks => ks.IsNotEmpty.ShouldBeTrue(),
+            ks => ks.Any.ShouldBeTrue(),
             ks => ks.IsEmpty.ShouldBeFalse(),
             ks => ks.Count.ShouldBe(5),
             ks => (ks as IEnumerable<string>).ToArray().ShouldContainAll("einz", "zwei", "drei", "view", "fünf")
@@ -71,7 +71,7 @@ public class ImmutableDictionaryTest
 
         dict.Values.Verify
         (
-            vs => vs.IsNotEmpty.ShouldBeTrue(),
+            vs => vs.Any.ShouldBeTrue(),
             vs => vs.IsEmpty.ShouldBeFalse(),
             vs => vs.Count.ShouldBe(5),
             vs => (vs as IEnumerable<long>).ToArray().ShouldContainAll(1L, 2L, 3L, 4L, 5L)
@@ -107,7 +107,7 @@ public class ImmutableDictionaryTest
     {
         dict.Verify
         (
-            d => d.IsNotEmpty.ShouldBeTrue(),
+            d => d.Any.ShouldBeTrue(),
             d => d.IsEmpty.ShouldBeFalse(),
             d => d.Count.ShouldBe(6),
             d => d.MinKey.ShouldBe(10u),
@@ -128,7 +128,7 @@ public class ImmutableDictionaryTest
 
         dict.Keys.Verify
         (
-            ks => ks.IsNotEmpty.ShouldBeTrue(),
+            ks => ks.Any.ShouldBeTrue(),
             ks => ks.IsEmpty.ShouldBeFalse(),
             ks => ks.Count.ShouldBe(6),
             ks => ks.First.ShouldBe(10u),
@@ -144,7 +144,7 @@ public class ImmutableDictionaryTest
 
         dict.Values.Verify
         (
-            vs => vs.IsNotEmpty.ShouldBeTrue(),
+            vs => vs.Any.ShouldBeTrue(),
             vs => vs.IsEmpty.ShouldBeFalse(),
             vs => vs.Count.ShouldBe(6),
             vs => vs.First.ShouldBe("A"),
@@ -154,7 +154,7 @@ public class ImmutableDictionaryTest
 
         dict.Entries.Verify
         (
-            es => es.IsNotEmpty.ShouldBeTrue(),
+            es => es.Any.ShouldBeTrue(),
             es => es.IsEmpty.ShouldBeFalse(),
             es => es.Count.ShouldBe(6),
             es => es.First.ShouldBe(Pairs6[0]),

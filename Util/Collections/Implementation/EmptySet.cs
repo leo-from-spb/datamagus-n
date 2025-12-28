@@ -17,7 +17,7 @@ public class EmptySet<T> : ImmutableCollection<T>, ImmListSet<T>
 
     protected override string CollectionWord => "EmptySet";
 
-    public bool IsNotEmpty => false;
+    public bool Any => false;
     public bool IsEmpty    => true;
 
     public override int Count => 0;
@@ -38,7 +38,7 @@ public class EmptySet<T> : ImmutableCollection<T>, ImmListSet<T>
     public int IndexOf(T     element, int notFound) => notFound;
     public int LastIndexOf(T element, int notFound) => notFound;
 
-    public bool IsProperSubsetOf(IEnumerable<T>   other) => other.IsNotEmpty();
+    public bool IsProperSubsetOf(IEnumerable<T>   other) => other.Any();
     public bool IsSubsetOf(IEnumerable<T>         other) => true;
     public bool IsProperSupersetOf(IEnumerable<T> other) => false;
     public bool IsSupersetOf(IEnumerable<T>       other) => other.IsEmpty();

@@ -11,7 +11,6 @@ namespace Util.Collections;
 /// <typeparam name="K">type fo the key.</typeparam>
 /// <typeparam name="V">type of the value.</typeparam>
 public sealed class ImmDictBuilder<K,V>
-    where K: IEquatable<K>
 {
     private readonly List<KeyValuePair<K,V>> Entries = new();
 

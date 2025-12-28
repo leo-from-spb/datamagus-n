@@ -24,7 +24,7 @@ public interface ImmCollection<T> : IReadOnlyCollection<T>
     /// <summary>
     /// This collection has at least one element.
     /// </summary>
-    public bool IsNotEmpty { get; }
+    public bool Any { get; }
 
     /// <summary>
     /// This collection is empty.

@@ -15,7 +15,7 @@ public class EmptyDictionary<K,V> : ImmutableDictionary<K,V>, ImmListDict<K,V>
 
     public static readonly EmptyDictionary<K,V> Instance = new();
 
-    public          bool IsNotEmpty => false;
+    public          bool Any => false;
     public          bool IsEmpty    => true;
     public override int  Count      => 0;
 
