@@ -1,10 +1,11 @@
-using System.Collections.Generic;
+using Util.Collections;
 
 namespace Model.Abstracts;
 
-public class AbstractConsts
+public static class AbstractConsts
 {
 
-    public static readonly IReadOnlyList<Ref<Matter>> NoRefs = [];
+    // ReSharper disable once CollectionNeverUpdated.Global
+    public static readonly ImmList<Ref<Matter>> NoRefs = [];
 
 }
