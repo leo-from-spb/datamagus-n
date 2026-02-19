@@ -37,6 +37,10 @@ public static class NumberConstants
     public const byte _28_ = 28;
     public const byte _29_ = 29;
 
+    public const byte _50_ = 50;
+    public const byte _99_ = 99;
+    public const byte _100_ = 99;
+
     public const byte _254_ = 254;
     public const byte _255_ = 255;
 
