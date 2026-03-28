@@ -71,6 +71,8 @@ internal class MetaProducer (MetaModel mm) : MetaFileProducer
     {
         string classModifier = m.IsConcrete ? "sealed" : "abstract";
         cb.EmptyLine();
+        cb.Phrase("#region", "matter class", m.Imm.ClassName);
+        cb.EmptyLine();
         ProduceImmMatterGreatComment(cb, m);
         cb.Phrase("public", classModifier, "class", m.Imm.ClassName, ":", m.Imm.BaseClassName + ",", m.IntfName);
 
@@ -82,6 +84,9 @@ internal class MetaProducer (MetaModel mm) : MetaFileProducer
             ProduceImmMatterRefrences(cb, m);
             ProduceImmMatterProperties(cb, m);
         }
+        
+        cb.Phrase("#endregion");
+        cb.EmptyLine();
     }
 
     private static void ProduceImmMatterGreatComment(CodeBuilder cb, MetaMatter m)
@@ -168,8 +173,12 @@ internal class MetaProducer (MetaModel mm) : MetaFileProducer
 
         using (cb.Indenting())
         {
-            for (var i = 0; i < parameters.Count; i++) cb.Phrase(parameters[i] + (i < parameters.Count - 1 ? "," : ")"));
-            cb.Phrase(": base(", baseConstructorParameters, ")");
+            using (cb.Indenting(5 + m.Imm.ClassName.Length))
+            {
+                for (var i = 0; i < parameters.Count; i++)
+                    cb.Phrase(parameters[i] + (i < parameters.Count - 1 ? "," : ")"));
+            }
+            cb.Phrase($": base({baseConstructorParameters})");
         }
         using (cb.CurlyBlock(true))
         {
@@ -181,15 +190,13 @@ internal class MetaProducer (MetaModel mm) : MetaFileProducer
     private void ProduceImmMatterFamilies(CodeBuilder cb, MetaMatter m)
     {
         if (m.AllFamilies.IsEmpty()) return;
-        cb.EmptyLine();
-        cb.Phrase(@"// Families \\");        
         foreach (var f in m.AllFamilies.Values)
         {
             MetaMatter child      = f.Child;
             string     immTypeStr = $"Imm{f.FamilyTypeName}<{child.IntfName}>";
             string     iTypeStr   = $"{f.FamilyTypeName}<{child.IntfName}>";
             cb.EmptyLine();
-            cb.Phrase("//", child.Names);
+            cb.Phrase("// family", child.Names);
             cb.Text($"private readonly {immTypeStr} {f.FamilyVarName};",
                     $"public {iTypeStr} {f.FamilyName} => {f.FamilyVarName};");
         }

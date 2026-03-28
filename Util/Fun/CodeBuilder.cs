@@ -74,6 +74,9 @@ public class CodeBuilder
 
     public IndentationBlockMarker CurlyBlock(bool thenSkipLine = false) => Block("{", "}", null, thenSkipLine);
 
+    public IndentationBlockMarker Indenting(int spaces)
+        => Indenting(new string(' ', spaces));
+
     public IndentationBlockMarker Indenting(string? withIndentation = null)
     {
         Indent(withIndentation);
