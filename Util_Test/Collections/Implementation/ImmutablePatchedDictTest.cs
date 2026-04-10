@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -223,6 +224,112 @@ public class ImmutablePatchedDictTest
                         KV(5, "SuperFive"),
                      /* then the entry from the patch */
                         KV(10, "SuperTen"), KV(11, "SuperEleven")]);
+    }
+
+
+
+    // KeySet set operations \\
+
+    [Test]
+    public void P1_KeySet_IsSubsetOf()
+    {
+        var patchedDict = new ImmutablePatchedDict<ulong,string>(OriginalDict, PatchDict1, RemovedKeys1);
+        var keys = patchedDict.Keys;
+        // keys = {1, 2, 5, 7, 8, 9}
+        keys.Verify(
+            ks => ks.IsSubsetOf(new ulong[] { 1, 2, 5, 7, 8, 9 }).ShouldBeTrue(),          // equal set
+            ks => ks.IsSubsetOf(new ulong[] { 1, 2, 3, 5, 6, 7, 8, 9 }).ShouldBeTrue(),    // superset
+            ks => ks.IsSubsetOf(new ulong[] { 1, 2, 5, 7, 8 }).ShouldBeFalse(),            // missing 9
+            ks => ks.IsSubsetOf(new ulong[] { 1, 2, 3, 4 }).ShouldBeFalse(),               // mostly different
+            ks => ks.IsSubsetOf(Array.Empty<ulong>()).ShouldBeFalse()                      // empty
+        );
+    }
+
+    [Test]
+    public void P1_KeySet_IsProperSubsetOf()
+    {
+        var patchedDict = new ImmutablePatchedDict<ulong,string>(OriginalDict, PatchDict1, RemovedKeys1);
+        var keys = patchedDict.Keys;
+        keys.Verify(
+            ks => ks.IsProperSubsetOf(new ulong[] { 1, 2, 5, 7, 8, 9 }).ShouldBeFalse(),      // equal — not proper
+            ks => ks.IsProperSubsetOf(new ulong[] { 1, 2, 5, 7, 8, 9, 10 }).ShouldBeTrue(),   // one extra element
+            ks => ks.IsProperSubsetOf(new ulong[] { 1, 2, 5, 7, 8 }).ShouldBeFalse(),         // missing 9
+            ks => ks.IsProperSubsetOf(Array.Empty<ulong>()).ShouldBeFalse()                   // empty
+        );
+    }
+
+    [Test]
+    public void P1_KeySet_IsSupersetOf()
+    {
+        var patchedDict = new ImmutablePatchedDict<ulong,string>(OriginalDict, PatchDict1, RemovedKeys1);
+        var keys = patchedDict.Keys;
+        keys.Verify(
+            ks => ks.IsSupersetOf(new ulong[] { 1, 2, 5, 7, 8, 9 }).ShouldBeTrue(),      // equal set
+            ks => ks.IsSupersetOf(new ulong[] { 1, 5, 9 }).ShouldBeTrue(),               // subset
+            ks => ks.IsSupersetOf(Array.Empty<ulong>()).ShouldBeTrue(),                  // empty
+            ks => ks.IsSupersetOf(new ulong[] { 1, 2, 3 }).ShouldBeFalse(),              // 3 was removed
+            ks => ks.IsSupersetOf(new ulong[] { 1, 2, 5, 7, 8, 9, 10 }).ShouldBeFalse()  // extra element
+        );
+    }
+
+    [Test]
+    public void P1_KeySet_IsProperSupersetOf()
+    {
+        var patchedDict = new ImmutablePatchedDict<ulong,string>(OriginalDict, PatchDict1, RemovedKeys1);
+        var keys = patchedDict.Keys;
+        keys.Verify(
+            ks => ks.IsProperSupersetOf(new ulong[] { 1, 2, 5, 7, 8, 9 }).ShouldBeFalse(),  // equal — not proper
+            ks => ks.IsProperSupersetOf(new ulong[] { 1, 5, 9 }).ShouldBeTrue(),            // strict subset
+            ks => ks.IsProperSupersetOf(Array.Empty<ulong>()).ShouldBeTrue(),               // empty
+            ks => ks.IsProperSupersetOf(new ulong[] { 1, 2, 3 }).ShouldBeFalse()            // 3 not in keys
+        );
+    }
+
+    [Test]
+    public void P1_KeySet_Overlaps()
+    {
+        var patchedDict = new ImmutablePatchedDict<ulong,string>(OriginalDict, PatchDict1, RemovedKeys1);
+        var keys = patchedDict.Keys;
+        keys.Verify(
+            ks => ks.Overlaps(new ulong[] { 1 }).ShouldBeTrue(),                 // single match
+            ks => ks.Overlaps(new ulong[] { 5, 99 }).ShouldBeTrue(),             // 5 is in keys
+            ks => ks.Overlaps(new ulong[] { 3, 4, 6 }).ShouldBeFalse(),          // all removed or absent
+            ks => ks.Overlaps(new ulong[] { 100, 200 }).ShouldBeFalse(),         // completely disjoint
+            ks => ks.Overlaps(Array.Empty<ulong>()).ShouldBeFalse()              // empty
+        );
+    }
+
+    [Test]
+    public void P1_KeySet_SetEquals()
+    {
+        var patchedDict = new ImmutablePatchedDict<ulong,string>(OriginalDict, PatchDict1, RemovedKeys1);
+        var keys = patchedDict.Keys;
+        keys.Verify(
+            ks => ks.SetEquals(new ulong[] { 1, 2, 5, 7, 8, 9 }).ShouldBeTrue(),        // exact match
+            ks => ks.SetEquals(new ulong[] { 9, 8, 7, 5, 2, 1 }).ShouldBeTrue(),        // different order
+            ks => ks.SetEquals(new ulong[] { 1, 2, 5, 7, 8 }).ShouldBeFalse(),          // missing 9
+            ks => ks.SetEquals(new ulong[] { 1, 2, 5, 7, 8, 9, 10 }).ShouldBeFalse(),   // extra element
+            ks => ks.SetEquals(Array.Empty<ulong>()).ShouldBeFalse()                    // empty
+        );
+    }
+
+    [Test]
+    public void P2_KeySet_SetOperations()
+    {
+        var p1Dict = new ImmutablePatchedDict<ulong,string>(OriginalDict, PatchDict1, RemovedKeys1);
+        var p2Dict = new ImmutablePatchedDict<ulong,string>(p1Dict, PatchDict2, RemovedKeys2);
+        var keys   = p2Dict.Keys;
+        // keys = {2, 5, 7, 8, 9, 10, 11}
+        keys.Verify(
+            ks => ks.SetEquals(new ulong[] { 2, 5, 7, 8, 9, 10, 11 }).ShouldBeTrue(),
+            ks => ks.IsSubsetOf(new ulong[] { 2, 5, 7, 8, 9, 10, 11, 12 }).ShouldBeTrue(),
+            ks => ks.IsProperSubsetOf(new ulong[] { 2, 5, 7, 8, 9, 10, 11 }).ShouldBeFalse(),
+            ks => ks.IsSupersetOf(new ulong[] { 5, 10, 11 }).ShouldBeTrue(),
+            ks => ks.IsProperSupersetOf(new ulong[] { 5, 10, 11 }).ShouldBeTrue(),
+            ks => ks.Overlaps(new ulong[] { 1, 10 }).ShouldBeTrue(),       // 1 was removed but 10 is present
+            ks => ks.Overlaps(new ulong[] { 1, 3, 6 }).ShouldBeFalse(),    // all removed from P2
+            ks => ks.IsSupersetOf(new ulong[] { 1, 2 }).ShouldBeFalse()    // 1 was removed in P2
+        );
     }
 
 

@@ -7,6 +7,12 @@ using static System.Math;
 namespace Util.Collections.Implementation;
 
 
+/// <summary>
+/// Immutable patched dictionary,
+/// holds a reference on a base immutable dictionary (the origin) and changes (new and changed entries and deleted keys).
+/// </summary>
+/// <typeparam name="K">type of keys.</typeparam>
+/// <typeparam name="V">type of associated values.</typeparam>
 internal sealed class ImmutablePatchedDict<K,V> : ImmutableDictionary<K,V>, ImmDict<K,V>
 {
     protected override string DictionaryWord => "Patched Dictionary";
@@ -20,6 +26,12 @@ internal sealed class ImmutablePatchedDict<K,V> : ImmutableDictionary<K,V>, ImmD
     internal override byte CascadingLevel { get; }
     public override   int  Count          { get; }
 
+    /// <summary>
+    /// Creates a patched dictionary.
+    /// </summary>
+    /// <param name="origin">base immutable dictionary.</param>
+    /// <param name="patch">new and updated entries.</param>
+    /// <param name="removed">deleted keys.</param>
     public ImmutablePatchedDict(ImmDict<K,V> origin, ImmDict<K,V> patch, ImmSet<K> removed)
     {
         Origin  = origin;
@@ -34,8 +46,8 @@ internal sealed class ImmutablePatchedDict<K,V> : ImmutableDictionary<K,V>, ImmD
         Count = Origin.Count + newCnt - deletedCnt;
     }
 
-    public bool Any => Count != 0;
-    public bool IsEmpty    => Count == 0;
+    public bool Any     => Count != 0;
+    public bool IsEmpty => Count == 0;
 
     public bool ContainsKey(K key) => Patch.ContainsKey(key)
                                    || Origin.ContainsKey(key) && !Removed.Contains(key);
@@ -57,7 +69,7 @@ internal sealed class ImmutablePatchedDict<K,V> : ImmutableDictionary<K,V>, ImmD
 
     internal IEnumerable<KeyValuePair<K,V>> EnumerateEntries()
     {
-        IEnumerable<KeyValuePair<K, V>> q1 = Origin.Entries.Select(e => AdjustEntry(e)).Where(f => f.Ok).Select(f => f.Item);
+        IEnumerable<KeyValuePair<K, V>> q1 = Origin.Entries.Select(AdjustEntry).Where(f => f.Ok).Select(f => f.Item);
         IEnumerable<KeyValuePair<K,V>>  q2 = Patch.Entries.Where(e => !Origin.ContainsKey(e.Key));
         return q1.Concat(q2);
     }
@@ -128,29 +140,63 @@ internal sealed class ImmutablePatchedDict<K,V> : ImmutableDictionary<K,V>, ImmD
         }
 
 
-        public bool IsProperSubsetOf(IEnumerable<K>   other)
+        public bool IsSubsetOf(IEnumerable<K> other)
         {
-            throw new NotImplementedException();
+            IReadOnlySet<K> otherSet = other as IReadOnlySet<K> ?? new HashSet<K>(other);
+            if (Count > otherSet.Count) return false;
+            foreach (K k in this)
+                if (!otherSet.Contains(k))
+                    return false;
+            return true;
         }
-        public bool IsProperSupersetOf(IEnumerable<K> other)
+
+        public bool IsProperSubsetOf(IEnumerable<K> other)
         {
-            throw new NotImplementedException();
+            IReadOnlySet<K> otherSet = other as IReadOnlySet<K> ?? new HashSet<K>(other);
+            if (Count >= otherSet.Count) return false;
+            foreach (K k in this)
+                if (!otherSet.Contains(k))
+                    return false;
+            return true;
         }
-        public bool IsSubsetOf(IEnumerable<K>   other)
-        {
-            throw new NotImplementedException();
-        }
+
         public bool IsSupersetOf(IEnumerable<K> other)
         {
-            throw new NotImplementedException();
+            foreach (K el in other)
+                if (!Contains(el))
+                    return false;
+            return true;
         }
-        public bool Overlaps(IEnumerable<K>  other)
+
+        public bool IsProperSupersetOf(IEnumerable<K> other)
         {
-            throw new NotImplementedException();
+            int otherCount = 0;
+            foreach (K el in other)
+            {
+                otherCount++;
+                if (!Contains(el)) return false;
+            }
+            return Count > otherCount;
         }
+
+        public bool Overlaps(IEnumerable<K> other)
+        {
+            foreach (K el in other)
+                if (Contains(el))
+                    return true;
+            return false;
+        }
+
         public bool SetEquals(IEnumerable<K> other)
         {
-            throw new NotImplementedException();
+            int n = 0;
+            foreach (K el in other)
+            {
+                n++;
+                if (n > Count) return false;
+                if (!Contains(el)) return false;
+            }
+            return n == Count;
         }
     }
 
@@ -200,9 +246,9 @@ internal sealed class ImmutablePatchedDict<K,V> : ImmutableDictionary<K,V>, ImmD
             Dict = dict;
         }
 
-        public override int  Count      => Dict.Count;
-        public          bool Any => Dict.Any;
-        public          bool IsEmpty    => Dict.IsEmpty;
+        public override int  Count   => Dict.Count;
+        public          bool Any     => Dict.Any;
+        public          bool IsEmpty => Dict.IsEmpty;
 
         public override IEnumerator<KeyValuePair<K,V>> GetEnumerator() =>
             Dict.EnumerateEntries()
