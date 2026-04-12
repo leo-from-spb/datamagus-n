@@ -8,10 +8,20 @@ using Util.Extensions;
 namespace Testing.Appliance.Assertions;
 
 
+/// <summary>
+/// More useful assertion methods.
+/// </summary>
 [ShouldlyMethods]
 public static class Assertions
 {
 
+    /// <summary>
+    /// Asserts that the array contains all of the specified expected items.
+    /// Reports which items are missing if the assertion fails.
+    /// </summary>
+    /// <param name="array">the actual array to check.</param>
+    /// <param name="expectedItems">items that must all be present in the array.</param>
+    /// <typeparam name="E">the element type.</typeparam>
     public static void ShouldContainAll<E>(this E[]? array, params E[] expectedItems)
     {
         if (array is null) Fail($"Actual array is null when expect an array with the following items " + expectedItems.Describe());
@@ -19,12 +29,27 @@ public static class Assertions
         CheckContainsAll("array", set, expectedItems);
     }
 
+    /// <summary>
+    /// Asserts that the collection contains all of the specified expected items.
+    /// Reports which items are missing if the assertion fails.
+    /// </summary>
+    /// <param name="collection">the actual collection to check.</param>
+    /// <param name="expectedItems">items that must all be present in the collection.</param>
+    /// <typeparam name="E">the element type.</typeparam>
     public static void ShouldContainAll<E>(this IReadOnlyCollection<E>? collection, params E[] expectedItems)
     {
         if (collection is null) Fail("Actual collection is null when expect a collection with the following items " + expectedItems.Describe());
         CheckContainsAll("collection", collection, expectedItems);
     }
 
+    /// <summary>
+    /// Asserts that the enumerable contains all of the specified expected items.
+    /// Materializes the enumerable into a set for containment checks.
+    /// Reports which items are missing if the assertion fails.
+    /// </summary>
+    /// <param name="enumerable">the actual enumerable to check.</param>
+    /// <param name="expectedItems">items that must all be present in the enumerable.</param>
+    /// <typeparam name="E">the element type.</typeparam>
     public static void ShouldContainAll<E>(this IEnumerable<E>? enumerable, params E[] expectedItems)
     {
         if (enumerable is null) Fail("Actual collection is null when expect a collection with the following items " + expectedItems.Describe());
