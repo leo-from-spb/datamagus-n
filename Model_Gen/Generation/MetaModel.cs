@@ -31,8 +31,7 @@ internal enum SegmentKind : byte
 internal class MetaMatter
 {
     internal readonly SegmentKind SegmKind;
-    internal readonly byte        Level;
-    internal readonly byte        OrderNum;  
+    internal readonly byte        OrderNum;
     internal readonly string      IntfName;
     internal readonly Type        Intf;
     internal readonly bool        IsConcrete;
@@ -76,10 +75,9 @@ internal class MetaMatter
         internal bool ToImplement => !Matter.IsAbstract && !ManuallyImplemented;
     }
     
-    internal MetaMatter(Type intf, bool isConcrete, byte level)
+    internal MetaMatter(Type intf, bool isConcrete)
     {
         OrderNum   = ++matterOrderCounter;
-        Level      = level;
         IntfName   = intf.Name;
         Intf       = intf;
         IsConcrete = isConcrete;
@@ -109,7 +107,7 @@ internal class MetaMatter
     public override string ToString()
     {
         char bullet = IsConcrete ? '◆' : '◇';
-        return $"{bullet} [{(byte)SegmKind}.{Level}] {Intf.Name}";
+        return $"{bullet} [{(byte)SegmKind}] {Intf.Name}";
     }
 }
 

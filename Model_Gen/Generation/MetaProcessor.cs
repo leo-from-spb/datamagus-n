@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Immutable;
 using System.Diagnostics;
+using System.Linq;
+using System.Reflection;
 using Model.Abstracts;
 using Util.Extensions;
 
@@ -18,8 +20,12 @@ internal class MetaProcessor (MetaModel mm)
         nameof(NamedTermMatter)
     ];
 
+
+    private readonly Type matterType      = typeof(Matter);
     private readonly Type namedMatterType = typeof(NamedMatter);
-    
+    private readonly Type familyType      = typeof(Family<Matter>);
+    private readonly Type refType         = typeof(Ref<Matter>);
+    private readonly Type polyRefType     = typeof(PolyRef<Matter>);
 
     internal void ProcessModel()
     {
@@ -56,24 +62,43 @@ internal class MetaProcessor (MetaModel mm)
             // base matters
             m.BaseMatters.AddRange(m.DeclaredBaseMatters);
             m.DeclaredBaseMatters.ForEach(b => b.DirectInheritors.Add(m));
-            
-            // families
-            foreach (var bm in m.BaseMatters)
-            {
-                foreach (var f in bm.OwnFamilies)
-                    if (!m.AllFamilies.ContainsKey(f.FamilyName))
-                    {
-                        var newF = f.cloneFor(m);
-                        m.AllFamilies[newF.FamilyName] = newF;
-                    }
 
-                foreach (var f in m.OwnFamilies)
+            // families
+            if (m.IsMedium)
+            {
+                var familyEntries =
+                    from child in m.Intf.GetProperties()
+                    where child.MemberType == MemberTypes.Property
+                       && child.PropertyType.IsAssignableTo(familyType)
+                    select child;
+                foreach (var fe in familyEntries)
+                    HandleFamily(m, fe);
+
+                foreach (var bm in m.BaseMatters)
                 {
-                    m.AllFamilies[f.FamilyName] = f;
+                    foreach (var f in bm.OwnFamilies)
+                        if (!m.AllFamilies.ContainsKey(f.FamilyName))
+                        {
+                            var newF = f.cloneFor(m);
+                            m.AllFamilies[newF.FamilyName] = newF;
+                        }
+
+                    foreach (var f in m.OwnFamilies)
+                    {
+                        m.AllFamilies[f.FamilyName] = f;
+                    }
                 }
             }
 
             // references
+            var refEntries =
+                from r in m.Intf.GetProperties()
+                where r.MemberType == MemberTypes.Property
+                   && r.PropertyType.IsAssignableTo(refType)
+                select r;
+            foreach (var pe in refEntries)
+                HandleRef(m, pe);
+
             foreach (var bm in m.BaseMatters)
             {
                 foreach (var r in bm.OwnRefs)
@@ -87,6 +112,16 @@ internal class MetaProcessor (MetaModel mm)
             }
 
             // properties
+            var proEntries =
+                from p in m.Intf.GetProperties()
+                where p.MemberType == MemberTypes.Property
+                   && p.GetCustomAttribute<MatterPropertyAttribute>() != null
+                   && !p.PropertyType.IsAssignableTo(familyType)
+                   && !p.PropertyType.IsAssignableTo(refType)
+                select p;
+            foreach (var pe in proEntries)
+                HandleProperty(m, pe);
+
             foreach (var bm in m.BaseMatters)
             {
                 foreach (var p in bm.OwnProperties)
@@ -113,6 +148,38 @@ internal class MetaProcessor (MetaModel mm)
         }
         
     }
-    
-    
+
+
+    private void HandleFamily(MetaMatter host, PropertyInfo prop)
+    {
+        var propType = prop.PropertyType;
+        var propIntf = propType.GenericTypeArguments[0];
+        Debug.Assert(propIntf is not null);
+        Debug.Assert(propIntf.IsIn(ModelMetaBrief.AllModelMatters));
+        var child = mm.Intfs[propIntf];
+        Debug.Assert(child is not null);
+        var family = new MetaFamily(host, child, propType, prop.Name);
+        host.AddFamily(family);
+    }
+
+    private void HandleRef(MetaMatter host, PropertyInfo prop)
+    {
+        var refName         = prop.Name;
+        var refPropType     = prop.PropertyType;
+        var refTargetIntf   = refPropType.GenericTypeArguments[0];
+        var refTargetMatter = mm.Intfs[refTargetIntf];
+        Debug.Assert(refTargetMatter is not null);
+        var poly = refPropType.IsAssignableTo(polyRefType);
+        var r    = new MetaRef(host, refName, poly, refTargetMatter);
+        host.OwnRefs.Add(r);
+    }
+
+    private void HandleProperty(MetaMatter host, PropertyInfo prop)
+    {
+        var proName = prop.Name;
+        var proType = prop.PropertyType;
+        var p       = new MetaProperty(host, proName, proType);
+        host.OwnProperties.Add(p);
+    }
+
 }
