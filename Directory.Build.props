@@ -2,5 +2,6 @@
     <PropertyGroup>
         <BaseIntermediateOutputPath>$(SolutionDir)/yonder/obj/$(MSBuildProjectName)/</BaseIntermediateOutputPath>
         <BaseOutputPath>$(SolutionDir)/yonder/bin/$(MSBuildProjectName)/</BaseOutputPath>
+        <NuGetAudit>false</NuGetAudit>
     </PropertyGroup>
 </Project>
