@@ -230,6 +230,8 @@ internal static class CollectionLogic
         if (nB == 0) return setA;
         if (nA == 0) return setB;
         // TODO optimize
+        if (nB < 16 && nB < nA && setA.IsSupersetOf(setB)) return setA;
+        if (nA < 16 && nA < nB && setB.IsSupersetOf(setA)) return setB;
         return new ImmutableUnionSet<E>(setA, setB);
     }
 

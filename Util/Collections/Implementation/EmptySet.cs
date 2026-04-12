@@ -17,8 +17,8 @@ public class EmptySet<T> : ImmutableCollection<T>, ImmListSet<T>
 
     protected override string CollectionWord => "EmptySet";
 
-    public bool Any => false;
-    public bool IsEmpty    => true;
+    public bool Any     => false;
+    public bool IsEmpty => true;
 
     public override int Count => 0;
 
@@ -32,8 +32,8 @@ public class EmptySet<T> : ImmutableCollection<T>, ImmListSet<T>
     public T At(int   index) => throw new IndexOutOfRangeException("Collection is empty");
     public T this[int index] => throw new IndexOutOfRangeException("Collection is empty");
 
-    public T First => throw new IndexOutOfRangeException("Collection is empty");
-    public T Last  => throw new IndexOutOfRangeException("Collection is empty");
+    public T First => throw new IndexOutOfRangeException("Collection is empty (attempted to get a first element)");
+    public T Last  => throw new IndexOutOfRangeException("Collection is empty (attempted to get a last element)");
 
     public int IndexOf(T     element, int notFound) => notFound;
     public int LastIndexOf(T element, int notFound) => notFound;
