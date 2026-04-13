@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Util.Collections;
 using Util.Extensions;
 using Util.Fun;
 
@@ -15,6 +16,34 @@ internal class MetaProducer (MetaModel mm) : MetaFileProducer
     private const string ImmCommonFilePath    = ImmDirPath + "/ModelCommonImmImp.cs";
     private const string ImmConceptFilePath   = ImmDirPath + "/ModelConceptImmImp.cs";
     private const string ImmVisualityFilePath = ImmDirPath + "/ModelVisualityImmImp.cs";
+
+    private ImmSortedSet<string> usingsForCommon =
+        Imm.SortedSetOf
+        (
+            "System.Collections.Generic",
+            "System.Linq",
+            "Model.Abstracts"
+        );
+
+    private ImmSortedSet<string> usingsForConcept =
+        Imm.SortedSetOf
+        (
+            "Model.Concept"
+        );
+
+    private ImmSortedSet<string> usingsForDB =
+        Imm.SortedSetOf
+        (
+            "Model.Concept"
+        );
+
+    private ImmSortedSet<string> usingsForVisuality =
+        Imm.SortedSetOf
+        (
+            "Model.Concept",
+            "Model.Visuality",
+            "Util.Geometry"
+        );
 
 
     internal void CheckDirectory()
@@ -42,16 +71,16 @@ internal class MetaProducer (MetaModel mm) : MetaFileProducer
 
     private void ProduceImmutableClasses(SegmentKind segmentKind, string filePath)
     {
+        var usings = CollectUsings(segmentKind);
+
         CodeBuilder cb = new CodeBuilder();
-        cb.Text("""
-                using System.Collections.Generic;
-                using System.Linq;
-                using Model.Abstracts;
-                using Model.Concept;
-                using Model.Visuality;
-                
-                namespace Model.Imm;
-                """);
+        cb.Text(MetaConsts.GeneratedFileHeader);
+        cb.EmptyLine();
+
+        foreach (var usingNamespace in usings)
+            cb.Phrase("using ", usingNamespace, ";");
+        cb.EmptyLine();
+        cb.Text("namespace Model.Imm;");
         cb.EmptyLine();
 
         var segmentMatters = from m in mm.Matters
@@ -66,6 +95,16 @@ internal class MetaProducer (MetaModel mm) : MetaFileProducer
         
         WriteFile(filePath, cb.Result);
     }
+
+    private ImmSet<string> CollectUsings(SegmentKind segmentKind) =>
+        segmentKind switch
+        {
+            SegmentKind.soCommon    => usingsForCommon,
+            SegmentKind.soConcept   => usingsForCommon + usingsForConcept,
+            SegmentKind.soDB        => usingsForCommon + usingsForDB,
+            SegmentKind.soVisuality => usingsForCommon + usingsForVisuality,
+            _                       => throw new ArgumentOutOfRangeException(nameof(segmentKind))
+        };
 
     private void ProduceImmMatter(CodeBuilder cb, MetaMatter m)
     {

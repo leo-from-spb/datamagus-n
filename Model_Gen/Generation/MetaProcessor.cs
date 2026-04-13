@@ -178,7 +178,12 @@ internal class MetaProcessor (MetaModel mm)
     {
         var proName = prop.Name;
         var proType = prop.PropertyType;
-        var p       = new MetaProperty(host, proName, proType);
+
+        bool nullWrapped = proType.IsValueType && proType.IsGenericType && proType.Name.StartsWith("Nullable`");
+        if (nullWrapped)
+            proType = proType.GenericTypeArguments[0];
+
+        var p = new MetaProperty(host, proName, proType, nullWrapped);
         host.OwnProperties.Add(p);
     }
 

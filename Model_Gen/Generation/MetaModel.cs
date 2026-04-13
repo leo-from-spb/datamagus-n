@@ -172,21 +172,24 @@ internal class MetaProperty
     internal readonly string     ProName;
     internal          string     ProVarName => ProName.Decapitalized;
     internal readonly Type       ProType;
+    internal readonly bool       ProTypeNullableSign;
     internal readonly string     ProTypeName;
 
     internal bool ImplementedInMatter = false;
 
-    public MetaProperty(MetaMatter matter, string proName, Type proType)
+    public MetaProperty(MetaMatter matter, string proName, Type proType, bool nullableSign = false)
     {
-        Matter      = matter;
-        ProName     = proName;
-        ProType     = proType;
-        ProTypeName = MetaConsts.SystemTypes.Get(proType, proType.Name);
+        Matter              = matter;
+        ProName             = proName;
+        ProType             = proType;
+        ProTypeNullableSign = nullableSign;
+
+        ProTypeName = (MetaConsts.SystemTypes.Find(proType) | proType.Name) + (nullableSign ? "?" : "");
     }
 
     internal MetaProperty cloneFor(MetaMatter inheritor)
     {
-        var newProperty = new MetaProperty(inheritor, ProName, ProType);
+        var newProperty = new MetaProperty(inheritor, ProName, ProType, ProTypeNullableSign);
         newProperty.ImplementedInMatter = this.ImplementedInMatter;
         return newProperty;
     }
