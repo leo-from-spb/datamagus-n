@@ -30,7 +30,8 @@ public static class ModelMetaBrief
             typeof(DiaAlbum),
             typeof(DiaTemplate),
             typeof(DiaPage),
-            typeof(DiaShape)
+            typeof(DiaShape),
+            typeof(DiaEntity)
         );
 
     /// <summary>
