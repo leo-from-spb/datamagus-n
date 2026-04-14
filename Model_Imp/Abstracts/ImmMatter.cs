@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Util.Collections;
 
 namespace Model.Abstracts;
 
@@ -16,7 +17,7 @@ public abstract class ImmMatter : Matter
 
     public abstract IEnumerable<Matter> AllInnerMatters { get; }
 
-    public abstract IReadOnlyList<Ref<Matter>> AllRefs { get; }
+    public abstract ImmList<Ref<Matter>> AllRefs { get; }
 }
 
 
@@ -24,7 +25,7 @@ public abstract class ImmMediumMatter : ImmMatter, MediumMatter
 {
     protected ImmMediumMatter(uint id, uint version) : base(id, version) { }
 
-    public abstract IReadOnlyList<Family<Matter>> Families { get; }
+    public abstract ImmList<Family<Matter>> Families { get; }
 
     public override IEnumerable<Matter> AllInnerMatters =>
         from family in Families

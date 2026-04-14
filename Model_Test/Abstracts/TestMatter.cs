@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using Util.Collections;
 
 namespace Model.Abstracts;
 
@@ -35,8 +35,8 @@ public class ImmTestYard : ImmMediumMatter, TestYard
         GuineaPigs = guineaPigs;
     }
 
-    public override IReadOnlyList<Family<Matter>> Families => new Family<Matter>[] { Rabbits, GuineaPigs };
-    public override IReadOnlyList<Ref<Matter>>    AllRefs  => AbstractConsts.NoRefs;
+    public override ImmList<Family<Matter>> Families => Imm.ListOf<Family<Matter>>(Rabbits, GuineaPigs);
+    public override ImmList<Ref<Matter>>    AllRefs  => AbstractConsts.NoRefs;
 }
 
 
@@ -46,7 +46,7 @@ public class ImmTestRabbit : ImmNamedTermMatter, TestRabbit
     {
     }
 
-    public override IReadOnlyList<Ref<Matter>>    AllRefs  => AbstractConsts.NoRefs;
+    public override ImmList<Ref<Matter>> AllRefs => AbstractConsts.NoRefs;
 }
 
 
@@ -56,5 +56,5 @@ public class ImmTestGuineaPig : ImmNamedTermMatter, TestGuineaPig
     {
     }
 
-    public override IReadOnlyList<Ref<Matter>>    AllRefs  => AbstractConsts.NoRefs;
+    public override ImmList<Ref<Matter>> AllRefs => AbstractConsts.NoRefs;
 }

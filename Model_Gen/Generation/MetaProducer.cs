@@ -179,8 +179,7 @@ internal class MetaProducer (MetaModel mm) : MetaFileProducer
     {
         if (m.IsMedium && m.IsConcrete)
         {
-            cb.Text("private readonly Family<Matter>[] families;",
-                    "public override IReadOnlyList<Family<Matter>> Families => families;");
+            cb.Text("public override ImmList<Family<Matter>> Families { get; }");
             cb.EmptyLine();
         }
     }
@@ -237,7 +236,7 @@ internal class MetaProducer (MetaModel mm) : MetaFileProducer
         using (cb.CurlyBlock(true))
         {
             cb.Text(assignments);
-            if (m.IsMedium && m.IsConcrete) cb.Phrase("families = new Family<Matter>[] {", thisFamilies, "};");
+            if (m.IsMedium && m.IsConcrete) cb.Phrase("Families = Imm.ListOf<Family<Matter>>(", thisFamilies, ");");
         }
     }
 
@@ -272,11 +271,11 @@ internal class MetaProducer (MetaModel mm) : MetaFileProducer
             }
             cb.EmptyLine();
             var refNames = m.AllRefs.Values.JoinToString(r => r.RefName);
-            cb.Phrase("public override IReadOnlyList<Ref<Matter>> AllRefs => new Ref<Matter>[] {", refNames, "};");
+            cb.Phrase("public override ImmList<Ref<Matter>> AllRefs => Imm.ListOf<Ref<Matter>>(", refNames, ");");
         }
         else
         {
-            cb.Phrase("public override IReadOnlyList<Ref<Matter>> AllRefs => AbstractConsts.NoRefs;");
+            cb.Phrase("public override ImmList<Ref<Matter>> AllRefs => AbstractConsts.NoRefs;");
         }
     }
 

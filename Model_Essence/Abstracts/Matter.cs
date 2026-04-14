@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Util.Collections;
 
 namespace Model.Abstracts;
 
@@ -27,7 +28,7 @@ public interface Matter : Node
     /// <summary>
     /// All references, including empty.
     /// </summary>
-    IReadOnlyList<Ref<Matter>> AllRefs { get; }
+    ImmList<Ref<Matter>> AllRefs { get; }
 }
 
 
@@ -40,7 +41,7 @@ public interface MediumMatter : Matter
     /// <summary>
     /// All families, in order when they're declared.
     /// </summary>
-    IReadOnlyList<Family<Matter>> Families { get; }
+    ImmList<Family<Matter>> Families { get; }
 }
 
 
