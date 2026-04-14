@@ -22,7 +22,7 @@ internal class MetaModel
 
 internal enum SegmentKind : byte
 {
-    soCommon,
+    soAbstracts,
     soConcept,
     soDB,
     soVisuality
@@ -91,11 +91,11 @@ internal class MetaMatter
         SegmKind =
             Prefix switch
             {
-                "Ab"  => SegmentKind.soCommon,
+                "Ab"  => SegmentKind.soAbstracts,
                 "Con" => SegmentKind.soConcept,
                 "Db"  => SegmentKind.soDB,
                 "Dia" => SegmentKind.soVisuality,
-                _     => SegmentKind.soCommon
+                _     => SegmentKind.soAbstracts
             };
         Name = IntfName.Remove(0, Prefix.Length);
 

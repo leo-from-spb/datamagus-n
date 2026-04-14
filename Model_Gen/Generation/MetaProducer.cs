@@ -5,39 +5,44 @@ using System.Linq;
 using Util.Collections;
 using Util.Extensions;
 using Util.Fun;
+using static Model.Generation.MetaConsts;
 
 namespace Model.Generation;
 
 
+
 internal class MetaProducer (MetaModel mm) : MetaFileProducer
 {
-    private const string ModuleDirPath        = "./Model_Imp";
-    private const string ImmDirPath           = ModuleDirPath + "/_generated_";
-    private const string ImmCommonFilePath    = ImmDirPath + "/ModelCommonImmImp.cs";
-    private const string ImmConceptFilePath   = ImmDirPath + "/ModelConceptImmImp.cs";
-    private const string ImmVisualityFilePath = ImmDirPath + "/ModelVisualityImmImp.cs";
 
-    private ImmSortedSet<string> usingsForCommon =
+    private readonly ImmSortedSet<string> usingsForAll =
         Imm.SortedSetOf
         (
             "System.Collections.Generic",
             "System.Linq",
-            "Model.Abstracts"
+            "Model.Abstracts",
+            "Util.Collections"
         );
 
-    private ImmSortedSet<string> usingsForConcept =
+    private readonly ImmSortedSet<string> usingsForCommon =
+        Imm.SortedSetOf
+        (
+            "Model.Concept",
+            "Model.Visuality"
+        );
+
+    private readonly ImmSortedSet<string> usingsForConcept =
         Imm.SortedSetOf
         (
             "Model.Concept"
         );
 
-    private ImmSortedSet<string> usingsForDB =
+    private readonly ImmSortedSet<string> usingsForDB =
         Imm.SortedSetOf
         (
             "Model.Concept"
         );
 
-    private ImmSortedSet<string> usingsForVisuality =
+    private readonly ImmSortedSet<string> usingsForVisuality =
         Imm.SortedSetOf
         (
             "Model.Concept",
@@ -63,7 +68,7 @@ internal class MetaProducer (MetaModel mm) : MetaFileProducer
 
     internal void ProduceCode()
     {
-        ProduceImmutableClasses(SegmentKind.soCommon, ImmCommonFilePath);
+        ProduceImmutableClasses(SegmentKind.soAbstracts, ImmAbstractsFilePath);
         ProduceImmutableClasses(SegmentKind.soConcept, ImmConceptFilePath);
         ProduceImmutableClasses(SegmentKind.soVisuality, ImmVisualityFilePath);
     }
@@ -71,16 +76,16 @@ internal class MetaProducer (MetaModel mm) : MetaFileProducer
 
     private void ProduceImmutableClasses(SegmentKind segmentKind, string filePath)
     {
-        var usings = CollectUsings(segmentKind);
+        var usings = CollectUsings(segmentKind).ToImmSortedSet();
 
         CodeBuilder cb = new CodeBuilder();
-        cb.Text(MetaConsts.GeneratedFileHeader);
+        cb.Text(GeneratedFileHeader);
         cb.EmptyLine();
 
         foreach (var usingNamespace in usings)
             cb.Phrase("using ", usingNamespace, ";");
         cb.EmptyLine();
-        cb.Text("namespace Model.Imm;");
+        cb.Phrase("namespace", SegmentNamespace(segmentKind), ";");
         cb.EmptyLine();
 
         var segmentMatters = from m in mm.Matters
@@ -99,11 +104,21 @@ internal class MetaProducer (MetaModel mm) : MetaFileProducer
     private ImmSet<string> CollectUsings(SegmentKind segmentKind) =>
         segmentKind switch
         {
-            SegmentKind.soCommon    => usingsForCommon,
-            SegmentKind.soConcept   => usingsForCommon + usingsForConcept,
-            SegmentKind.soDB        => usingsForCommon + usingsForDB,
-            SegmentKind.soVisuality => usingsForCommon + usingsForVisuality,
-            _                       => throw new ArgumentOutOfRangeException(nameof(segmentKind))
+            SegmentKind.soAbstracts => usingsForAll + usingsForCommon,
+            SegmentKind.soConcept   => usingsForAll + usingsForConcept,
+            SegmentKind.soDB        => usingsForAll + usingsForDB,
+            SegmentKind.soVisuality => usingsForAll + usingsForVisuality,
+            _                       => throw new ArgumentOutOfRangeException(nameof(segmentKind), segmentKind, null)
+        };
+
+    private string SegmentNamespace(SegmentKind segmentKind) =>
+        segmentKind switch
+        {
+            SegmentKind.soAbstracts => "Model.Abstracts",
+            SegmentKind.soConcept   => "Model.Concept",
+            SegmentKind.soDB        => "Model.DB",
+            SegmentKind.soVisuality => "Model.Visuality",
+            _                       => throw new ArgumentOutOfRangeException(nameof(segmentKind), segmentKind, null)
         };
 
     private void ProduceImmMatter(CodeBuilder cb, MetaMatter m)
@@ -120,7 +135,7 @@ internal class MetaProducer (MetaModel mm) : MetaFileProducer
             ProduceLocalVariablesOnTop(cb, m);
             ProduceImmMatterConstructor(cb, m);
             ProduceImmMatterFamilies(cb, m);
-            ProduceImmMatterRefrences(cb, m);
+            ProduceImmMatterReferences(cb, m);
             ProduceImmMatterProperties(cb, m);
         }
         
@@ -241,7 +256,7 @@ internal class MetaProducer (MetaModel mm) : MetaFileProducer
         }
     }
 
-    private void ProduceImmMatterRefrences(CodeBuilder cb, MetaMatter m)
+    private void ProduceImmMatterReferences(CodeBuilder cb, MetaMatter m)
     {
         cb.EmptyLine();
         cb.Phrase(@"// References \\");
