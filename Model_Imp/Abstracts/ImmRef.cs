@@ -40,3 +40,20 @@ public sealed class ImmPolyRef<M> : ImmRef<M>, PolyRef<M>
     
     public override string ToString() => Ids.JoinToString(i=>i.ToString(), ",", empty: "none");
 }
+
+
+
+public static class ImmRefExtensions
+{
+
+    public static ImmMonoRef<M> ToImmRef<M>(this MonoRef<M> mr)
+        where M : class, Matter
+        => mr as ImmMonoRef<M> ?? new ImmMonoRef<M>(mr.Id);
+
+    public static ImmPolyRef<M> ToImmRef<M>(this PolyRef<M> mr)
+        where M : class, Matter
+        => mr as ImmPolyRef<M> ?? new ImmPolyRef<M>(mr.Ids);
+    
+
+
+}

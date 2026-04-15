@@ -97,7 +97,9 @@ internal class MetaProducer (MetaModel mm) : MetaFileProducer
         {
             ProduceImmMatter(cb, matter);
         }
-        
+
+        ProduceExtensionMethods(cb, segmentMatters);
+
         WriteFile(filePath, cb.Result);
     }
 
@@ -133,7 +135,8 @@ internal class MetaProducer (MetaModel mm) : MetaFileProducer
         using (cb.CurlyBlock(true))
         {
             ProduceLocalVariablesOnTop(cb, m);
-            ProduceImmMatterConstructor(cb, m);
+            ProduceImmMatterConstructor1(cb, m);
+            ProduceImmMatterConstructor2(cb, m);
             ProduceImmMatterFamilies(cb, m);
             ProduceImmMatterReferences(cb, m);
             ProduceImmMatterProperties(cb, m);
@@ -184,7 +187,7 @@ internal class MetaProducer (MetaModel mm) : MetaFileProducer
         }
     }
 
-    private void ProduceImmMatterConstructor(CodeBuilder cb, MetaMatter m)
+    private void ProduceImmMatterConstructor1(CodeBuilder cb, MetaMatter m)
     {
         var familyParameters =
             from f in m.AllFamilies.Values
@@ -221,8 +224,8 @@ internal class MetaProducer (MetaModel mm) : MetaFileProducer
         var baseConstructorParameters = m.HasName ? "id, version, name" : "id, version";
         var thisFamilies              = m.AllFamilies.Keys.Select(name => "this." + name.Decapitalized).JoinToString();
 
-        cb.Phrase(@"// Constructor \\");
-        cb.Phrase("public", m.Imm.ClassName, "(" + realConstructorParameters);
+        cb.Phrase(@"// Constructor 1 \\");
+        cb.Phrase("public", m.Imm.ClassName, "(", realConstructorParameters);
 
         using (cb.Indenting())
         {
@@ -231,6 +234,42 @@ internal class MetaProducer (MetaModel mm) : MetaFileProducer
                 for (var i = 0; i < parameters.Count; i++)
                     cb.Phrase(parameters[i] + (i < parameters.Count - 1 ? "," : ")"));
             }
+            cb.Phrase($": base({baseConstructorParameters})");
+        }
+        using (cb.CurlyBlock(true))
+        {
+            cb.Text(assignments);
+            if (m.IsMedium && m.IsConcrete) cb.Phrase("Families = Imm.ListOf<Family<Matter>>(", thisFamilies, ");");
+        }
+    }
+
+    private void ProduceImmMatterConstructor2(CodeBuilder cb, MetaMatter m)
+    {
+        var arg = m.LowName;
+
+        var familyAssignments =
+            from f in m.AllFamilies.Values
+            select $"this.{f.FamilyVarName} = new Imm{f.FamilyTypeName}<{f.Child.IntfName}>({arg}.{f.FamilyName}.Select(m=>m.ToImm()).ToArray());";
+        var refAssignments =
+            from r in m.AllRefs.Values
+            select $"this.{r.RefName} = {arg}.{r.RefName}.ToImmRef();";
+        var propertyAssignments =
+            from p in m.AllProperties.Values
+            where !p.ImplementedInMatter
+            select $"this.{p.ProName} = {arg}.{p.ProName};";
+
+        var baseConstructorParameters = m.HasName ? $"{arg}.Id, {arg}.Version, {arg}.Name" : $"{arg}.Id, {arg}.Version";
+        var thisFamilies              = m.AllFamilies.Keys.Select(name => "this." + name.Decapitalized).JoinToString();
+
+        var assignments = new List<string>();
+        assignments.AddRange(familyAssignments);
+        assignments.AddRange(refAssignments);
+        assignments.AddRange(propertyAssignments);
+
+        cb.Phrase(@"// Constructor 2 \\");
+        cb.Phrase("public", m.Imm.ClassName, "(", m.IntfName, arg, ")");
+        using (cb.Indenting())
+        {
             cb.Phrase($": base({baseConstructorParameters})");
         }
         using (cb.CurlyBlock(true))
@@ -289,6 +328,26 @@ internal class MetaProducer (MetaModel mm) : MetaFileProducer
             if (p.ImplementedInMatter) continue;
             cb.Phrase("public", p.ProTypeName, p.ProName, "{ get; }");
         }
+    }
+
+
+    private void ProduceExtensionMethods(CodeBuilder cb, IEnumerable<MetaMatter> matters)
+    {
+        cb.EmptyLine();
+        cb.Phrase("#region", "extension methods");
+        cb.EmptyLine();
+        cb.Phrase("public static class ExtensionMethods");
+        using (cb.CurlyBlock(thenSkipLine: true))
+        {
+            foreach (var m in matters)
+            {
+                string intfName = m.IntfName;
+                string immName  = m.Imm.ClassName;
+                cb.Text($"public static {immName} ToImm(this {intfName} m) => m as {immName} ?? new {immName}(m);");
+            }
+        }
+        cb.EmptyLine();
+        cb.Phrase("#endregion");
     }
 
 }

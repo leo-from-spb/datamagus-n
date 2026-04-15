@@ -21,7 +21,7 @@ public interface ConModel : ConArea, AbSegment
 {
     
     public NamingFamily<ConSubjArea> SubjectAreas { get; }
-    
+
 }
 
 
@@ -31,7 +31,7 @@ public interface ConModel : ConArea, AbSegment
 public interface ConSubjArea : ConArea, AbSection
 {
     [MatterProperty]
-    public string Prefix { get; }
+    public string? Prefix { get; }
 
 
 }

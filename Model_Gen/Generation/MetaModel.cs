@@ -184,7 +184,8 @@ internal class MetaProperty
         ProType             = proType;
         ProTypeNullableSign = nullableSign;
 
-        ProTypeName = (MetaConsts.SystemTypes.Find(proType) | proType.Name) + (nullableSign ? "?" : "");
+        bool q = nullableSign || proType.IsClass;
+        ProTypeName = (MetaConsts.SystemTypes.Find(proType) | proType.Name) + (q ? "?" : "");
     }
 
     internal MetaProperty cloneFor(MetaMatter inheritor)
