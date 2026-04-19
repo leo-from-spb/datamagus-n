@@ -67,10 +67,13 @@ public abstract class ImmNamedMediumMatter : ImmMediumMatter, NamedMediumMatter
 
 public abstract class ImmNamedTermMatter : ImmTermMatter, NamedTermMatter
 {
+    protected ImmNamedTermMatter(uint id, uint version) : base(id, version)
+    { }
+    
     protected ImmNamedTermMatter(uint id, uint version, string? name) : base(id, version)
     {
         Name = name;
     }
-    
+
     public string? Name { get; }
 }
