@@ -43,7 +43,7 @@ public interface PolyRef<out M> : Ref<M>
     /// <summary>
     /// Ids of target elements.
     /// </summary>
-    IReadOnlyList<M> Ids { get; }
+    IReadOnlyList<uint> Ids { get; }
 }
 
 

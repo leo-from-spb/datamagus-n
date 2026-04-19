@@ -29,11 +29,11 @@ public sealed class ImmMonoRef<M> : ImmRef<M>, MonoRef<M>
 public sealed class ImmPolyRef<M> : ImmRef<M>, PolyRef<M>
     where M : Matter
 {
-    public IReadOnlyList<M> Ids { get; }
+    public IReadOnlyList<uint> Ids { get; }
 
     public override bool Exists => Ids.IsNotEmpty();
 
-    public ImmPolyRef(IReadOnlyList<M> ids)
+    public ImmPolyRef(IReadOnlyList<uint> ids)
     {
         Ids = ids; // TODO ensure the list is read-only
     }
