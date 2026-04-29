@@ -20,6 +20,17 @@ public static class EnumerableExt
                 if (predicate(e)) return new Found<E>(true, e);
             return Found<E>.NotFound;
         }
+
+        public IEnumerable<R> SelectNotNull<R>(Func<E,R?> selector)
+            where R : class
+        {
+            foreach (var item in enumerable)
+            {
+                var result = selector(item);
+                if (result != null)
+                    yield return result;
+            }
+        }
     }
 
 
