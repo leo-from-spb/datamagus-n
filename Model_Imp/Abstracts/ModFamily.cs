@@ -1,10 +1,15 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using Util.Extensions;
 
 namespace Model.Abstracts;
+
+
+// ReSharper disable InconsistentNaming  while the bug RIDER-138537 is not fixed
 
 
 public class ModFamily<M,MM> : Family<M>
@@ -15,27 +20,41 @@ public class ModFamily<M,MM> : Family<M>
     protected readonly Family<M>?    OriginFamily;
     protected readonly List<M>       Matters;
 
+    private readonly ConstructorInfo ChildConstructor;
+
     private readonly Func<MM> ChildInstantiation;
 
     public ModFamily(ModBaseObject host, Family<M> originFamily, Func<MM> childInstantiation)
     {
-        this.Host = host;
-        this.OriginFamily = originFamily;
-        this.Matters      = new List<M>(originFamily.AsList());
-        this.ChildInstantiation = childInstantiation;
+        this.Host             = host;
+        this.OriginFamily     = originFamily;
+        this.Matters          = new List<M>(originFamily.AsList());
+        this.ChildConstructor = getChildConstructor();
     }
 
     public ModFamily(ModBaseObject host, Func<MM> childInstantiation)
     {
-        this.Host = host;
-        this.OriginFamily = null;
-        this.Matters      = new List<M>();
-        this.ChildInstantiation = childInstantiation;
+        this.Host             = host;
+        this.OriginFamily     = null;
+        this.Matters          = new List<M>();
+        this.ChildConstructor = getChildConstructor();
+    }
+
+    private static ConstructorInfo getChildConstructor()
+    {
+        ConstructorInfo? constructor = typeof(MM).GetConstructor([typeof(ModBaseObject)]);
+        if (constructor is null) throw new InvalidOperationException($"Class {typeof(MM).Name} has no appropriate constructor");
+        return constructor;
     }
 
     public MM New()
     {
-        MM newOne = ChildInstantiation.Invoke();
+        ConstructorInfo? constructor = typeof(MM).GetConstructor([typeof(ModBaseObject)]);
+        if (constructor is null) throw new InvalidOperationException($"Class {typeof(MM).Name} has no appropriate constructor");
+
+        MM? newOne = constructor.Invoke([Host]) as MM;  //ChildInstantiation.Invoke();
+        if (newOne is null) throw new InvalidOperationException($"Cannot instantiate {typeof(MM).Name}");
+        
         Matters.Add(newOne);
         return newOne;
     }

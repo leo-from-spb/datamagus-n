@@ -18,6 +18,8 @@
 
     <ItemGroup>
       <Compile Remove="_generated_\ModelCommonImmImp.cs" />
+      <Compile Remove="X-files\ModelConceptImmImp.cs" />
+      <Compile Remove="X-files\ModelVisualityImmImp.cs" />
     </ItemGroup>
 
 </Project>

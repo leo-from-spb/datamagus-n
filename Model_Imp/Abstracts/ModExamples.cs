@@ -60,14 +60,15 @@ public sealed class ModConEntity : ModNamedMediumMatter<ConEntity>, ConEntity
 {
     public ModConEntity(ModBaseObject parent, string? name) : base(parent, name)
     {
-        Attributes = new ModNamingFamily<ConAttribute,ModConAttribute>(this, () => new ModConAttribute(this));
+        Attributes = new ModNamingFamily<ConAttribute,ModConAttribute>(this, InstantiateAttribute);
     }
 
     public ModConEntity(ModBaseObject parent, ConEntity origin) : base(parent, origin.Name)
     {
-        Attributes = new ModNamingFamily<ConAttribute,ModConAttribute>(this, origin.Attributes, () => new ModConAttribute(this));
+        Attributes = new ModNamingFamily<ConAttribute,ModConAttribute>(this, origin.Attributes, InstantiateAttribute);
     }
 
+    private ModConAttribute InstantiateAttribute() => new ModConAttribute(this);
 
     public ModNamingFamily<ConAttribute,ModConAttribute> Attributes { get; }
     NamingFamily<ConAttribute> ConEntity.Attributes => Attributes;
