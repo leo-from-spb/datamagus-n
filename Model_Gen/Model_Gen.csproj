@@ -10,6 +10,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Gena\Gena.csproj" />
       <ProjectReference Include="..\Model_Essence\Model_Essence.csproj" />
       <ProjectReference Include="..\Util\Util.csproj" />
     </ItemGroup>

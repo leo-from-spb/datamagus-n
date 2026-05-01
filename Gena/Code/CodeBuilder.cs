@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Util.Fun;
+namespace Gena.Code;
 
 
 public class CodeBuilder

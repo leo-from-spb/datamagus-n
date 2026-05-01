@@ -1,6 +1,6 @@
 using System;
 
-namespace Util.Fun;
+namespace Gena.Code;
 
 [TestFixture]
 public class CodeBuilderTest

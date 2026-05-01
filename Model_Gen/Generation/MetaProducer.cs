@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Util.Extensions;
-using Util.Fun;
+using Gena.Code;
 
 namespace Model.Generation;
 
