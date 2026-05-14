@@ -6,3 +6,5 @@ yonder
 .DS_Store
 
 .idea/.idea.DataMagus/.idea/markdown.xml
+
+.claude/settings.local.json
