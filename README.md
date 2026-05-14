@@ -24,4 +24,4 @@ Development
 
 The development documentation:
 * Project [Layout](Layout.md)
-
+* [Coding Conventions](docs/Coding.md) 

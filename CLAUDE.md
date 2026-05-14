@@ -7,6 +7,8 @@ It is written on C# and uses the AvaloniaUI framework for GUI.
                        
 The layout of the project is described in the Layout.md file.
 
+The coding conventions are described in the docs\Coding.md file.
+
 
 Build and Run
 ------------- 
