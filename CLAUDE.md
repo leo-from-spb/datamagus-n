@@ -10,8 +10,18 @@ The layout of the project is described in the Layout.md file.
 
 Build and Run
 ------------- 
+                 
+Build the code generator:
+```bash
+dotnet build Model_Gen
+```
+   
+Generate Model implementation:
+```bash
+dotnet run --project Model_Gen
+```
 
-Build:
+Build all:
 ```bash
 dotnet build
 ```
@@ -19,4 +29,9 @@ dotnet build
 Test:
 ```bash
 dotnet test
+```
+
+Start the built application:
+```bash
+dotnet run --project DataMagus_App
 ```
