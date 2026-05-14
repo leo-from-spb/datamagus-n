@@ -102,4 +102,27 @@ public class ProjectStructureTest
             Assert.Fail(message);
         }
     }
+
+    [Test]
+    public void NoTargetFrameworkAndLangVersion()
+    {
+        var allDirs           = Trees.TraversDepthFirst(Root, d => d.Directories);
+        var csprojFiles       = allDirs.SelectMany(d => d.Files).Where(f => f.Name.EndsWith(".csproj")).Select(f => f.FullName);
+        var wrongProjectFiles = new List<string>();
+
+        foreach (var f in csprojFiles)
+        {
+            string text = File.ReadAllText(f);
+            if (text.Contains("<TargetFramework", StringComparison.OrdinalIgnoreCase)
+             || text.Contains("<LangVersion",     StringComparison.OrdinalIgnoreCase))
+                wrongProjectFiles.Add(f);
+        }
+
+        if (wrongProjectFiles.Count > 0)
+        {
+            var message = wrongProjectFiles.JoinToString(prefix: "The following project files specify .NET or C# version (should be set centrally in Directory.Build.props): \n",
+                                                         separator: "\n");
+            Assert.Fail(message);
+        }
+    }
 }
