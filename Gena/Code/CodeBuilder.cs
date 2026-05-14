@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Util.Extensions;
 
 namespace Gena.Code;
 
@@ -9,13 +10,17 @@ namespace Gena.Code;
 public class CodeBuilder
 {
     private readonly StringBuilder Buf = new StringBuilder();
-    
-    
+
+
     // Settings \\
 
     public string Indentation = "\t";
 
-    
+
+    public string GluingAtLeft  = "([";
+    public string GluingAtRight = ":;.,?!])";
+
+
     // State \\
 
     private string CurrIndentation = "";
@@ -113,10 +118,11 @@ public class CodeBuilder
         bool begin = true;
         foreach (string? word in words)
         {
-            if (word is null) continue;
-            if (begin) begin = false;
-            else Buf.Append(' ');
+            if (word is null || word.IsEmpty) continue;
+            bool glue = begin || LastChar.IsIn(GluingAtLeft) || word[0].IsIn(GluingAtRight);
+            if (!glue) Buf.Append(' ');
             Buf.Append(word);
+            begin = false;
         }
         Buf.AppendLine();
     }
@@ -208,6 +214,6 @@ public class CodeBuilder
             return n > 0 ? Buf[n - 1] : '\0';
         }
     }
-    
-        
+
+
 }
