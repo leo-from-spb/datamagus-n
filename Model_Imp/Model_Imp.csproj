@@ -14,8 +14,4 @@
     <ItemGroup>
     </ItemGroup>
 
-    <ItemGroup>
-      <Compile Remove="_generated_\ModelCommonImmImp.cs" />
-    </ItemGroup>
-
 </Project>
