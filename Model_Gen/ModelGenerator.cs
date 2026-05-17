@@ -13,19 +13,20 @@ internal static class ModelGenerator
         var mc = new MetaCollector(mm);
         var mx = new MetaProcessor(mm);
         var mp = new MetaProducer(mm);
+        var mj = new MetaProjector(mm);
 
         mp.CheckDirectory();
         mc.CollectMetaData();
         mx.ProcessModel();
-        
+
         Console.WriteLine("Matters:");
         foreach (var m in mm.Matters)
         {
             Console.WriteLine($"\t{m}");
         }
-        
+
         mp.ProduceCode();
-        
+        mj.ProduceCode();
     }
-    
+
 }
