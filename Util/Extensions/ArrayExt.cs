@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace Util.Extensions;
 
@@ -8,8 +9,37 @@ namespace Util.Extensions;
 /// </summary>
 public static class ArrayExt
 {
+    extension<E>(E[]? array)
+    {
+        /// <summary>
+        /// Checks whether this array contains something.
+        /// </summary>
+        /// <seealso cref="Nothing"/>
+        [OverloadResolutionPriority(Int32.MaxValue)]
+        public bool Some => array is not null && array.Length != 0;
+
+        /// <summary>
+        /// Checks whether this array is null or empty.
+        /// <p>
+        /// The difference between <c>Nothing</c> and <c>IsEmpty</c> is
+        /// that <c>Nothing</c> checks the array for null but <c>IsEmpty</c> requires a non-null reference.
+        /// </p>
+        /// </summary>
+        /// <seealso cref="Some"/>
+        [OverloadResolutionPriority(Int32.MaxValue)]
+        public bool Nothing => array is null || array.Length == 0;
+    }
+
+
     extension<E>(E[] array)
     {
+        /// <summary>
+        /// Checks whether this array is empty.
+        /// </summary>
+        [OverloadResolutionPriority(Int32.MaxValue)]
+        public bool IsEmpty => array.Length == 0;
+
+
         /// <summary>
         /// Searches an item with the given value in this array;
         /// this array should be sorted by the related values.
@@ -41,7 +71,7 @@ public static class ArrayExt
                                          Func<E, P>   getter,
                                          IComparer<P> comparer)
         {
-            if (array.IsEmpty()) return -1;
+            if (array.IsEmpty) return -1;
 
             int lo = from;
             int hi = from + length - 1;

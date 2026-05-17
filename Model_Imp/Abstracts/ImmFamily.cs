@@ -14,7 +14,7 @@ public class ImmFamily<M> : Family<M>
 {
     private protected readonly M[] matters;
 
-    
+
     public static ImmFamily<M> Of(params M[] matters) => new ImmFamily<M>(matters);
 
     public static ImmFamily<M> Empty() => new (Array.Empty<M>());
@@ -24,7 +24,7 @@ public class ImmFamily<M> : Family<M>
         this.matters = matters;
     }
 
-    public bool Any     => matters.Length > 0;
+    public bool Some    => matters.Length > 0;
     public bool IsEmpty => matters.Length == 0;
     public int  Count   => matters.Length;
 
@@ -66,14 +66,14 @@ public class ImmFamily<M> : Family<M>
 
 
 
-public class ImmNamingFamily<M> : ImmFamily<M>, NamingFamily<M> 
+public class ImmNamingFamily<M> : ImmFamily<M>, NamingFamily<M>
     where M : class, NamedMatter
 {
     public new static ImmNamingFamily<M> Of(params M[] matters) => new (matters);
 
     public new static ImmNamingFamily<M> Empty() => new (Array.Empty<M>());
 
-    public ImmNamingFamily(M[] matters) 
+    public ImmNamingFamily(M[] matters)
         : base(matters)
     {
     }

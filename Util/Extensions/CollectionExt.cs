@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace Util.Extensions;
 
@@ -8,20 +9,35 @@ namespace Util.Extensions;
 /// </summary>
 public static class CollectionExt
 {
-    /// <param name="collection">the collection to check.</param>
+    extension<E>(IReadOnlyCollection<E>? collection)
+    {
+        /// <summary>
+        /// Checks whether this collection contains something.
+        /// </summary>
+        /// <seealso cref="Nothing"/>
+        [OverloadResolutionPriority(10)]
+        public bool Some => collection is not null && collection.Count != 0;
+
+        /// <summary>
+        /// Checks whether this collection is null or empty.
+        /// <p>
+        /// The difference between <c>Nothing</c> and <c>IsEmpty</c> is
+        /// that <c>Nothing</c> checks the collection for null but <c>IsEmpty</c> requires a non-null reference.
+        /// </p>
+        /// </summary>
+        /// <seealso cref="Some"/>
+        [OverloadResolutionPriority(10)]
+        public bool Nothing => collection is null || collection.Count == 0;
+    }
+
+
     extension<E>(IReadOnlyCollection<E> collection)
     {
         /// <summary>
         /// Checks whether this collection is empty.
         /// </summary>
         /// <returns>true when empty.</returns>
-        public bool IsEmpty() => collection.Count == 0;
-
-        /// <summary>
-        /// Checks whether this collection contains something (is not empty).
-        /// </summary>
-        /// <returns>true when it is not empty.</returns>
-        public bool IsNotEmpty() => collection.Count > 0;
+        public bool IsEmpty => collection.Count == 0;
     }
 
 }

@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using Util.Collections;
 
@@ -10,6 +12,39 @@ public static class EnumerableExt
 
     extension<E>(IEnumerable<E>? seq)
     {
+        /// <summary>
+        /// Checks whether this sequence contains something.
+        /// </summary>
+        /// <seealso cref="Nothing"/>
+        [OverloadResolutionPriority(3)]
+        public bool Some =>
+            seq switch
+            {
+                null                     => false,
+                E[] a                    => a.Length != 0,
+                IReadOnlyCollection<E> c => c.Count != 0,
+                _                        => Enumerable.Any(seq)
+            };
+
+        /// <summary>
+        /// Checks whether this sequence is null or empty.
+        /// <p>
+        /// The difference between <c>Nothing</c> and <c>IsEmpty</c> is
+        /// that <c>Nothing</c> checks the sequence for null but <c>IsEmpty</c> requires a non-null reference.
+        /// </p>
+        /// </summary>
+        /// <seealso cref="Some"/>
+        [OverloadResolutionPriority(3)]
+        public bool Nothing =>
+            seq switch
+            {
+                null                     => true,
+                E[] a                    => a.Length == 0,
+                IReadOnlyCollection<E> c => c.Count == 0,
+                _                        => !Enumerable.Any(seq)
+            };
+
+
         /// <summary>
         /// Joins elements from this sequence into a string (skipping some elements).
         /// Every element is transformed into a string by given function, and null values are skipped.

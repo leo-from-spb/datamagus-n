@@ -137,14 +137,14 @@ public class StringExtTest
         string? strN = null, strE = "", strB = "   \t ", strX = "Something here";
         Verify
         (
-            () => strN.IsNotEmpty.ShouldBeFalse(),
-            () => strE.IsNotEmpty.ShouldBeFalse(),
-            () => strB.IsNotEmpty.ShouldBeTrue(),
-            () => strX.IsNotEmpty.ShouldBeTrue(),
-            () => strN.IsNotBlank.ShouldBeFalse(),
-            () => strE.IsNotBlank.ShouldBeFalse(),
-            () => strB.IsNotBlank.ShouldBeFalse(),
-            () => strX.IsNotBlank.ShouldBeTrue(),
+            () => strN.Some.ShouldBeFalse(),
+            () => strE.Some.ShouldBeFalse(),
+            () => strB.Some.ShouldBeTrue(),
+            () => strX.Some.ShouldBeTrue(),
+            () => strN.SomeNotBlank.ShouldBeFalse(),
+            () => strE.SomeNotBlank.ShouldBeFalse(),
+            () => strB.SomeNotBlank.ShouldBeFalse(),
+            () => strX.SomeNotBlank.ShouldBeTrue(),
             () => strN.IsEmpty.ShouldBeTrue(),
             () => strE.IsEmpty.ShouldBeTrue(),
             () => strB.IsEmpty.ShouldBeFalse(),
@@ -162,13 +162,13 @@ public class StringExtTest
     public void IsNotEmpty_IsNotBlank_IsEmpty_Annotated()
     {
         string? str1 = "ABC".TakeIf(true);
-        if (str1.IsNotEmpty)
+        if (str1.Some)
         {
             char c = str1[1]; // expecting no inspection
         }
 
         string? str2 = "ABC".TakeIf(true);
-        if (str2.IsNotBlank)
+        if (str2.SomeNotBlank)
         {
             char c = str2[1]; // expecting no inspection
         }

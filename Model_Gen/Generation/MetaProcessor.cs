@@ -19,7 +19,7 @@ internal class MetaProcessor (MetaModel mm)
     ];
 
     private readonly Type namedMatterType = typeof(NamedMatter);
-    
+
 
     internal void ProcessModel()
     {
@@ -31,18 +31,18 @@ internal class MetaProcessor (MetaModel mm)
         Debug.Assert(baseTermMatter is not null);
         Debug.Assert(baseNamedMediumMatter is not null);
         Debug.Assert(baseNamedTermMatter is not null);
-        
+
         foreach (var m in mm.Matters)
         {
             m.IsMedium = m.Intf.IsAssignableTo(typeof(MediumMatter));
             m.HasName  = m.AllBaseIntfs.Contains(namedMatterType);
 
             // select the base type
-            var baseMatter = m.HasName 
-                ? m.IsMedium ? baseNamedMediumMatter : baseNamedTermMatter 
+            var baseMatter = m.HasName
+                ? m.IsMedium ? baseNamedMediumMatter : baseNamedTermMatter
                 : m.IsMedium ? baseMediumMatter : baseTermMatter;
             m.BaseMatter = baseMatter;
-            
+
             // handle base interfaces
             foreach (var bi in m.DeclaredBaseIntfs)
             {
@@ -51,12 +51,12 @@ internal class MetaProcessor (MetaModel mm)
                 {
                     m.DeclaredBaseMatters.Add(bm);
                 }
-            }  
-            
+            }
+
             // base matters
             m.BaseMatters.AddRange(m.DeclaredBaseMatters);
             m.DeclaredBaseMatters.ForEach(b => b.DirectInheritors.Add(m));
-            
+
             // families
             foreach (var bm in m.BaseMatters)
             {
@@ -101,8 +101,8 @@ internal class MetaProcessor (MetaModel mm)
                 m.AllProperties[p.ProName] = p;
                 p.ImplementedInMatter      = m.IntfName.IsIn(ManualImplementedMatters);
             }
-            
-            bool hasChildren = m.AllFamilies.IsNotEmpty();
+
+            bool hasChildren = m.AllFamilies.Some;
             if (m.IsConcrete && m.IsMedium != hasChildren)
                 Console.Error.WriteLine($"Matter {m.Name} families: {m.AllFamilies.Count}, but IsMedium: {m.IsMedium}");
 
@@ -111,8 +111,8 @@ internal class MetaProcessor (MetaModel mm)
             m.Imm.ClassName           = "Imm" + m.IntfName;
             m.Imm.BaseClassName       = baseMatter.Imm.ClassName;
         }
-        
+
     }
-    
-    
+
+
 }

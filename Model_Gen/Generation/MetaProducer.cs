@@ -49,7 +49,7 @@ internal class MetaProducer (MetaModel mm) : MetaFileProducer
                 using Model.Abstracts;
                 using Model.Concept;
                 using Model.Visuality;
-                
+
                 namespace Model.Imm;
                 """);
         cb.EmptyLine();
@@ -63,7 +63,7 @@ internal class MetaProducer (MetaModel mm) : MetaFileProducer
         {
             ProduceImmMatter(cb, matter);
         }
-        
+
         WriteFile(filePath, cb.Result);
     }
 
@@ -84,7 +84,7 @@ internal class MetaProducer (MetaModel mm) : MetaFileProducer
             ProduceImmMatterRefrences(cb, m);
             ProduceImmMatterProperties(cb, m);
         }
-        
+
         cb.Phrase("#endregion");
         cb.EmptyLine();
     }
@@ -108,7 +108,7 @@ internal class MetaProducer (MetaModel mm) : MetaFileProducer
             cb.Phrase("</ul>");
 
             var families = m.AllFamilies.Values;
-            if (families.IsNotEmpty())
+            if (families.Some)
             {
                 cb.Phrase("Families:");
                 cb.Phrase("<ul>");
@@ -189,7 +189,7 @@ internal class MetaProducer (MetaModel mm) : MetaFileProducer
 
     private void ProduceImmMatterFamilies(CodeBuilder cb, MetaMatter m)
     {
-        if (m.AllFamilies.IsEmpty()) return;
+        if (m.AllFamilies.IsEmpty) return;
         foreach (var f in m.AllFamilies.Values)
         {
             MetaMatter child      = f.Child;
@@ -207,7 +207,7 @@ internal class MetaProducer (MetaModel mm) : MetaFileProducer
         cb.EmptyLine();
         cb.Phrase(@"// References \\");
 
-        if (!m.AllRefs.IsEmpty())
+        if (m.AllRefs.Some)
         {
             foreach (var r in m.AllRefs.Values)
             {
@@ -228,9 +228,9 @@ internal class MetaProducer (MetaModel mm) : MetaFileProducer
 
     private void ProduceImmMatterProperties(CodeBuilder cb, MetaMatter m)
     {
-        if (m.AllProperties.IsEmpty()) return;
+        if (m.AllProperties.IsEmpty) return;
         cb.EmptyLine();
-        cb.Text(@"// Properties \\");        
+        cb.Text(@"// Properties \\");
         foreach (var p in m.AllProperties.Values)
         {
             if (p.ImplementedInMatter) continue;

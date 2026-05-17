@@ -12,7 +12,7 @@ public interface Family<out M> : Node, IEnumerable<M>
     /// <summary>
     /// This family has children.
     /// </summary>
-    bool Any { get; }
+    bool Some { get; }
 
     /// <summary>
     /// This family is empty.

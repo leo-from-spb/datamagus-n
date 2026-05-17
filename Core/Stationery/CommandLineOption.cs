@@ -58,7 +58,7 @@ public class CommandLineOptions
             var unknownOptions = givenOptions
                                 .Where(code => code.IsNotIn(knownOptionCodes.Keys))
                                 .ToArray();
-            if (unknownOptions.IsNotEmpty())
+            if (unknownOptions.Some)
             {
                 var message = "Unknown options: " + unknownOptions.JoinToString();
                 Console.Error.WriteLine(message);

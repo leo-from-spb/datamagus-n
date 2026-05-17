@@ -25,7 +25,7 @@ public static class Assertions
     public static void ShouldContainAll<E>(this E[]? array, params E[] expectedItems)
     {
         if (array is null) Fail($"Actual array is null when expect an array with the following items " + expectedItems.Describe());
-        IReadOnlySet<E> set = array.IsNotEmpty() ? array.ToHashSet() : ImmutableSortedSet<E>.Empty;
+        IReadOnlySet<E> set = array.Some ? array.ToHashSet() : ImmutableSortedSet<E>.Empty;
         CheckContainsAll("array", set, expectedItems);
     }
 
@@ -60,12 +60,12 @@ public static class Assertions
     private static void CheckContainsAll<E>(string collectionWord, IReadOnlyCollection<E>? collection, E[] expectedItems)
     {
         if (collection is null) Fail($"Actual {collectionWord} is null when expect a {collectionWord} with the following items: " + expectedItems.Describe());
-        if (collection.IsEmpty()) Fail($"Actual {collectionWord} is empty when expect a {collectionWord} with the following items: " + expectedItems.Describe());
+        if (collection.IsEmpty) Fail($"Actual {collectionWord} is empty when expect a {collectionWord} with the following items: " + expectedItems.Describe());
 
         var actualItems = collection is IReadOnlySet<E> ? collection : collection.ToHashSet();
         var missedItems = expectedItems.Where(item => !actualItems.Contains(item)).ToList();
 
-        if (missedItems.IsNotEmpty())
+        if (missedItems.Some)
         {
             var message =
                 $"Expected a {collectionWord} containing {expectedItems.Length} specified items\n"

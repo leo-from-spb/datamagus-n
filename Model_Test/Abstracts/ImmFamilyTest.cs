@@ -30,7 +30,7 @@ public class ImmFamilyTest
     {
         var rabbitFamily = ImmFamily<TestRabbit>.Of(rabbitsABC);
         rabbitFamily.Verify(
-            f => f.Any.ShouldBeTrue(),
+            f => f.Some.ShouldBeTrue(),
             f => f.IsEmpty.ShouldBeFalse(),
             f => f.Count.ShouldBe(3)
         );
