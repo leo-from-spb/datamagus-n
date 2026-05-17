@@ -1,6 +1,5 @@
-using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Runtime.CompilerServices;
 
 namespace Util.Extensions;
 
@@ -10,59 +9,35 @@ namespace Util.Extensions;
 /// </summary>
 public static class CollectionExt
 {
-    
-    public static void Into<T>(this IEnumerable<T> sequence, List<T> list)
+    extension<E>(IReadOnlyCollection<E>? collection)
     {
-        list.AddRange(sequence);
+        /// <summary>
+        /// Checks whether this collection contains something.
+        /// </summary>
+        /// <seealso cref="Nothing"/>
+        [OverloadResolutionPriority(10)]
+        public bool Some => collection is not null && collection.Count != 0;
+
+        /// <summary>
+        /// Checks whether this collection is null or empty.
+        /// <p>
+        /// The difference between <c>Nothing</c> and <c>IsEmpty</c> is
+        /// that <c>Nothing</c> checks the collection for null but <c>IsEmpty</c> requires a non-null reference.
+        /// </p>
+        /// </summary>
+        /// <seealso cref="Some"/>
+        [OverloadResolutionPriority(10)]
+        public bool Nothing => collection is null || collection.Count == 0;
     }
 
 
-    public static string JoinToString(this IEnumerable<string> strings,
-                                      string                   separator = ", ",
-                                      string                   prefix    = "",
-                                      string                   suffix    = "",
-                                      string                   empty     = "") =>
-        strings.JoinToString(func: s => s,
-                             separator: separator,
-                             prefix: prefix,
-                             suffix: suffix,
-                             empty: empty );
-
-
-    public static string JoinToString<T>(this IEnumerable<T> items,
-                                         Func<T, string?>    func,
-                                         string              separator = ", ",
-                                         string              prefix    = "",
-                                         string              suffix    = "",
-                                         string              empty     = "")
+    extension<E>(IReadOnlyCollection<E> collection)
     {
-        var b     = new StringBuilder();
-        var begin = true;
-        foreach (var item in items)
-        {
-            var s = func(item);
-            if (s is null) continue;
-            b.Append(begin ? prefix : separator);
-            b.Append(s);
-            begin = false;
-        }
-
-        b.Append(begin ? empty : suffix);
-        return b.ToString();
+        /// <summary>
+        /// Checks whether this collection is empty.
+        /// </summary>
+        /// <returns>true when empty.</returns>
+        public bool IsEmpty => collection.Count == 0;
     }
-
-    /// <summary>
-    /// Checks whether this collection is empty.
-    /// </summary>
-    /// <param name="collection">the collection to check.</param>
-    /// <returns>true when empty.</returns>
-    public static bool IsEmpty<E>(this IReadOnlyCollection<E> collection) => collection.Count == 0;
-
-    /// <summary>
-    /// Checks whether this collection contains something (is not empty).
-    /// </summary>
-    /// <param name="collection">the collection to check.</param>
-    /// <returns>true when it is not empty.</returns>
-    public static bool IsNotEmpty<E>(this IReadOnlyCollection<E> collection) => collection.Count > 0;
 
 }

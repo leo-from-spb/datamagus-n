@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Util.Extensions;
 using static Util.Fun.NumberConstants;
 
 namespace Util.Collections.Implementation;
@@ -17,7 +18,7 @@ public class EmptySet<T> : ImmutableCollection<T>, ImmListSet<T>
 
     protected override string CollectionWord => "EmptySet";
 
-    public bool Any     => false;
+    public bool Some    => false;
     public bool IsEmpty => true;
 
     public override int Count => 0;
@@ -38,13 +39,13 @@ public class EmptySet<T> : ImmutableCollection<T>, ImmListSet<T>
     public int IndexOf(T     element, int notFound) => notFound;
     public int LastIndexOf(T element, int notFound) => notFound;
 
-    public bool IsProperSubsetOf(IEnumerable<T>   other) => other.Any();
+    public bool IsProperSubsetOf(IEnumerable<T>   other) => other.Some;
     public bool IsSubsetOf(IEnumerable<T>         other) => true;
     public bool IsProperSupersetOf(IEnumerable<T> other) => false;
-    public bool IsSupersetOf(IEnumerable<T>       other) => other.IsEmpty();
+    public bool IsSupersetOf(IEnumerable<T>       other) => other.Nothing;
 
     public bool Overlaps(IEnumerable<T>  other) => false;
-    public bool SetEquals(IEnumerable<T> other) => other.IsEmpty();
+    public bool SetEquals(IEnumerable<T> other) => other.Nothing;
 
     public override IEnumerator<T> GetEnumerator() => Enumerable.Empty<T>().GetEnumerator();
     IEnumerator IEnumerable.GetEnumerator() => Array.Empty<T>().GetEnumerator();

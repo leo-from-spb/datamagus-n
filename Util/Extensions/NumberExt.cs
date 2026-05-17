@@ -2,7 +2,7 @@ using static Util.Fun.NumberConstants;
 
 namespace Util.Fun;
 
-public static class Numbers
+public static class NumberExt
 {
 
     extension(byte b)

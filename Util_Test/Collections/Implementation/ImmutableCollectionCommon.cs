@@ -150,7 +150,7 @@ public class ImmutableCollectionCommon
         Verify
         (
             () => set.IsEmpty.ShouldBeFalse(),
-            () => set.Any.ShouldBeTrue(),
+            () => set.Some.ShouldBeTrue(),
             () => set.Count.ShouldBe(1),
             () => set.First.ShouldBe(element),
             () => set.Last.ShouldBe(element),
@@ -209,7 +209,7 @@ public class ImmutableCollectionCommon
     {
         collection.Verify
         (
-            c => c.Any.ShouldBeTrue(),
+            c => c.Some.ShouldBeTrue(),
             c => c.IsEmpty.ShouldBeFalse(),
             c => c.Count.ShouldBe(3),
             c => c.First.ShouldBe(26L),

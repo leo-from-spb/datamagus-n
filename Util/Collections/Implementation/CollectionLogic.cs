@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Util.Extensions;
 
 namespace Util.Collections.Implementation;
 
@@ -106,22 +107,6 @@ internal static class CollectionLogic
     }
 
 
-    internal static bool Any<E>(this IEnumerable<E> source)
-    {
-        if (source is IReadOnlyCollection<E> collection)
-        {
-            return collection.Count > 0;
-        }
-        else
-        {
-            using IEnumerator<E> enumerator = source.GetEnumerator();
-            return enumerator.MoveNext();
-        }
-    }
-
-    internal static bool IsEmpty<E>(this IEnumerable<E> source) => !source.Any();
-
-
     internal static int CountTrues(this BitArray bits)
     {
         int n = 0;
@@ -204,7 +189,7 @@ internal static class CollectionLogic
 
     internal static bool IsTheSingletonSupersetOf<E>(E element, EqualityComparer<E> eq, IEnumerable<E> anotherSources, bool strict)
     {
-        if (strict) return anotherSources.IsEmpty();
+        if (strict) return anotherSources.Nothing;
 
         foreach (var x in anotherSources)
             if (eq.Equals(element, x) == false) return false;
@@ -241,7 +226,7 @@ internal static class CollectionLogic
         var listB = new List<E>(arrayB.Length);
         foreach (var el in arrayB)
             if (setA.Contains(el) == false) listB.Add(el);
-        if (listB.IsEmpty()) return setA;
+        if (listB.IsEmpty) return setA;
         var setB     = listB.ToImmSet();
         int newCount = setA.Count + setB.Count;
         return new ImmutableUnionSet<E>(setA, setB, newCount);

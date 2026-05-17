@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Util.Collections;
 
@@ -55,7 +54,7 @@ public class ImmListTest
         sequence.Verify
         (
             seq => seq.IsEmpty.ShouldBeFalse(),
-            seq => seq.Any.ShouldBeTrue(),
+            seq => seq.Some.ShouldBeTrue(),
             seq => seq.First.ShouldBe(_3_),
             seq => seq.Last.ShouldBe(_7_),
             seq => seq.Count.ShouldBe(3)
@@ -148,7 +147,7 @@ public class ImmListTest
     private void BasicTest(ImmList<ulong> list) =>
         list.Verify
         (
-            l => l.Any.ShouldBeTrue(),
+            l => l.Some.ShouldBeTrue(),
             l => l.IsEmpty.ShouldBeFalse(),
             l => l.Count.ShouldBe(3),
             l => l.First.ShouldBe(26uL),

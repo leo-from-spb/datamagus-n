@@ -30,7 +30,7 @@ public class ImmutablePatchedDictTest
         var patchedDict = new ImmutablePatchedDict<ulong,string>(OriginalDict, PatchDict1, RemovedKeys1);
         patchedDict.Verify(
             pd => pd.Imp.CascadingLevel.ShouldBe(_2_),
-            pd => pd.Any.ShouldBeTrue(),
+            pd => pd.Some.ShouldBeTrue(),
             pd => pd.IsEmpty.ShouldBeFalse(),
             pd => pd.Count.ShouldBe(6)
         );
@@ -77,7 +77,7 @@ public class ImmutablePatchedDictTest
         var keys = patchedDict.Keys;
         keys.Verify(
             ks => ks.Imp.CascadingLevel.ShouldBe(_3_),
-            ks => ks.Any.ShouldBeTrue(),
+            ks => ks.Some.ShouldBeTrue(),
             ks => ks.IsEmpty.ShouldBeFalse(),
             ks => ks.Count.ShouldBe(6)
         );
@@ -141,7 +141,7 @@ public class ImmutablePatchedDictTest
         var p2Dict = new ImmutablePatchedDict<ulong,string>(p1Dict, PatchDict2, RemovedKeys2);
         p2Dict.Verify(
             pd => pd.Imp.CascadingLevel.ShouldBe(_3_),
-            pd => pd.Any.ShouldBeTrue(),
+            pd => pd.Some.ShouldBeTrue(),
             pd => pd.IsEmpty.ShouldBeFalse(),
             pd => pd.Count.ShouldBe(7)
         );

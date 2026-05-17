@@ -28,8 +28,8 @@ internal class ImmutableSingletonDictionary<K,V> : ImmutableDictionary<K,V>, Imm
         this.Value = pair.Value;
     }
 
-    public bool Any => true;
-    public bool IsEmpty    => false;
+    public bool Some    => true;
+    public bool IsEmpty => false;
 
     public override int Count => 1;
 

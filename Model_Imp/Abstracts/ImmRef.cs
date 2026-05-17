@@ -31,12 +31,12 @@ public sealed class ImmPolyRef<M> : ImmRef<M>, PolyRef<M>
 {
     public IReadOnlyList<M> Ids { get; }
 
-    public override bool Exists => Ids.IsNotEmpty();
+    public override bool Exists => Ids.Some;
 
     public ImmPolyRef(IReadOnlyList<M> ids)
     {
         Ids = ids; // TODO ensure the list is read-only
     }
-    
+
     public override string ToString() => Ids.JoinToString(i=>i.ToString(), ",", empty: "none");
 }

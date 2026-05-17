@@ -135,13 +135,18 @@ public static class StringExt
         /// Check whether this string is not empty (and not null).
         /// </summary>
         /// <returns>true, when not null and not empty.</returns>
-        public bool IsNotEmpty => str is not null && str.Length > 0;
+        public bool Some => str is not null && str.Length > 0;
 
         /// <summary>
         /// Check whether this string is not blank (and not null).
         /// </summary>
         /// <returns>true, when not null and not blank.</returns>
-        public bool IsNotBlank => str is not null && !string.IsNullOrWhiteSpace(str);
+        public bool SomeNotBlank => str is not null && !string.IsNullOrWhiteSpace(str);
+
+        /// <summary>
+        /// Checks whether this string is empty or null.
+        /// </summary>
+        public bool Nothing => str is null || str.Length == 0;
 
         /// <summary>
         /// Checks whether this substring is contained in the given text.

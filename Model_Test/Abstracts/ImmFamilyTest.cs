@@ -30,7 +30,7 @@ public class ImmFamilyTest
     {
         var rabbitFamily = ImmFamily<TestRabbit>.Of(rabbitsABC);
         rabbitFamily.Verify(
-            f => f.Any.ShouldBeTrue(),
+            f => f.Some.ShouldBeTrue(),
             f => f.IsEmpty.ShouldBeFalse(),
             f => f.Count.ShouldBe(3)
         );
@@ -65,7 +65,7 @@ public class ImmFamilyTest
         var rabbitFamily = ImmFamily<TestRabbit>.Of(rabbitsABC);
         var ids          = rabbitFamily.GetAllIds();
 
-        ids.JoinToString(func: x => x.ToString()).ShouldBe("1001, 1002, 1003");
+        ids.JoinToString(map: x => x.ToString()).ShouldBe("1001, 1002, 1003");
     }
 
 

@@ -91,8 +91,8 @@ internal class ImmutableFlatDictionary<V> : ImmutableDictionary<uint,V>, ImmSort
 
     public override int Count => Cnt;
 
-    public bool Any => Cnt != 0;
-    public bool IsEmpty    => Cnt == 0;
+    public bool Some    => Cnt != 0;
+    public bool IsEmpty => Cnt == 0;
 
     public KeyValuePair<uint,V> FirstEntry => new KeyValuePair<uint,V>(MinKey, Cells[0]);
     public KeyValuePair<uint,V> LastEntry  => new KeyValuePair<uint,V>(MaxKey, Cells[^1]);
@@ -140,8 +140,8 @@ internal class ImmutableFlatDictionary<V> : ImmutableDictionary<uint,V>, ImmSort
 
         public override int Count => Dict.Count;
 
-        public bool Any => Dict.Any;
-        public bool IsEmpty    => Dict.IsEmpty;
+        public bool Some    => Dict.Some;
+        public bool IsEmpty => Dict.IsEmpty;
 
         public uint First => Dict.MinKey;
         public uint Last  => Dict.MaxKey;
@@ -217,7 +217,7 @@ internal class ImmutableFlatDictionary<V> : ImmutableDictionary<uint,V>, ImmSort
 
         public override int Count => Dict.Count;
 
-        public bool Any => Dict.Any;
+        public bool Some => Dict.Some;
         public bool IsEmpty    => Dict.IsEmpty;
 
         public V First => Dict.Cells[0];
@@ -262,7 +262,7 @@ internal class ImmutableFlatDictionary<V> : ImmutableDictionary<uint,V>, ImmSort
 
         public override int Count => Dict.Count;
 
-        public bool Any => Dict.Any;
+        public bool Some => Dict.Some;
         public bool IsEmpty    => Dict.IsEmpty;
 
         public KeyValuePair<uint,V> First => Dict.FirstEntry!;

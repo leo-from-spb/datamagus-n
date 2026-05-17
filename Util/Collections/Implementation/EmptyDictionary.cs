@@ -15,9 +15,9 @@ public class EmptyDictionary<K,V> : ImmutableDictionary<K,V>, ImmListDict<K,V>
 
     public static readonly EmptyDictionary<K,V> Instance = new();
 
-    public          bool Any => false;
-    public          bool IsEmpty    => true;
-    public override int  Count      => 0;
+    public          bool Some    => false;
+    public          bool IsEmpty => true;
+    public override int  Count   => 0;
 
     public KeyValuePair<K,V> FirstEntry => throw new IndexOutOfRangeException("The dictionary is empty");
     public KeyValuePair<K,V> LastEntry  => throw new IndexOutOfRangeException("The dictionary is empty");

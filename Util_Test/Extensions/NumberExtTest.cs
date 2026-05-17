@@ -4,7 +4,7 @@ namespace Util.Fun;
 
 
 [TestFixture]
-public class NumbersTest
+public class NumberExtTest
 {
 
     [Test]

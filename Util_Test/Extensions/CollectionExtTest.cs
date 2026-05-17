@@ -32,7 +32,7 @@ public class CollectionExtTest
     public void JoinToString_Longs()
     {
         long[] longs = [13L, 44L, 186L, 989L];
-        longs.JoinToString(func: x => x.ToString(), separator: "+", prefix: "<<", suffix: ">>")
+        longs.JoinToString(map: x => x.ToString(), separator: "+", prefix: "<<", suffix: ">>")
              .ShouldBe("<<13+44+186+989>>");
     }
 
