@@ -14,7 +14,7 @@ public class CodeBuilderTest
         cb.Text("One_Line");
         cb.Result.ShouldBe($"One_Line{nl}");
     }
-    
+
     [Test]
     public void Text_3Lines()
     {
@@ -25,7 +25,7 @@ public class CodeBuilderTest
         cb.Text(text);
         cb.Result.ShouldBe(result);
     }
-    
+
     [Test]
     public void Text_3LinesWithEOL()
     {
@@ -36,7 +36,7 @@ public class CodeBuilderTest
         cb.Text(text);
         cb.Result.ShouldBe(result);
     }
-    
+
     [Test]
     public void Text_3LinesIndented()
     {
@@ -65,4 +65,100 @@ public class CodeBuilderTest
         cb.Phrase("AAA", null, "CCC", "DDD", null, null, "FFF", "GGG");
         cb.Result.ShouldBe($"AAA CCC DDD FFF GGG{nl}");
     }
+
+
+    [Test]
+    public void CurLine_Basic()
+    {
+        CodeBuilder cb = new CodeBuilder();
+        cb.CurLine.ShouldBe(1);
+        cb.Phrase("Line 1");
+        cb.CurLine.ShouldBe(2);
+        cb.Phrase("Line 2");
+        cb.CurLine.ShouldBe(3);
+    }
+
+    [Test]
+    public void CurLine_NL()
+    {
+        CodeBuilder cb = new CodeBuilder();
+        cb.CurLine.ShouldBe(1);
+        cb.Phrase("Line 1");
+        cb.CurLine.ShouldBe(2);
+        cb.EmptyLine();
+        cb.CurLine.ShouldBe(3);
+    }
+
+    [Test]
+    public void CurLine_MultiLineText()
+    {
+        CodeBuilder cb = new CodeBuilder();
+        cb.CurLine.ShouldBe(1);
+        cb.Text("""
+                Your time is limited,
+                so don't waste it living someone else's life.
+                Steve Jobs
+                """);
+        cb.CurLine.ShouldBe(4);
+    }
+
+
+    [Test]
+    public void CurPos_1()
+    {
+        CodeBuilder cb = new CodeBuilder();
+        cb.CurPos.ShouldBe(1);
+        cb.Phrase("Something new");
+        cb.CurPos.ShouldBe(1);
+    }
+
+    [Test]
+    public void CurPos_Indent()
+    {
+        CodeBuilder cb = new CodeBuilder();
+        cb.Indentation = "    ";
+
+        cb.CurPos.ShouldBe(1);
+        cb.Indent();
+        cb.CurPos.ShouldBe(5);
+        cb.Indent("// ");
+        cb.CurPos.ShouldBe(8);
+        cb.Unindent();
+        cb.CurPos.ShouldBe(5);
+        cb.Unindent();
+        cb.CurPos.ShouldBe(1);
+    }
+
+
+    [Test]
+    public void TextWidth_Basic()
+    {
+        CodeBuilder cb = new CodeBuilder();
+        cb.TextWidth.ShouldBe(0);
+
+        cb.Phrase("Good");
+        cb.TextWidth.ShouldBe(4);
+        cb.Phrase("Mood");
+        cb.TextWidth.ShouldBe(4);
+        cb.Phrase("Flood");
+        cb.TextWidth.ShouldBe(5);
+        cb.Phrase("!");
+        cb.TextWidth.ShouldBe(5);
+    }
+
+
+    [Test]
+    public void TextWidth_MultiLineText()
+    {
+        CodeBuilder cb = new CodeBuilder();
+        cb.Text("""
+                Be yourself;
+                everyone else
+                is already taken.
+                Oscar Wilde
+                """);
+        cb.TextWidth.ShouldBe(17);
+    }
+
+
 }
