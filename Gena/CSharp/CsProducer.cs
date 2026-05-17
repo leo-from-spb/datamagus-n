@@ -59,16 +59,31 @@ public class CsProducer
 
         using (B.CurlyBlock(thenSkipLine: true))
         {
-            ProduceClassContent(clazz);
+            bool begin = true;
+            foreach (var group in clazz.Groups)
+            {
+                if (group.IsEmpty) continue;
+                if (begin) begin = false;
+                else B.EmptyLine();
+                ProduceClassGroupContent(clazz, group);
+            }
         }
 
         WriteRegionEnd(clazz.WrappingRegion);
     }
 
-    private void ProduceClassContent(CsClass clazz)
+    private void ProduceClassGroupContent(CsClass clazz, CsGroup group)
     {
+        if (group.Comment.SomeNotBlank)
+        {
+            B.Text(group.Comment);
+            if (group.WrappingRegion is null) B.EmptyLine();
+        }
+
+        WriteRegionBegin(group.WrappingRegion);
+
         // Fields
-        foreach (var f in clazz.Fields)
+        foreach (var f in group.Fields)
         {
             string? getter = f.TheGetExpression;
             string? setter = f.TheSetExpression;
@@ -118,10 +133,10 @@ public class CsProducer
             }
         }
 
-        if (clazz.Fields.Some) B.EmptyLine();
+        if (group.Fields.Some) B.EmptyLine();
 
         // Constructors
-        foreach (var ctr in clazz.Constructors)
+        foreach (var ctr in group.Constructors)
         {
             var arguments = ctr.Arguments
                                .Select(a => a.Spec)
@@ -142,7 +157,7 @@ public class CsProducer
         }
 
         // Methods
-        foreach (var m in clazz.Methods)
+        foreach (var m in group.Methods)
         {
             var arguments = m.Arguments
                              .Select(a => a.Spec)
@@ -171,6 +186,8 @@ public class CsProducer
                 }
             }
         }
+
+        WriteRegionEnd(group.WrappingRegion);
     }
 
     private void WriteRegionBegin(string? region)

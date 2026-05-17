@@ -54,7 +54,7 @@ public class CsProducerTest
     public void HelloWorld()
     {
         var clazz  = File.NewClass("HelloWorld");
-        var method = clazz.NewMethod("Main", isStatic: true);
+        var method = clazz.NewMethod(null, "Main", isStatic: true);
         method.NewArgument("args", "string[]");
         method.ContentBuilder.Phrase("""System.Console.WriteLine("Hello World!");""");
 
@@ -79,7 +79,7 @@ public class CsProducerTest
                               This is a test class.
                               This class is for testing.
                               """;
-        var method = clazz.NewMethod("Main", isStatic: true);
+        var method = clazz.NewMethod(null, "Main", isStatic: true);
         method.Documentation = """
                                This is a test method.
                                This method is for testing.
@@ -108,8 +108,8 @@ public class CsProducerTest
     public void Field_Basic()
     {
         var clazz = File.NewClass("MyClass");
-        var f1    = clazz.NewField("X", "long", defaultValue: "0L");
-        var f2    = clazz.NewField("Y", "float", defaultValue: "0.0");
+        var f1    = clazz.NewField(null, "X", "long", defaultValue: "0L");
+        var f2    = clazz.NewField(null, "Y", "float", defaultValue: "0.0");
         f1.Visibility = visPublic;
         f2.Visibility = visPrivate;
 
@@ -127,7 +127,7 @@ public class CsProducerTest
     public void Field_PureExpression()
     {
         var clazz = File.NewClass("MyClass");
-        var f = clazz.NewField("Count", "int", expression: "42 + 26", visibility: visPublic);
+        var f = clazz.NewField(null, "Count", "int", expression: "42 + 26", visibility: visPublic);
 
         f.IsPureExpression.ShouldBeTrue();
         f.IsPureProperty.ShouldBeFalse();
@@ -142,7 +142,7 @@ public class CsProducerTest
     public void Field_PureProperty_1()
     {
         var clazz = File.NewClass("MyClass");
-        var f = clazz.NewField("Count", "int", expression: "", visibility: visPublic);
+        var f = clazz.NewField(null, "Count", "int", expression: "", visibility: visPublic);
         f.IsOverride = true;
 
         f.IsPureProperty.ShouldBeTrue();
@@ -158,7 +158,7 @@ public class CsProducerTest
     public void Field_PureProperty_2()
     {
         var clazz = File.NewClass("MyClass");
-        var f = clazz.NewField("Count", "int", expression: "", visibility: visPublic);
+        var f = clazz.NewField(null, "Count", "int", expression: "", visibility: visPublic);
         f.TheSetExpression = "";
 
         f.IsPureProperty.ShouldBeTrue();
@@ -174,7 +174,7 @@ public class CsProducerTest
     public void Field_Complex()
     {
         var clazz = File.NewClass("MyClass");
-        var f = clazz.NewField("MyVar", "int", visibility: visPublic);
+        var f = clazz.NewField(null, "MyVar", "int", visibility: visPublic);
         f.TheGetExpression = "field - 1";
         f.TheSetExpression = "value + 1";
 
@@ -197,7 +197,7 @@ public class CsProducerTest
     public void Field_ComplexWithDefault()
     {
         var clazz = File.NewClass("MyClass");
-        var f = clazz.NewField("MyVar", "int", "100", visibility: visPublic);
+        var f = clazz.NewField(null, "MyVar", "int", "100", visibility: visPublic);
         f.TheGetExpression = "field - 1";
         f.TheSetExpression = "value + 1";
 
@@ -218,7 +218,7 @@ public class CsProducerTest
     public void ClassConstructor()
     {
         var clazz = File.NewClass("MyClass");
-        var ctr   = clazz.NewConstructor();
+        var ctr   = clazz.NewConstructor(null);
         ctr.NewArgument("x", "int");
         ctr.NewArgument("y", "float");
 
@@ -256,7 +256,7 @@ public class CsProducerTest
     public void Method_Basic()
     {
         var clazz = File.NewClass("MyClass");
-        var m     = clazz.NewMethod("Tan", "float");
+        var m     = clazz.NewMethod(null, "Tan", "float");
 
         m.IsExpression = false;
         m.ContentBuilder.Phrase("return Sin / Cos;");
@@ -275,7 +275,7 @@ public class CsProducerTest
     public void Method_Expression()
     {
         var clazz = File.NewClass("MyClass");
-        var m     = clazz.NewMethod("Tan", "float");
+        var m     = clazz.NewMethod(null, "Tan", "float");
 
         m.IsExpression = true;
         m.ContentBuilder.Phrase("Sin / Cos;");
@@ -284,6 +284,48 @@ public class CsProducerTest
         ProducedText.ShouldContainWithoutWhitespace("""
                                                     public float Tan() =>
                                                         Sin / Cos;
+                                                    """);
+    }
+
+
+    [Test]
+    public void Group_Region()
+    {
+        var clazz = File.NewClass("MyClass");
+        var g1 = clazz.NewGroup("Group A");
+        var g2 = clazz.NewGroup("Group B");
+
+        g1.Comment = """
+                     First Group.
+                     This Group is first.
+                     """;
+        g2.Comment = """
+                     Second Group.
+                     This Group is second.
+                     """;
+        clazz.FirstGroup.Comment = "This group should not appear.";
+
+        clazz.NewField(g1, "VarA", "int", "1", visibility: visPublic);
+        clazz.NewField(g2, "VarB", "int", "3", visibility: visPublic);
+
+        clazz.NewField(g1, "VarX", "int", "2", visibility: visPublic);
+        clazz.NewField(g2, "VarY", "int", "4", visibility: visPublic);
+
+        ProduceFileText();
+        ProducedText.ShouldContainWithoutWhitespace("""
+                                                    First Group.
+                                                    This Group is first.
+                                                    #region Group A
+                                                    public int VarA = 1;
+                                                    public int VarX = 2;
+                                                    #endregion // Group A
+
+                                                    Second Group.
+                                                    This Group is second.
+                                                    #region Group B
+                                                    public int VarB = 3;
+                                                    public int VarY = 4;
+                                                    #endregion // Group B
                                                     """);
     }
 

@@ -105,10 +105,21 @@ public class CsClass : CsEntity
     public bool IsAbstract;
     public bool IsSealed;
 
-    public readonly List<String>        TypoParams   = new();
-    public readonly List<CsField>       Fields       = new();
-    public readonly List<CsConstructor> Constructors = new();
-    public readonly List<CsMethod>      Methods      = new();
+    /// <summary>
+    /// Type parameters.
+    /// </summary>
+    public readonly List<String> TypoParams = new();
+
+    /// <summary>
+    /// Group of entities.
+    /// </summary>
+    public readonly List<CsGroup> Groups = new();
+
+    /// <summary>
+    /// The first group.
+    /// This group is used by default.
+    /// </summary>
+    public readonly CsGroup FirstGroup = new();
 
     public string? WrappingRegion = null;
 
@@ -121,35 +132,75 @@ public class CsClass : CsEntity
         IsStatic = isStatic;
         IsAbstract = isAbstract;
         IsSealed = isSealed;
+
+        Groups.Add(FirstGroup);
     }
 
-    public CsField NewField(string       fieldName,
+
+    public CsGroup NewGroup(string? region)
+    {
+        var group = new CsGroup();
+        group.WrappingRegion = region;
+        Groups.Add(group);
+        return group;
+    }
+
+    public CsField NewField(CsGroup?     group,
+                            string       fieldName,
                             string       fieldType,
                             string?      defaultValue = null,
                             string?      expression   = null,
                             CsVisibility visibility   = visAuto)
     {
+        var g = group ?? FirstGroup;
         var f = new CsField(fieldName, fieldType, defaultValue, expression, visibility);
-        Fields.Add(f);
+        g.Fields.Add(f);
         return f;
     }
 
-    public CsConstructor NewConstructor()
+    public CsConstructor NewConstructor(CsGroup? group)
     {
+        var g   = group ?? FirstGroup;
         var ctr = new CsConstructor(this);
-        Constructors.Add(ctr);
+        g.Constructors.Add(ctr);
         return ctr;
     }
 
-    public CsMethod NewMethod(string methodName,
-                              string? returnType = null,
-                              bool isStatic = false,
-                              bool isAbstract = false)
+    public CsMethod NewMethod(CsGroup? group,
+                              string methodName,
+                              string?  returnType = null,
+                              bool     isStatic   = false,
+                              bool     isAbstract = false)
     {
+        var g = group ?? FirstGroup;
         var method = new CsMethod(this, methodName, returnType, isStatic, isAbstract);
-        Methods.Add(method);
+        g.Methods.Add(method);
         return method;
     }
+}
+
+
+/// <summary>
+/// Group of entities inside a class.
+/// </summary>
+public class CsGroup
+{
+    /// <summary>
+    /// Region.
+    /// </summary>
+    public string? WrappingRegion;
+
+    /// <summary>
+    /// Comment before the group content.
+    /// </summary>
+    public string? Comment;
+
+    public readonly List<CsField>       Fields       = new();
+    public readonly List<CsConstructor> Constructors = new();
+    public readonly List<CsMethod>      Methods      = new();
+
+    public bool Some    => Fields.Some || Constructors.Some || Methods.Some;
+    public bool IsEmpty => !Some;
 }
 
 
