@@ -55,7 +55,8 @@ public class CsProducer
                  "abstract".TakeIf(clazz.IsAbstract),
                  "class", clazz.Name + typeParams,
                  ":".TakeIf(clazz.BaseNames is not null),
-                 clazz.BaseNames);
+                 clazz.BaseNames,
+                 clazz.ImplementInterfaces.JoinToString(prefix: ", "));
 
         using (B.CurlyBlock(thenSkipLine: true))
         {
@@ -149,6 +150,16 @@ public class CsProducer
             B.Phrase(visibility.Word,
                      clazz.Name,
                      "(", arguments, ")" );
+            if (ctr.PassArguments.Some)
+            {
+                using (B.Indenting())
+                {
+                    B.Phrase(":",
+                             ctr.PassToThis ? "this" : "base",
+                             ctr.PassArguments.JoinToString(prefix: "(", suffix: ")") );
+                }
+            }
+
             using (B.CurlyBlock())
             {
                 B.Text(ctr.Content);

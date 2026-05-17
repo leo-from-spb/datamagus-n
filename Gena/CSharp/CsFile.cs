@@ -108,7 +108,12 @@ public class CsClass : CsEntity
     /// <summary>
     /// Type parameters.
     /// </summary>
-    public readonly List<String> TypoParams = new();
+    public readonly List<string> TypoParams = new();
+
+    /// <summary>
+    /// Names of interfaces this class implements.
+    /// </summary>
+    public readonly List<string> ImplementInterfaces = new();
 
     /// <summary>
     /// Group of entities.
@@ -265,7 +270,7 @@ public abstract class CsRoutine : CsEntity
 
     public readonly CodeBuilder ContentBuilder;
 
-    public CsRoutine(CsClass clazz, string name, CsVisibility visibility)
+    protected CsRoutine(CsClass clazz, string name, CsVisibility visibility)
         : base(name, visibility)
     {
         Class           = clazz;
@@ -290,6 +295,17 @@ public abstract class CsRoutine : CsEntity
 /// </summary>
 public class CsConstructor : CsRoutine
 {
+    /// <summary>
+    /// Expressions that should be passed to "base" or "this" constructor.
+    /// </summary>
+    /// <seealso cref="PassToThis"/>
+    public readonly List<string> PassArguments = new();
+
+    /// <summary>
+    /// How to cascade constructor: false -> base, true -> this.
+    /// </summary>
+    public bool PassToThis = false;
+
     public CsConstructor(CsClass clazz)
         : base(clazz, "", visAuto)
     { }
