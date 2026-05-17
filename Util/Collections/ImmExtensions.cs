@@ -20,11 +20,6 @@ public static class ImmExtensions
     extension<E> (E[] array)
     {
         /// <summary>
-        /// Whether this array has any elements.
-        /// </summary>
-        public bool Any => array.Length != 0;
-
-        /// <summary>
         /// Creates a snapshot of this array.
         /// </summary>
         /// <returns>the snapshot.</returns>
@@ -88,11 +83,6 @@ public static class ImmExtensions
     /// <typeparam name="E">type of elements.</typeparam>
     extension<E>(ReadOnlySpan<E> span)
     {
-        /// <summary>
-        /// Whether this span has any elements.
-        /// </summary>
-        public bool Any => span.Length > 0;
-
         /// <summary>
         /// Creates a snapshot of this array.
         /// </summary>
@@ -231,17 +221,6 @@ public static class ImmExtensions
     extension<E>(IEnumerable<E> source)
     {
         /// <summary>
-        /// Whether this source has any elements.
-        /// </summary>
-        public bool Any =>
-            source switch
-            {
-                E[] a                    => a.Length != 0,
-                IReadOnlyCollection<E> c => c.Count > 0,
-                _                        => Enumerable.Any(source)
-            };
-
-        /// <summary>
         /// Collects all elements from this <paramref name="source"/> and make an immutable list of them.
         /// </summary>
         /// <returns>the immutable list.</returns>
@@ -366,11 +345,6 @@ public static class ImmExtensions
     /// <typeparam name="E">type of elements.</typeparam>
     extension<E>(IReadOnlyCollection<E> collection)
     {
-        /// <summary>
-        /// Whether this collection has any elements.
-        /// </summary>
-        public bool Any => collection.Count > 0;
-
         /// <summary>
         /// Creates a snapshot of this collection.
         /// </summary>
@@ -599,11 +573,6 @@ public static class ImmExtensions
     extension<K,V>(IReadOnlyDictionary<K,V> dictionary)
     {
         /// <summary>
-        /// Whether this dictionary has any entries.
-        /// </summary>
-        public bool Any => dictionary.Count > 0;
-
-        /// <summary>
         /// Makes an immutable snapshot of this dictionary.
         /// </summary>
         /// <returns>the just created immutable snapshot.</returns>
@@ -652,11 +621,6 @@ public static class ImmExtensions
     extension<K,V>(IDictionary<K,V> dictionary)
     {
         /// <summary>
-        /// Whether this dictionary has any entries.
-        /// </summary>
-        public bool Any => dictionary.Count > 0;
-
-        /// <summary>
         /// Makes an immutable snapshot of this dictionary.
         /// </summary>
         /// <returns>the just created immutable snapshot.</returns>
@@ -702,11 +666,6 @@ public static class ImmExtensions
     extension<K,V>(Dictionary<K,V> dictionary)
         where K : notnull
     {
-        /// <summary>
-        /// Whether this dictionary has any entries.
-        /// </summary>
-        public bool Any => dictionary.Count > 0;
-
         /// <summary>
         /// Makes an immutable snapshot of this dictionary.
         /// </summary>

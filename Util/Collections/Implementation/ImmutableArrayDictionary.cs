@@ -58,8 +58,8 @@ internal abstract class ImmutableArrayDictionary<K,V> : ImmutableDictionary<K,V>
         Count = pairs.Length;
     }
 
-    public bool Any => true;
-    public bool IsEmpty    => false;
+    public bool Some    => true;
+    public bool IsEmpty => false;
 
     public KeyValuePair<K,V> FirstEntry => Pairs[0];
     public KeyValuePair<K,V> LastEntry  => Pairs[^1];
@@ -102,8 +102,8 @@ internal abstract class ImmutableArrayDictionary<K,V> : ImmutableDictionary<K,V>
 
         public override int Count => Dict.Count;
 
-        public bool Any => true;
-        public bool IsEmpty    => false;
+        public bool Some    => true;
+        public bool IsEmpty => false;
 
         public int IndexOf(K key) => Dict.IndexOfKey(key);
 
@@ -153,7 +153,7 @@ internal abstract class ImmutableArrayDictionary<K,V> : ImmutableDictionary<K,V>
 
         public override int Count => Dict.Count;
 
-        public bool Any => true;
+        public bool Some => true;
         public bool IsEmpty    => false;
 
         public V First => Dict.Pairs[0].Value;

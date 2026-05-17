@@ -55,8 +55,8 @@ internal class ImmutableArrayList<T> : ImmutableCollection<T>, ImmList<T>
     internal T[] ShareElementsArray() => Elements;
 
 
-    public bool Any => true;
-    public bool IsEmpty    => false;
+    public bool Some    => true;
+    public bool IsEmpty => false;
 
     int IReadOnlyCollection<T>.Count => Count;
 
@@ -114,7 +114,7 @@ internal class ImmutableArrayList<T> : ImmutableCollection<T>, ImmList<T>
             T element = Elements[i];
             if (predicate(element)) return new Found<T>(true, element);
         }
-        
+
         return Found<T>.NotFound;
     }
 
