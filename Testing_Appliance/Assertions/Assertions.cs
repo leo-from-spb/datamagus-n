@@ -71,9 +71,9 @@ public static class Assertions
                 $"Expected a {collectionWord} containing {expectedItems.Length} specified items\n"
               + $"but got one ({collection.GetType().Name}) that contains {collection.Count} items that misses {missedItems.Count} of expected ones.\n"
               + $"-------- Given items ----------\n"
-              + $"{collection.JoinToString(func: i => $"\t{i}", separator: "\n")}\n"
+              + $"{collection.JoinToString(map: i => $"\t{i}", separator: "\n")}\n"
               + $"-------- Expected items -------\n"
-              + $"{expectedItems.JoinToString(func: i => $"\t{i.IsIncludedAsChar(actualItems)} {i}", separator: "\n")}\n"
+              + $"{expectedItems.JoinToString(map: i => $"\t{i.IsIncludedAsChar(actualItems)} {i}", separator: "\n")}\n"
               + $"-------------------------------";
             Fail(message);
         }
@@ -86,7 +86,7 @@ public static class Assertions
     private static string Describe<E>(this E[] items)
     {
         if (items.Length == 0) return "Empty array of items";
-        return items.JoinToString(func: i => $"\t{i}", separator: "\n");
+        return items.JoinToString(map: i => $"\t{i}", separator: "\n");
     }
 
     [DoesNotReturn]

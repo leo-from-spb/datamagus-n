@@ -65,7 +65,7 @@ public class ImmFamilyTest
         var rabbitFamily = ImmFamily<TestRabbit>.Of(rabbitsABC);
         var ids          = rabbitFamily.GetAllIds();
 
-        ids.JoinToString(func: x => x.ToString()).ShouldBe("1001, 1002, 1003");
+        ids.JoinToString(map: x => x.ToString()).ShouldBe("1001, 1002, 1003");
     }
 
 
