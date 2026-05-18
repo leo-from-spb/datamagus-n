@@ -5,6 +5,7 @@
       <map>
         <entry key="Gui_Application/Main/AboutWindow.axaml" value="DataMagus_App/DataMagus_App.csproj" />
         <entry key="Gui_Application/Main/MainWindow.axaml" value="DataMagus_App/DataMagus_App.csproj" />
+        <entry key="Gui_Application/Workbenches/EaselWorkbench.axaml" value="DataMagus_App/DataMagus_App.csproj" />
       </map>
     </option>
   </component>

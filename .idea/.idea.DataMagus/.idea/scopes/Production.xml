@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Production" pattern="file:Core//*||file:Core_Imp//*||file:DataMagus_App//*||file:Gui_Application//*||file:Model_Essence//*||file:Model_Imp//*||file:Util//*" />
+</component>
