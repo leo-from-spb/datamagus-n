@@ -1,6 +1,6 @@
-using System.Diagnostics.CodeAnalysis;
 using Core.Gears.Settings;
 using Core.Interaction.Commands;
+using Core.Stationery;
 
 namespace Core.Services;
 
@@ -10,7 +10,6 @@ namespace Core.Services;
 public static class CoreServiceMaster
 {
 
-    [SuppressMessage("ReSharper", "UnusedVariable")]
     public static void Sunrise()
     {
         HardServiceMill.CreateServiceMill();
@@ -31,9 +30,12 @@ public static class CoreServiceMaster
         var mill = HardServiceMill.GetTheMillWhenInitialized();
         if (mill is not null)
         {
-            var ss = ServiceMill.GetService<SettingService>();
-            ((LocalSettingService)ss).SaveAllSettings();
-            
+            if (DataMagusState.AppMode == DataMagusState.ApplicationMode.dmamGui)
+            {
+                var ss = ServiceMill.GetService<SettingService>();
+                ((LocalSettingService)ss).SaveAllSettings();
+            }
+
             mill.ShutdownAllServices();
             mill.Dispose();
         }

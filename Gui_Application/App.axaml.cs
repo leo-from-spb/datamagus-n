@@ -4,7 +4,6 @@ using Avalonia.Markup.Xaml;
 using Core.Interaction.Commands;
 using Core.Services;
 using Gui.Application.Main;
-using Gui.Application.Services;
 
 namespace Gui.Application;
 
@@ -26,8 +25,6 @@ public partial class App : Avalonia.Application
         }
 
         base.OnFrameworkInitializationCompleted();
-
-        GuiServiceMaster.Sunrise();
     }
 
     private void CreateMainWindow(IClassicDesktopStyleApplicationLifetime applicationLifetime)

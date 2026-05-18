@@ -7,6 +7,7 @@ using NLog;
 using NLog.Config;
 using NLog.Targets;
 using Util.Extensions;
+using static Core.Stationery.DataMagusState.ApplicationMode;
 
 namespace DataMagus.App;
 
@@ -21,12 +22,18 @@ public static class Program
     [STAThread]
     public static void Main(string[] args)
     {
+        RunInGuiMode(args);
+    }
+
+    private static void RunInGuiMode(string[] args)
+    {
+        DataMagusState.AppStarted(dmamGui);
         SetupLogger();
         Sunrise();
 
         try
         {
-            Gui.Application.Program.Main(args);
+            Gui.Application.Program.RunAvaloniaApp(args);
         }
         finally
         {
@@ -74,5 +81,5 @@ public static class Program
     {
         Log?.Info("Goodbye!");
     }
-    
+
 }

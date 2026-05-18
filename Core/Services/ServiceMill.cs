@@ -1,6 +1,8 @@
 using System;
 using System.Diagnostics;
 using System.Reflection;
+using Core.Stationery;
+using static Core.Stationery.DataMagusState.ApplicationMode;
 
 namespace Core.Services;
 
@@ -18,7 +20,8 @@ public abstract class ServiceMill
     public static S GetService<S>()
         where S: class
     {
-        Debug.Assert(theMill != null);
+        Debug.Assert(DataMagusState.AppMode != dmamNone, "DataMagus Application is not started yet.");
+        Debug.Assert(theMill != null, "The Service Mill is not instantiated yet.");
         S? service = theMill.FindService<S>();
         if (service == null)
         {
