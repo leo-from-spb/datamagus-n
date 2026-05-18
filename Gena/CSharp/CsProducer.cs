@@ -77,7 +77,7 @@ public class CsProducer
     {
         if (group.Comment.SomeNotBlank)
         {
-            B.Text(group.Comment);
+            ProduceComment(group.Comment);
             if (group.WrappingRegion is null) B.EmptyLine();
         }
 
@@ -106,7 +106,7 @@ public class CsProducer
                      purePropertyBody,
                      "=>".TakeIf(f.IsPureExpression),
                      getter.TakeIf(f.IsPureExpression && isSingleLine),
-                     ";".TakeIf(isSingleLine));
+                     ";".TakeIf(isSingleLine && purePropertyBody is null));
             if (isSingleLine) continue;
 
             if (f.IsPureExpression)
@@ -225,6 +225,17 @@ public class CsProducer
                 B.Phrase("<summary>");
                 B.Text(doc);
                 B.Phrase("</summary>");
+            }
+        }
+    }
+
+    private void ProduceComment(string? comment)
+    {
+        if (comment.SomeNotBlank)
+        {
+            using (B.Indenting("// "))
+            {
+                B.Text(comment);
             }
         }
     }

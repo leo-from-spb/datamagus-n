@@ -145,10 +145,11 @@ public class CsClass : CsEntity
     }
 
 
-    public CsGroup NewGroup(string? region)
+    public CsGroup NewGroup(string? region = null, string? comment = null)
     {
         var group = new CsGroup();
         group.WrappingRegion = region;
+        group.Comment = comment;
         Groups.Add(group);
         return group;
     }
@@ -158,10 +159,13 @@ public class CsClass : CsEntity
                             string       fieldType,
                             string?      defaultValue = null,
                             string?      expression   = null,
+                            bool         isStatic     = false,
+                            bool         isOverride   = false,
+                            bool         isReadOnly   = false,
                             CsVisibility visibility   = visAuto)
     {
         var g = group ?? FirstGroup;
-        var f = new CsField(fieldName, fieldType, defaultValue, expression, visibility);
+        var f = new CsField(fieldName, fieldType, defaultValue, expression, isStatic, isOverride, isReadOnly, visibility);
         g.Fields.Add(f);
         return f;
     }
@@ -230,6 +234,9 @@ public class CsField : CsEntity
                    string       type,
                    string?      defaultValue = null,
                    string?      expression   = null,
+                   bool         isStatic     = false,
+                   bool         isOverride   = false,
+                   bool         isReadOnly   = false,
                    CsVisibility visibility   = visAuto)
         : base(name, visibility)
     {
@@ -237,8 +244,15 @@ public class CsField : CsEntity
         DefaultValue = defaultValue;
         TheGetExpression = expression;
 
+        IsStatic = isStatic;
+        IsOverride = isOverride;
+        IsReadOnly = isReadOnly;
+
         if (Visibility.IsAuto)
-            Visibility = name.IsCapitalized ? visPublic : IsOverride ? visProtected : visPrivate;
+            Visibility = name.Contains('.') ? visDefault
+                       : name.IsCapitalized ? visPublic
+                       : isOverride ? visProtected
+                       : visPrivate;
     }
 
     /// <summary>

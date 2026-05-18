@@ -313,15 +313,15 @@ public class CsProducerTest
 
         ProduceFileText();
         ProducedText.ShouldContainWithoutWhitespace("""
-                                                    First Group.
-                                                    This Group is first.
+                                                    // First Group.
+                                                    // This Group is first.
                                                     #region Group A
                                                     public int VarA = 1;
                                                     public int VarX = 2;
                                                     #endregion // Group A
 
-                                                    Second Group.
-                                                    This Group is second.
+                                                    // Second Group.
+                                                    // This Group is second.
                                                     #region Group B
                                                     public int VarB = 3;
                                                     public int VarY = 4;
