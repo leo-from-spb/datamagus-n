@@ -139,6 +139,9 @@ public class CsClass : CsEntity
         IsSealed = isSealed;
 
         Groups.Add(FirstGroup);
+
+        if (Visibility.IsAuto)
+            Visibility = visPublic;
     }
 
 
@@ -233,6 +236,9 @@ public class CsField : CsEntity
         Type = type;
         DefaultValue = defaultValue;
         TheGetExpression = expression;
+
+        if (Visibility.IsAuto)
+            Visibility = name.IsCapitalized ? visPublic : IsOverride ? visProtected : visPrivate;
     }
 
     /// <summary>
@@ -308,7 +314,10 @@ public class CsConstructor : CsRoutine
 
     public CsConstructor(CsClass clazz)
         : base(clazz, "", visAuto)
-    { }
+    {
+        if (Visibility.IsAuto)
+            Visibility = clazz.IsAbstract ? visProtected : clazz.Visibility;
+    }
 }
 
 
@@ -331,6 +340,9 @@ public class CsMethod : CsRoutine
         IsStatic        = isStatic;
         IsAbstract      = isAbstract;
         this.ReturnType = returnType;
+
+        if (Visibility.IsAuto)
+            Visibility = clazz.Visibility;
     }
 }
 

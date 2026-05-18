@@ -127,7 +127,7 @@ public class CsProducerTest
     public void Field_PureExpression()
     {
         var clazz = File.NewClass("MyClass");
-        var f = clazz.NewField(null, "Count", "int", expression: "42 + 26", visibility: visPublic);
+        var f = clazz.NewField(null, "Count", "int", expression: "42 + 26");
 
         f.IsPureExpression.ShouldBeTrue();
         f.IsPureProperty.ShouldBeFalse();
@@ -142,7 +142,7 @@ public class CsProducerTest
     public void Field_PureProperty_1()
     {
         var clazz = File.NewClass("MyClass");
-        var f = clazz.NewField(null, "Count", "int", expression: "", visibility: visPublic);
+        var f = clazz.NewField(null, "Count", "int", expression: "");
         f.IsOverride = true;
 
         f.IsPureProperty.ShouldBeTrue();
@@ -158,7 +158,7 @@ public class CsProducerTest
     public void Field_PureProperty_2()
     {
         var clazz = File.NewClass("MyClass");
-        var f = clazz.NewField(null, "Count", "int", expression: "", visibility: visPublic);
+        var f = clazz.NewField(null, "Count", "int", expression: "");
         f.TheSetExpression = "";
 
         f.IsPureProperty.ShouldBeTrue();
@@ -174,7 +174,7 @@ public class CsProducerTest
     public void Field_Complex()
     {
         var clazz = File.NewClass("MyClass");
-        var f = clazz.NewField(null, "MyVar", "int", visibility: visPublic);
+        var f = clazz.NewField(null, "MyVar", "int");
         f.TheGetExpression = "field - 1";
         f.TheSetExpression = "value + 1";
 
@@ -197,7 +197,7 @@ public class CsProducerTest
     public void Field_ComplexWithDefault()
     {
         var clazz = File.NewClass("MyClass");
-        var f = clazz.NewField(null, "MyVar", "int", "100", visibility: visPublic);
+        var f = clazz.NewField(null, "MyVar", "int", "100");
         f.TheGetExpression = "field - 1";
         f.TheSetExpression = "value + 1";
 
@@ -305,11 +305,11 @@ public class CsProducerTest
                      """;
         clazz.FirstGroup.Comment = "This group should not appear.";
 
-        clazz.NewField(g1, "VarA", "int", "1", visibility: visPublic);
-        clazz.NewField(g2, "VarB", "int", "3", visibility: visPublic);
+        clazz.NewField(g1, "VarA", "int", "1");
+        clazz.NewField(g2, "VarB", "int", "3");
 
-        clazz.NewField(g1, "VarX", "int", "2", visibility: visPublic);
-        clazz.NewField(g2, "VarY", "int", "4", visibility: visPublic);
+        clazz.NewField(g1, "VarX", "int", "2");
+        clazz.NewField(g2, "VarY", "int", "4");
 
         ProduceFileText();
         ProducedText.ShouldContainWithoutWhitespace("""

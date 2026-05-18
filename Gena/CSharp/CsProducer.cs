@@ -142,12 +142,8 @@ public class CsProducer
             var arguments = ctr.Arguments
                                .Select(a => a.Spec)
                                .JoinToString();
-            var visibility = ctr.Visibility != visAuto
-                ? ctr.Visibility
-                : clazz.IsAbstract ? visProtected : visPublic;
-
             ProduceDocumentation(ctr);
-            B.Phrase(visibility.Word,
+            B.Phrase(ctr.Visibility.Word,
                      clazz.Name,
                      "(", arguments, ")" );
             if (ctr.PassArguments.Some)
