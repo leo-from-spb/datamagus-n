@@ -2,25 +2,53 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Util.Extensions;
 
-namespace Util.Fun;
+namespace Gena.Code;
 
 
+/// <summary>
+/// Builder for code text — text with indented blocks like in programming languages.
+/// </summary>
 public class CodeBuilder
 {
     private readonly StringBuilder Buf = new StringBuilder();
-    
-    
+
+
     // Settings \\
 
     public string Indentation = "\t";
 
-    
+
+    public string GluingAtLeft  = "([";
+    public string GluingAtRight = ":;.,?!])";
+
+
     // State \\
 
     private string CurrIndentation = "";
 
     private readonly Stack<string> Indentations = new Stack<string>();
+
+    /// <summary>
+    /// Current line number (starting with 1).
+    /// </summary>
+    public int CurLine { get; private set; } = 1;
+
+    /// <summary>
+    /// Current position in the line (starting with 1).
+    /// </summary>
+    public int CurPos
+    {
+        get { return field > 1 ? field : CurrIndentation.Length + 1; }
+        private set;
+    } = 1;
+
+    /// <summary>
+    /// Width of the text: the length of the longest line of the text
+    /// (without the NL character at the end).
+    /// </summary>
+    public int TextWidth { get; private set; } = 0;
 
 
     // Auxiliary Classes \\
@@ -109,16 +137,17 @@ public class CodeBuilder
         bool exists = words.OfType<string>().Any();
         if (!exists) return;
         // add all that not null
-        Buf.Append(CurrIndentation);
+        BufAppend(CurrIndentation);
         bool begin = true;
         foreach (string? word in words)
         {
-            if (word is null) continue;
-            if (begin) begin = false;
-            else Buf.Append(' ');
-            Buf.Append(word);
+            if (word is null || word.IsEmpty) continue;
+            bool glue = begin || LastChar.IsIn(GluingAtLeft) || word[0].IsIn(GluingAtRight);
+            if (!glue) BufAppend(' ');
+            BufAppend(word);
+            begin = false;
         }
-        Buf.AppendLine();
+        BufAppendLine();
     }
 
     /// <summary>
@@ -163,12 +192,14 @@ public class CodeBuilder
             {
                 var line = lines[i].TrimEnd('\r');
                 if (i + 1 == n && line == "") break;
-                Buf.Append(CurrIndentation).AppendLine(line);
+                BufAppend(CurrIndentation);
+                BufAppendLine(line);
             }
         }
         else
         {
-            Buf.Append(CurrIndentation).AppendLine(text);
+            BufAppend(CurrIndentation);
+            BufAppendLine(text);
         }
     }
 
@@ -178,7 +209,7 @@ public class CodeBuilder
     public void EmptyLine()
     {
         EnsureEoL();
-        Buf.AppendLine();
+        BufAppendLine();
     }
 
     /// <summary>
@@ -188,7 +219,7 @@ public class CodeBuilder
     public void EnsureEoL()
     {
         if (Buf.Length == 0) return;
-        if (LastChar != '\n') Buf.AppendLine();
+        if (LastChar != '\n') BufAppendLine();
     }
 
     /// <summary>
@@ -208,6 +239,58 @@ public class CodeBuilder
             return n > 0 ? Buf[n - 1] : '\0';
         }
     }
-    
-        
+
+
+    // Buffer Operations \\
+
+    /// <summary>
+    /// Appends a single-line string (must not contain '\n' or '\r') to the buffer
+    /// and updates <see cref="CurPos"/> and <see cref="TextWidth"/>.
+    /// </summary>
+    private void BufAppend(string s)
+    {
+        if (s.Length == 0) return;
+        Buf.Append(s);
+        CurPos += s.Length;
+        if (CurPos - 1 > TextWidth) TextWidth = CurPos - 1;
+    }
+
+    /// <summary>
+    /// Appends a single character (must not be '\n' or '\r') to the buffer
+    /// and updates <see cref="CurPos"/> and <see cref="TextWidth"/>.
+    /// </summary>
+    private void BufAppend(char c)
+    {
+        Buf.Append(c);
+        CurPos++;
+        if (CurPos - 1 > TextWidth) TextWidth = CurPos - 1;
+    }
+
+    /// <summary>
+    /// Appends a line terminator and finalizes the current line:
+    /// updates <see cref="TextWidth"/>, increments <see cref="CurLine"/>, resets <see cref="CurPos"/>.
+    /// </summary>
+    private void BufAppendLine()
+    {
+        Buf.AppendLine();
+        int lineLen = CurPos - 1;
+        if (lineLen > TextWidth) TextWidth = lineLen;
+        CurLine++;
+        CurPos = 1;
+    }
+
+    /// <summary>
+    /// Appends a single-line string (must not contain '\n' or '\r') followed by a line terminator,
+    /// then finalizes the current line.
+    /// </summary>
+    private void BufAppendLine(string s)
+    {
+        Buf.AppendLine(s);
+        int lineLen = CurPos - 1 + s.Length;
+        if (lineLen > TextWidth) TextWidth = lineLen;
+        CurLine++;
+        CurPos = 1;
+    }
+
+
 }

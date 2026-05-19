@@ -21,6 +21,8 @@ Modules:
 | [Core](Core)                           | C     | Core interfaces and simple classes                |
 | [Core_Imp](Core_Imp)                   | C     | Core implementation                               |
 | [Core_Test](Core_Test)                 | T     | Tests for core modules                            |
+| [Gena](Gena)                           | **G** | Gena the Crocodile — code genaration framework    |
+| [Gena_Test](Gena_Test)                 | T     | Tests for Gena the Crocodile                      |
 | [Model_Essence](Model_Essence)         | C     | Model definition                                  |
 | [Model_Gen](Model_Gen)                 | **G** | Model generator (a command-line app)              |  
 | [Model_Imp](Model_Imp)                 | C     | Model implementation (including generated code)   |
@@ -44,6 +46,7 @@ To generate the code, run the 'Model_Gen' module that is a simple command-line a
 Or use the "Generate_Model" run configuration in Rider.
 
 In order to run the generator, the following modules must be compilable:
+* Gena
 * Model_Essence
 * Model_Gen
 * Util                                                                   

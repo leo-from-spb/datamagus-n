@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Text;
 using Shouldly;
 using Util.Extensions;
 
@@ -81,6 +82,62 @@ public static class Assertions
 
     private static char IsIncludedAsChar<E>(this E item, IReadOnlyCollection<E> collection) =>
         collection.Contains(item) ? '+' : '-';
+
+
+    /// <summary>
+    /// Asserts that this text contains the given string in the proper order.
+    /// </summary>
+    /// <param name="text">a text to verify.</param>
+    /// <param name="expectedStrings">string that should be present in the text, in the order to find them in the text.</param>
+    public static void ShouldContainInOrder(this string? text, params string[] expectedStrings)
+    {
+        int n = expectedStrings.Length;
+        if (text is null)
+        {
+            Fail($"Expected text that contains {n} sub-strings but the text is null");
+            return;
+        }
+        if (text.IsEmpty)
+        {
+            Fail($"Expected text that contains {n} sub-strings but the text is empty");
+            return;
+        }
+
+        int[] positions = new int[n];
+        int   lookFrom  = 0;
+        int   failures  = 0;
+        for (int i = 0; i < n; i++)
+        {
+            string es = expectedStrings[i];
+            int    p  = text.IndexOf(es, lookFrom);
+            positions[i] = p;
+            if (p >= 0) lookFrom = p + es.Length;
+            else failures++;
+        }
+
+        if (failures > 0)
+        {
+            var b = new StringBuilder();
+            b.AppendLine("Expected text with sub-strings in the proper order:");
+            for (int i = 0; i < n; i++)
+            {
+                b.Append('\t');
+                b.AppendPad(i + 1, 4);
+                int p1 = positions[i];
+                var es = expectedStrings[i];
+                int p2 = p1 + es.Length - 1;
+                var pp = p1 >= 0 ? $"[{p1}..{p2}]" : "-missed-";
+                b.AppendPad(pp, 14);
+                b.Append('"').Append(es).Append('"').AppendLine();
+            }
+            b.AppendLine("Actual text:");
+            b.AppendLine("------8<------");
+            b.Append(text).EnsureEoln();
+            b.AppendLine("------>8------");
+            b.Append(failures).AppendLine(" sub-strings missed.");
+            Fail(b.ToString());
+        }
+    }
 
 
     private static string Describe<E>(this E[] items)

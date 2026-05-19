@@ -48,6 +48,27 @@ public static class StringExt
                    };
         }
 
+        /// <summary>
+        /// Removes the specified prefix from this string, if one exists.
+        /// </summary>
+        /// <param name="prefix">the prefix to remove (case-sensitive).</param>
+        /// <returns>a string without the prefix.</returns>
+        public string RemovePrefix(string prefix) =>
+            str.StartsWith(prefix)
+                ? str.Remove(0, prefix.Length)
+                : str;
+
+        /// <summary>
+        /// Removes the specified suffix from this string, if one exists.
+        /// </summary>
+        /// <param name="prefix">the suffix to remove (case-sensitive).</param>
+        /// <returns>a string without the suffix.</returns>
+        public string RemoveSuffix(string prefix) =>
+            str.EndsWith(prefix)
+                ? str.Remove(str.Length - prefix.Length, prefix.Length)
+                : str;
+
+
         public string Decapitalized
         {
             get
