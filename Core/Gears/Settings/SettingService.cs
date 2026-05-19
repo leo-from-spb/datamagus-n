@@ -10,7 +10,6 @@ namespace Core.Gears.Settings;
 public interface SettingService
 {
 
-    public SystemSettings    SystemSettings    { get; }
     public WorkspaceSettings WorkspaceSettings { get; }
 
 }

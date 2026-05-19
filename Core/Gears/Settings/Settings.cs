@@ -25,20 +25,6 @@ public interface AbstractSettings
 
 
 /// <summary>
-/// Settings that relate to the computer on which this software is installed.
-/// These settings are computed automatically and could not be changed by the user.
-/// </summary>
-public interface SystemSettings : AbstractSettings
-{
-    public string UserName                   { get; }
-    public string SystemPreferencesPath      { get; }
-    public string SystemWorkspacePath        { get; }
-    public string ActualPersonalSettingsPath { get; }
-    public string ActualComputerSettingsPath { get; }
-}
-
-
-/// <summary>
 /// Settings that relate to the user's workspace, for example, position of windows, last typed text, etc.
 /// These settings are remembered automatically and transparently to the user; there's no UI for changing these settings.
 /// </summary>

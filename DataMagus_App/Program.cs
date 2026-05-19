@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using Core.Services;
+using Core.Stationary;
 using Core.Stationery;
 using NLog;
 using NLog.Config;
@@ -22,6 +23,7 @@ public static class Program
     [STAThread]
     public static void Main(string[] args)
     {
+        ApplicationLocationsDetector.DetectLocations();
         RunInGuiMode(args);
     }
 

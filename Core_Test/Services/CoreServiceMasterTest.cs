@@ -1,4 +1,5 @@
 using Core.Gears.Settings;
+using Core.Stationery;
 
 namespace Core.Services;
 
@@ -6,6 +7,13 @@ namespace Core.Services;
 [TestFixture]
 public class CoreServiceMasterTest
 {
+
+    [OneTimeSetUp]
+    public static void Setup()
+    {
+        DataMagusState.AppStarted(DataMagusState.ApplicationMode.dmamCommandLine);
+    }
+
 
     [Test]
     public void Basic_SunriseAndShutdown()
@@ -16,10 +24,8 @@ public class CoreServiceMasterTest
 
         CoreServiceMaster.IsUp().ShouldBeTrue();
 
-        var settingService = ServiceMill.GetService<SettingService>();
+        var settingService = GetService<SettingService>();
         settingService.ShouldNotBeNull();
-        settingService.SystemSettings.ActualComputerSettingsPath.Length.ShouldBeGreaterThan(3);
-        settingService.SystemSettings.ActualPersonalSettingsPath.Length.ShouldBeGreaterThan(3);
 
         CoreServiceMaster.Shutdown();
 

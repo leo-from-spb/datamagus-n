@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Text.RegularExpressions;
+using Core.Stationery;
 using Util.Extensions;
 using static Util.Fun.RegexFun;
 
@@ -9,18 +10,15 @@ namespace Core.Gears.Settings;
 
 internal class LocalSettingService : SettingService
 {
-    public SystemSettings    SystemSettings    { get; }
     public WorkspaceSettings WorkspaceSettings { get; }
 
     internal LocalSettingService()
     {
-        SystemSettings    = RealSystemSettings.InstantiateSystemSettingsForCurrentOS();
         WorkspaceSettings = new LocalWorkspaceSettings();
     }
 
     internal void Sunrise()
     {
-        ((RealSystemSettings)SystemSettings).Setup();
         LoadAllSettings();
     }
 
@@ -31,7 +29,7 @@ internal class LocalSettingService : SettingService
 
     private void SaveWorkspaceSettings()
     {
-        SaveSettings(WorkspaceSettings, SystemSettings.ActualComputerSettingsPath, "Workspace.ini");
+        SaveSettings(WorkspaceSettings, DataMagusState.Locations.WorkspaceSettingsAppPath, "Workspace.ini");
     }
 
     private void SaveSettings(AbstractSettings settings, string dirPath, string fileName)
@@ -55,7 +53,7 @@ internal class LocalSettingService : SettingService
 
     private void LoadWorkspaceSettings()
     {
-        LoadSettings(WorkspaceSettings, SystemSettings.ActualComputerSettingsPath, "Workspace.ini");
+        LoadSettings(WorkspaceSettings, DataMagusState.Locations.WorkspaceSettingsAppPath, "Workspace.ini");
     }
 
     private void LoadSettings(AbstractSettings settings, string dirPath, string fileName)

@@ -13,6 +13,12 @@ public static class DataMagusState
     /// </summary>
     public static ApplicationMode AppMode { get; private set; }
 
+    /// <summary>
+    /// Locations of settings, etc.
+    /// </summary>
+    public static readonly ApplicationLocations Locations = new();
+
+
     public static void AppStarted(ApplicationMode mode)
     {
         if (AppMode != ApplicationMode.dmamNone)
@@ -29,10 +35,8 @@ public static class DataMagusState
         dmamNone        = _0_,
         dmamAvalonia    = _1_,
         dmamCommandLine = _2_,
-        dmamGui         = _3_
+        dmamGui         = _3_,
+        dmamShutDown    = _255_
     }
 
 }
-
-
-
