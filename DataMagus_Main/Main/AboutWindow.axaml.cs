@@ -2,7 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 
-namespace Gui.Application.Main;
+namespace DataMagus.Main.Main;
 
 public partial class AboutWindow : Window
 {

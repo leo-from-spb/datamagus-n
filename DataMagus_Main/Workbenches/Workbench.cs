@@ -1,6 +1,6 @@
 using Avalonia.Input;
 
-namespace Gui.Application.Workbenches;
+namespace DataMagus.Main.Workbenches;
 
 public interface Workbench
 {

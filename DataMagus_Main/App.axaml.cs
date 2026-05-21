@@ -1,13 +1,14 @@
 using System;
+using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Core.Interaction.Commands;
 using Core.Services;
-using Gui.Application.Main;
+using DataMagus.Main.Main;
 
-namespace Gui.Application;
+namespace DataMagus.Main;
 
-public partial class App : Avalonia.Application
+public partial class App : Application
 {
     private MainWindow? myMainWindow = null;
 

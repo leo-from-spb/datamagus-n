@@ -35,7 +35,7 @@ public static class Program
 
         try
         {
-            Gui.Application.Program.RunAvaloniaApp(args);
+            DataMagus.Main.Program.RunAvaloniaApp(args);
         }
         finally
         {

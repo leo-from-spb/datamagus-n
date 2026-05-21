@@ -4,7 +4,7 @@ using Core.Interaction.Commands;
 using Util.Extensions;
 using static Avalonia.Input.KeyModifiers;
 
-namespace Gui.Application.Main;
+namespace DataMagus.Main.Main;
 
 public class KeyboardShortcuts
 {

@@ -1,7 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Input;
 
-namespace Gui.Application.Workbenches;
+namespace DataMagus.Main.Workbenches;
 
 public partial class ExplorerWorkbench : UserControl, Workbench
 {

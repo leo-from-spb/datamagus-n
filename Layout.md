@@ -28,7 +28,7 @@ Modules:
 | [Model_Imp](Model_Imp)                 | C     | Model implementation (including generated code)   |
 | [Model_Test](Model_Test)               | T     | Tests for model modules                           |
 | [DataMagus_App](DataMagus_App)         | C     | Application bootstrap                             |
-| [Gui_Application](Gui_Application)     | C     | Most GUI code (UI is based on Avalonia framework) |
+| [DataMagus_Main](DataMagus_Main)       | C     | Most GUI code (UI is based on Avalonia framework) |
 | [Util](Util)                           | C     | Utility classes and functions                     |
 | [Util_Test](Util_Test)                 | T     | Tests for utility module                          |
 | [Testing_Appliance](Testing_Appliance) | T     | Test infrastructure                               |

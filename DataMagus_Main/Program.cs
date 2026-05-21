@@ -5,7 +5,7 @@ using Core.Services;
 using Core.Stationery;
 using static Core.Stationery.DataMagusState.ApplicationMode;
 
-namespace Gui.Application;
+namespace DataMagus.Main;
 
 /// <summary>
 /// This "Program" is for compatibility with Avalonia Tools only.

@@ -1,7 +1,7 @@
 using Avalonia.Controls;
 using Core.Interaction.Commands;
 
-namespace Gui.Application.Main;
+namespace DataMagus.Main.Main;
 
 internal class MainMenu
 {

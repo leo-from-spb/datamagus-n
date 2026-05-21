@@ -1,7 +1,7 @@
 using Core.Interaction.Commands;
-using Gui.Application.Main;
+using DataMagus.Main.Main;
 
-namespace Gui.Application.Interaction.Commands;
+namespace DataMagus.Main.Interaction.Commands;
 
 
 internal class SimpleGuiCommands : MainCommands

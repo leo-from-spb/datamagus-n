@@ -1,10 +1,10 @@
 using System.Diagnostics.CodeAnalysis;
 using Core.Interaction.Commands;
 using Core.Services;
-using Gui.Application.Interaction.Commands;
-using Gui.Application.Main;
+using DataMagus.Main.Interaction.Commands;
+using DataMagus.Main.Main;
 
-namespace Gui.Application.Services;
+namespace DataMagus.Main.Services;
 
 
 

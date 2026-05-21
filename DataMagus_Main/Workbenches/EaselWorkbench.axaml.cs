@@ -3,9 +3,9 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media;
-using Gui.Application.Main;
+using DataMagus.Main.Main;
 
-namespace Gui.Application.Workbenches;
+namespace DataMagus.Main.Workbenches;
 
 public partial class EaselWorkbench : UserControl, Workbench
 {

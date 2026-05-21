@@ -5,9 +5,9 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Core.Gears.Settings;
 using Core.Services;
-using Gui.Application.Workbenches;
+using DataMagus.Main.Workbenches;
 
-namespace Gui.Application.Main;
+namespace DataMagus.Main.Main;
 
 public partial class MainWindow : Window
 {
