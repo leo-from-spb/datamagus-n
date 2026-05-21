@@ -45,6 +45,6 @@ public static class Program
     private static void PrepareStartInAvaloniaMode()
     {
         DataMagusState.AppStarted(dmamAvalonia);
-        CoreServiceMaster.Sunrise();
+        CoreServiceMaster.Startup();
     }
 }

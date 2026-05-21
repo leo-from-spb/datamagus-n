@@ -69,7 +69,7 @@ public static class Program
 
     private static void Sunrise()
     {
-        CoreServiceMaster.Sunrise();
+        CoreServiceMaster.Startup();
     }
 
 

@@ -5,6 +5,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Core.Gears.Settings;
 using Core.Services;
+using DataMagus.Main.Services;
 using DataMagus.Main.Workbenches;
 
 namespace DataMagus.Main.Main;
@@ -25,6 +26,20 @@ public partial class MainWindow : Window
 
         instance = this;
 
+        InitializeMainWindowPosition();
+
+        GuiServiceMaster.Startup();
+
+        SwitchToEasel();
+
+        // if in the debug mode
+        #if DEBUG
+        this.AttachDevTools(new KeyGesture(Key.F12, KeyModifiers.Control | KeyModifiers.Shift));
+        #endif
+    }
+
+    private void InitializeMainWindowPosition()
+    {
         var settingService    = ServiceMill.GetService<SettingService>();
         var workspaceSettings = settingService.WorkspaceSettings;
         var mainWindowPlace   = workspaceSettings.MainWindowPlace;
@@ -35,13 +50,6 @@ public partial class MainWindow : Window
             Height   = r.Height;
             Position = new PixelPoint(r.X, r.Y);
         }
-
-        SwitchToEasel();
-
-        // if in the debug mode
-        #if DEBUG
-        this.AttachDevTools(new KeyGesture(Key.F12, KeyModifiers.Control | KeyModifiers.Shift));
-        #endif
     }
 
     internal static MainWindow Instance

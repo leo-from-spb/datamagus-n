@@ -38,7 +38,7 @@ internal class RealCommandRegistry : CommandRegistry
     public override IReadOnlyList<Command> ListAllCommands() => AllCommands.Values.ToList();
 
 
-    internal void Sunrise()
+    internal void Init()
     {
         foreach (var command in AllCommands.Values.OfType<BasicCommand>())
             command.Setup();
@@ -46,6 +46,6 @@ internal class RealCommandRegistry : CommandRegistry
 
     internal void Sunset()
     {
-        
+
     }
 }

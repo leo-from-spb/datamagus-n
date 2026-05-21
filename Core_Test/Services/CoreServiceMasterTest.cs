@@ -20,7 +20,7 @@ public class CoreServiceMasterTest
     {
         CoreServiceMaster.IsUp().ShouldBeFalse();
 
-        CoreServiceMaster.Sunrise();
+        CoreServiceMaster.Startup();
 
         CoreServiceMaster.IsUp().ShouldBeTrue();
 

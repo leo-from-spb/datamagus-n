@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using Core.Interaction.Commands;
 using Core.Services;
 using DataMagus.Main.Interaction.Commands;
@@ -11,10 +10,9 @@ namespace DataMagus.Main.Services;
 public static class GuiServiceMaster
 {
 
-    [SuppressMessage("ReSharper", "UnusedVariable")]
-    internal static void Sunrise()
+    public static void Startup()
     {
-        var mill = HardServiceMill.GetTheMill();
+        var mill = BigServiceMill.GetTheMill();
 
         // get core services in order for providing them to the newly creating service
         var theCommandRegistry = ServiceMill.GetService<CommandRegistry>();

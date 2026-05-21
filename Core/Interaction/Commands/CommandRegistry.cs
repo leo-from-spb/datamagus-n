@@ -9,7 +9,7 @@ namespace Core.Interaction.Commands;
 /// Registry of all existing commands in the system.
 /// </summary>
 [Service]
-public abstract class CommandRegistry
+public abstract class CommandRegistry : Service
 {
     public void Execute(string id)
     {

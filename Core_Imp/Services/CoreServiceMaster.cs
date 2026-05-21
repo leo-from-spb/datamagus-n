@@ -10,24 +10,24 @@ namespace Core.Services;
 public static class CoreServiceMaster
 {
 
-    public static void Sunrise()
+    public static void Startup()
     {
-        HardServiceMill.CreateServiceMill();
-        var mill = HardServiceMill.GetTheMill();
+        BigServiceMill.Init();
+        BigServiceMill mill = BigServiceMill.GetTheMill();
 
         // instantiate and register all services
         var theSettingsService = mill.Register(new LocalSettingService());
         var theCommandRegistry = mill.Register(new RealCommandRegistry());
 
         // set up the services
-        theSettingsService.Sunrise();
-        theCommandRegistry.Sunrise();
+        theSettingsService.Init();
+        theCommandRegistry.Init();
     }
 
 
     public static void Shutdown()
     {
-        var mill = HardServiceMill.GetTheMillWhenInitialized();
+        var mill = BigServiceMill.GetTheMillWhenInitialized();
         if (mill is not null)
         {
             if (DataMagusState.AppMode == DataMagusState.ApplicationMode.dmamGui)
@@ -41,7 +41,7 @@ public static class CoreServiceMaster
         }
     }
 
-    public static bool IsUp() => HardServiceMill.GetTheMillWhenInitialized() is not null;
+    public static bool IsUp() => BigServiceMill.GetTheMillWhenInitialized() is not null;
 
 
 }

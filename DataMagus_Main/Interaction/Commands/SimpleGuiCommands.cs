@@ -1,10 +1,11 @@
 using Core.Interaction.Commands;
+using Core.Services;
 using DataMagus.Main.Main;
 
 namespace DataMagus.Main.Interaction.Commands;
 
 
-internal class SimpleGuiCommands : MainCommands
+internal class SimpleGuiCommands : MainCommands, Service
 {
 
 

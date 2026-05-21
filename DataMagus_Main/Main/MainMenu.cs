@@ -1,9 +1,10 @@
 using Avalonia.Controls;
 using Core.Interaction.Commands;
+using Core.Services;
 
 namespace DataMagus.Main.Main;
 
-internal class MainMenu
+internal class MainMenu : Service
 {
     private CommandRegistry   CommandRegistry;
     private KeyboardShortcuts KeyboardShortcuts;

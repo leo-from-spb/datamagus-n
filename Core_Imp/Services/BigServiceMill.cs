@@ -3,44 +3,41 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using Util.Extensions;
 
 namespace Core.Services;
 
 
-public class HardServiceMill : ServiceMill, IDisposable
+public class BigServiceMill : ServiceMill, IDisposable
 {
-    private readonly List<object>             services          = new List<object>();
-    private readonly Dictionary<Type, object> serviceDictionary = new Dictionary<Type, object>();
+    private readonly List<Service>            services          = new List<Service>();
+    private readonly Dictionary<Type,Service> serviceDictionary = new Dictionary<Type,Service>();
 
+    private bool weAreSunSettings = false;
 
-    internal static void CreateServiceMill()
+    internal static void Init()
     {
         Debug.Assert(theMill is null, "The service mill is already created");
-        theMill = new HardServiceMill();
+        theMill = new BigServiceMill();
     }
 
-    public static HardServiceMill GetTheMill()
+    public static BigServiceMill GetTheMill()
     {
         var mill = theMill;
         Debug.Assert(mill is not null, "The service mill is not created yet");
-        if (theMill is HardServiceMill hsm) return hsm;
+        if (theMill is BigServiceMill bsm) return bsm;
         else throw new InvalidOperationException($"The current mill is already set up by another class: {theMill}");
     }
 
-    public static HardServiceMill? GetTheMillWhenInitialized() =>
-        theMill as HardServiceMill;
-
-
-    public HardServiceMill()
-    {
-        theMill = this;
-    }
+    public static BigServiceMill? GetTheMillWhenInitialized() =>
+        theMill as BigServiceMill;
 
 
     public S Register<S>(S service)
-        where S: class
+        where S: class, Service
     {
+        if (weAreSunSettings) throw new InvalidOperationException($"The service mill is shutting down, cannot register the service {service.ServiceName}");
         var serviceType = service.GetType();
         services.Add(service);
         serviceDictionary[serviceType] = service;
@@ -77,17 +74,40 @@ public class HardServiceMill : ServiceMill, IDisposable
 
     protected internal void ShutdownAllServices()
     {
+        weAreSunSettings = true;
+        Thread.Sleep(1);
+
         int n = services.Count;
-        for (int i = n-1; i >= 0; i--)
+
+        // first, notify we're going to shut down
+        for (int i = 0; i < n; i++)
         {
-            object service = services[i];
+            Service service = services[i];
             try
             {
+                service.Finalizing();
+            }
+            catch (Exception e)
+            {
+                var message = $"Unexpected exception during finalizing the service ${service.ServiceName} (nr {i}): {e.Message}";
+                Console.Error.WriteLine(message);
+                // TODO log
+            }
+        }
+
+        // then, shut down all of them in the reverse order
+        for (int i = n-1; i >= 0; i--)
+        {
+            Service service = services[i];
+            try
+            {
+                service.Shutdown();
                 if (service is IDisposable d) d.Dispose();
             }
             catch (Exception e)
             {
-                Console.Error.WriteLine($"Disposing service {service.GetType().Name} thrown {e.GetType().Name}: {e.Message}");
+                var message = $"Unexpected exception during shut down the service ${service.ServiceName} (nr {i}): {e.Message}";
+                Console.Error.WriteLine(message);
                 // TODO log the problem
             }
             finally

@@ -17,7 +17,7 @@ internal class LocalSettingService : SettingService
         WorkspaceSettings = new LocalWorkspaceSettings();
     }
 
-    internal void Sunrise()
+    internal void Init()
     {
         LoadAllSettings();
     }

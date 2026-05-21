@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 using Avalonia.Input;
 using Core.Interaction.Commands;
+using Core.Services;
 using Util.Extensions;
 using static Avalonia.Input.KeyModifiers;
 
 namespace DataMagus.Main.Main;
 
-public class KeyboardShortcuts
+public class KeyboardShortcuts : Service
 {
 
     private Dictionary<string, KeyGesture> CommandShortcuts = new();

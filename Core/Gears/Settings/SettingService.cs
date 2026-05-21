@@ -7,7 +7,7 @@ namespace Core.Gears.Settings;
 /// The service that holds all settings.
 /// </summary>
 [Service]
-public interface SettingService
+public interface SettingService : Service
 {
 
     public WorkspaceSettings WorkspaceSettings { get; }

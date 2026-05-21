@@ -4,11 +4,11 @@ namespace Core.Services;
 
 
 [TestFixture]
-public class HardServiceMillTest
+public class BigServiceMillTest
 {
 
     [Service]
-    private interface MyTestServiceIntf1 { }
+    private interface MyTestServiceIntf1 : Service { }
     [Service]
     private interface MyTestServiceIntf2 : MyTestServiceIntf1 { }
 
@@ -19,7 +19,7 @@ public class HardServiceMillTest
 
     private class MyTestServiceImpl : MyTestBaseService, MyTestServiceIntf2 { }
 
-    private class MyTestServiceImpl2 : IDisposable { public void Dispose() { } }
+    private class MyTestServiceImpl2 : Service, IDisposable { public void Dispose() { } }
 
 
 
@@ -27,7 +27,7 @@ public class HardServiceMillTest
     [Test]
     public void GetByDirectClass()
     {
-        var hsm     = new HardServiceMill();
+        var hsm     = new BigServiceMill();
         var service = new MyTestServiceImpl();
         hsm.Register(service);
         hsm.FindService<MyTestServiceImpl>().ShouldBeSameAs(service);
@@ -36,7 +36,7 @@ public class HardServiceMillTest
     [Test]
     public void GetByBaseClass()
     {
-        var hsm     = new HardServiceMill();
+        var hsm     = new BigServiceMill();
         var service = new MyTestServiceImpl();
         hsm.Register(service);
         hsm.FindService<MyTestBaseService>().ShouldBeSameAs(service);
@@ -45,7 +45,7 @@ public class HardServiceMillTest
     [Test]
     public void GetByInterface()
     {
-        var hsm     = new HardServiceMill();
+        var hsm     = new BigServiceMill();
         var service = new MyTestServiceImpl();
         hsm.Register(service);
         hsm.FindService<MyTestServiceIntf2>().ShouldBeSameAs(service);
@@ -55,7 +55,7 @@ public class HardServiceMillTest
     [Test]
     public void Shutdown_NoMore()
     {
-        var hsm     = new HardServiceMill();
+        var hsm     = new BigServiceMill();
         hsm.Register(new MyTestServiceImpl());
         hsm.Register(new MyTestServiceImpl2());
 
