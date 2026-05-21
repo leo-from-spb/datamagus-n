@@ -1,6 +1,6 @@
 using System.Drawing;
 using System.Text.RegularExpressions;
-using static Util.Fun.RegexFun;
+using static Util.Text.RegexFun;
 
 namespace Core.Gears.Settings;
 

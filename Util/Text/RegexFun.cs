@@ -1,7 +1,7 @@
 using System.Text.RegularExpressions;
 using JetBrains.Annotations;
 
-namespace Util.Fun;
+namespace Util.Text;
 
 public static class RegexFun
 {

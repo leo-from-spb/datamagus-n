@@ -3,7 +3,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using Core.Stationery;
 using Util.Extensions;
-using static Util.Fun.RegexFun;
+using static Util.Text.RegexFun;
 
 namespace Core.Gears.Settings;
 

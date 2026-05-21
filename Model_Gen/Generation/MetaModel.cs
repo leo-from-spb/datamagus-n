@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Util.Collections;
 using Util.Extensions;
-using Util.Fun;
+using Util.Text;
 
 namespace Model.Generation;
 
