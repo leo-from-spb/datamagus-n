@@ -1,46 +1,26 @@
-using System;
-using System.IO;
 using System.Linq;
 using Gena.CSharp;
 using Util.Extensions;
 
 namespace Model.Generation;
 
-internal class MetaProjector(MetaModel mm) : MetaFileProducer
+/// <summary>
+/// Builds C# model files and classes by MetaModel.
+/// </summary>
+/// <param name="mm"></param>
+internal class MetaMason(MetaModel mm)
 {
-    private const string ModuleDirPath        = "./Model_Imp";
-    private const string ImmDirPath           = ModuleDirPath + "/_generated_";
-    private const string ImmCommonFilePath    = ImmDirPath + "/ModelCommonImmImp2.cs";
-    private const string ImmConceptFilePath   = ImmDirPath + "/ModelConceptImmImp2.cs";
-    private const string ImmVisualityFilePath = ImmDirPath + "/ModelVisualityImmImp2.cs";
+    internal readonly CsConstruction Construction = new();
 
-
-    private readonly CsConstruction Construction = new CsConstruction();
-
-
-    internal void CheckDirectory()
+    internal void ConstructCsModel()
     {
-        if (!Directory.Exists(ModuleDirPath))
-        {
-            Console.Error.WriteLine("Wrong current directory, should be the project root.");
-            Environment.Exit(-1);
-        }
-        if (!Directory.Exists(ImmDirPath))
-        {
-            Console.Error.WriteLine("Subdirectory Imp should exist.");
-            Environment.Exit(-2);
-        }
+        BuildImmutableClasses(SegmentKind.soCommon, MetaConsts.ImmCommonFilePath);
+        BuildImmutableClasses(SegmentKind.soConcept, MetaConsts.ImmConceptFilePath);
+        BuildImmutableClasses(SegmentKind.soVisuality, MetaConsts.ImmVisualityFilePath);
     }
 
 
-    internal void ProduceCode()
-    {
-        ProduceImmutableClasses(SegmentKind.soCommon, ImmCommonFilePath);
-        ProduceImmutableClasses(SegmentKind.soConcept, ImmConceptFilePath);
-        ProduceImmutableClasses(SegmentKind.soVisuality, ImmVisualityFilePath);
-    }
-
-    private void ProduceImmutableClasses(SegmentKind segmentKind, string filePath)
+    private void BuildImmutableClasses(SegmentKind segmentKind, string filePath)
     {
         CsFile file = Construction.NewFile("Model.Imm2", filePath);
 
@@ -57,17 +37,12 @@ internal class MetaProjector(MetaModel mm) : MetaFileProducer
 
         foreach (var matter in segmentMatters)
         {
-            ProduceImmMatter(file, matter);
+            BuildImmMatter(file, matter);
         }
-
-        var producer = new CsProducer();
-        producer.ProduceFile(file);
-        string text = producer.ResultText;
-        WriteFile(filePath, text);
     }
 
 
-    private void ProduceImmMatter(CsFile file, MetaMatter m)
+    private void BuildImmMatter(CsFile file, MetaMatter m)
     {
         var mClass = file.NewClass(m.Imm.ClassName,
                                    m.Imm.BaseClassName,

@@ -10,12 +10,19 @@ public class CsConstruction
     /// <summary>
     /// C# files.
     /// </summary>
-    private List<CsFile> Files = new();
+    public IReadOnlyList<CsFile> Files => MyFiles;
+    private List<CsFile> MyFiles = new();
 
+    /// <summary>
+    /// Prepares a new C# file.
+    /// </summary>
+    /// <param name="fileNamespace">the file namespace.</param>
+    /// <param name="fileName">file name, possible with path relative to the base directory.</param>
+    /// <returns>just created C# file.</returns>
     public CsFile NewFile(string fileNamespace, string fileName)
     {
         var file = new CsFile(this, fileNamespace, fileName);
-        Files.Add(file);
+        MyFiles.Add(file);
         return file;
     }
 
@@ -24,7 +31,7 @@ public class CsConstruction
     /// </summary>
     public void ClearContent()
     {
-        Files.Clear();
+        MyFiles.Clear();
     }
 
 }

@@ -20,9 +20,9 @@ public class CsFile
     public string Namespace;
 
     /// <summary>
-    /// File name (without path and extension).
+    /// File path and name (the path is relative to the base directory).
     /// </summary>
-    public string Name;
+    public string FileName;
 
 
     /// <summary>
@@ -35,11 +35,11 @@ public class CsFile
 
     public readonly List<CsClass> Classes = new();
 
-    internal CsFile(CsConstruction con, string ns, string name)
+    internal CsFile(CsConstruction con, string ns, string fileName)
     {
         Con       = con;
         Namespace = ns;
-        Name      = name;
+        FileName  = fileName;
     }
 
     public CsClass NewClass(string name,

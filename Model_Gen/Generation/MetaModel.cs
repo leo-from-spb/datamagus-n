@@ -7,6 +7,9 @@ using Util.Fun;
 
 namespace Model.Generation;
 
+/// <summary>
+/// Model of elements of our Model.
+/// </summary>
 internal class MetaModel
 {
     internal readonly List<MetaMatter>             Matters = [];
@@ -32,7 +35,7 @@ internal class MetaMatter
 {
     internal readonly SegmentKind SegmKind;
     internal readonly byte        Level;
-    internal readonly byte        OrderNum;  
+    internal readonly byte        OrderNum;
     internal readonly string      IntfName;
     internal readonly Type        Intf;
     internal readonly bool        IsConcrete;
@@ -56,7 +59,7 @@ internal class MetaMatter
     internal readonly Dictionary<string, MetaRef>      AllRefs             = [];
     internal readonly HashSet<MetaProperty>            OwnProperties = [];
     internal readonly Dictionary<string, MetaProperty> AllProperties = [];
-    
+
     internal readonly MetaImm Imm;
 
     internal bool        HasName;
@@ -75,7 +78,7 @@ internal class MetaMatter
 
         internal bool ToImplement => !Matter.IsAbstract && !ManuallyImplemented;
     }
-    
+
     internal MetaMatter(Type intf, bool isConcrete, byte level)
     {
         OrderNum   = ++matterOrderCounter;
@@ -122,10 +125,10 @@ internal class MetaFamily
     internal readonly string     FamilyTypeName;
     internal readonly string     FamilyName;
     internal readonly bool       Owned;
-    
+
     internal bool   IsAbstract    => Child.IsAbstract;
     internal string FamilyVarName => FamilyName.Decapitalized;
-    
+
     internal MetaFamily(MetaMatter matter, MetaMatter child, Type familyType, string familyName)
         : this(matter, child, familyType, familyName, true) { }
 
