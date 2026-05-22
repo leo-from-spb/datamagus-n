@@ -1,6 +1,8 @@
 using Avalonia.Controls;
+using Avalonia.Input;
 using Core.Interaction.Commands;
 using Core.Services;
+using Util.SystemStuff;
 
 namespace DataMagus.Main.Main;
 
@@ -42,6 +44,8 @@ internal class MainMenu : Service
                        Gesture = shortcut,
                    };
         menu.Add(item);
+        if (shortcut is not null && EnvironmentInfo.OS != OS.osMac)
+            Window.KeyBindings.Add(new KeyBinding { Gesture = shortcut, Command = command });
     }
 
     private void makeSeparator(NativeMenu menu)
