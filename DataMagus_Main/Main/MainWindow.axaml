@@ -14,6 +14,7 @@
          <StyleInclude Source="../Styles.axaml"/>
     </Window.Styles>
     <DockPanel Name="PrimaryPanel" Classes="AncientGround">
+        <NativeMenuBar DockPanel.Dock="Top"/>
         <DockPanel Name="StatusPanel" DockPanel.Dock="Bottom" MinHeight="18" HorizontalAlignment="Stretch">
             <Label Content="  " DockPanel.Dock="Left"/>
             <Label Name="StatusLine" DockPanel.Dock="Left"/>

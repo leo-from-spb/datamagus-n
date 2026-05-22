@@ -4,6 +4,7 @@
     <option name="projectPerEditor">
       <map>
         <entry key="DataMagus_Main/App.axaml" value="DataMagus_App/DataMagus_App.csproj" />
+        <entry key="DataMagus_Main/Main/MainWindow.axaml" value="DataMagus_App/DataMagus_App.csproj" />
         <entry key="Gui_Application/Main/AboutWindow.axaml" value="Gui_Application/Gui_Application.csproj" />
         <entry key="Gui_Application/Main/MainWindow.axaml" value="Gui_Application/Gui_Application.csproj" />
         <entry key="Gui_Application/Workbenches/EaselWorkbench.axaml" value="Gui_Application/Gui_Application.csproj" />
