@@ -10,4 +10,8 @@
       <ProjectReference Include="..\Util\Util.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="NLog" Version="6.1.3" />
+    </ItemGroup>
+
 </Project>
