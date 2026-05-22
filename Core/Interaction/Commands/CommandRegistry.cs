@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Core.Services;
+using NLog;
 
 namespace Core.Interaction.Commands;
 
@@ -11,10 +12,12 @@ namespace Core.Interaction.Commands;
 [Service]
 public abstract class CommandRegistry : Service
 {
+    private static readonly Logger Log = LogManager.GetCurrentClassLogger();
+
     public void Execute(string id)
     {
         var command = Find(id);
-        if (command is null) return; // TODO LOG
+        if (command is null) { Log.Warn($"Command {id} not found"); return; }
         command.Execute();
     }
 

@@ -1,7 +1,9 @@
+using Core.TestingInCore;
+
 namespace Core.Interaction.Commands;
 
 [TestFixture]
-public class CommandTest
+public class CommandTest : CoreCase
 {
 
     [Test]

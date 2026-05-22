@@ -1,11 +1,12 @@
 using Core.Gears.Settings;
 using Core.Stationery;
+using Core.TestingInCore;
 
 namespace Core.Services;
 
 
 [TestFixture]
-public class CoreServiceMasterTest
+public class CoreServiceMasterTest : CoreCase
 {
 
     [OneTimeSetUp]

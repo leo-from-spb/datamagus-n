@@ -1,11 +1,12 @@
 using System.Linq;
+using Core.TestingInCore;
 using Testing.Appliance.Assertions;
 
 namespace Core.Interaction.Commands;
 
 
 [TestFixture]
-public class RealCommandRegistryTest
+public class RealCommandRegistryTest : CoreCase
 {
 
     [Test]

@@ -1,10 +1,11 @@
 using System;
+using Core.TestingInCore;
 
 namespace Core.Services;
 
 
 [TestFixture]
-public class BigServiceMillTest
+public class BigServiceMillTest : CoreCase
 {
 
     [Service]

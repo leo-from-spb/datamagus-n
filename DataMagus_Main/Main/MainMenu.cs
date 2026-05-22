@@ -2,6 +2,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Core.Interaction.Commands;
 using Core.Services;
+using NLog;
 using Util.SystemStuff;
 
 namespace DataMagus.Main.Main;
@@ -11,6 +12,9 @@ internal class MainMenu : Service
     private CommandRegistry   CommandRegistry;
     private KeyboardShortcuts KeyboardShortcuts;
     private MainWindow        Window;
+
+    private static readonly Logger Log = LogManager.GetCurrentClassLogger();
+
 
     internal MainMenu(CommandRegistry commandRegistry, KeyboardShortcuts keyboardShortcuts, MainWindow window)
     {
@@ -35,7 +39,7 @@ internal class MainMenu : Service
     private void makeItem(string id, NativeMenu menu)
     {
         var command = CommandRegistry[id];
-        if (command is null) return; // TODO LOG
+        if (command is null) { Log.Warn($"Command {id} not found"); return; }
         var shortcut = KeyboardShortcuts[id];
         var item = new NativeMenuItem
                    {

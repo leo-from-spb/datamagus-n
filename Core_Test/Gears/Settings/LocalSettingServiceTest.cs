@@ -1,12 +1,13 @@
 using System;
 using System.Drawing;
 using Core.Stationery;
+using Core.TestingInCore;
 using Testing.Appliance.FileSystem;
 
 namespace Core.Gears.Settings;
 
 [TestFixture]
-public class LocalSettingServiceTest
+public class LocalSettingServiceTest : CoreCase
 {
     private TempDirectory TempWorkspaceDir;
 

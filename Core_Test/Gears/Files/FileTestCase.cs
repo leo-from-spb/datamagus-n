@@ -1,6 +1,10 @@
+using Core.TestingInCore;
+
 namespace Core.Gears.Files;
 
-public abstract class FileTestCase
+
+
+public abstract class FileTestCase : CoreCase
 {
 
     protected static string? ProjectRootPath;

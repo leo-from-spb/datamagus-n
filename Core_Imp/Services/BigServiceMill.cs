@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
+using NLog;
 using Util.Extensions;
 
 namespace Core.Services;
@@ -16,8 +17,11 @@ public class BigServiceMill : ServiceMill, IDisposable
 
     private bool weAreSunSettings = false;
 
+    private static Logger Log = LogManager.GetCurrentClassLogger();
+
     internal static void Init()
     {
+        Log.Debug("Big Service Mill is starting");
         Debug.Assert(theMill is null, "The service mill is already created");
         theMill = new BigServiceMill();
     }
@@ -90,8 +94,7 @@ public class BigServiceMill : ServiceMill, IDisposable
             catch (Exception e)
             {
                 var message = $"Unexpected exception during finalizing the service ${service.ServiceName} (nr {i}): {e.Message}";
-                Console.Error.WriteLine(message);
-                // TODO log
+                Log.Error(e, message);
             }
         }
 
@@ -107,8 +110,7 @@ public class BigServiceMill : ServiceMill, IDisposable
             catch (Exception e)
             {
                 var message = $"Unexpected exception during shut down the service ${service.ServiceName} (nr {i}): {e.Message}";
-                Console.Error.WriteLine(message);
-                // TODO log the problem
+                Log.Error(e, message);
             }
             finally
             {

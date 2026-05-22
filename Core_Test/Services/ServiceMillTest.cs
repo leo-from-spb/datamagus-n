@@ -1,9 +1,11 @@
+using Core.TestingInCore;
+
 namespace Core.Services;
 
 
 
 [TestFixture]
-public class ServiceMillTest
+public class ServiceMillTest : CoreCase
 {
 
     private class TestServiceMill : ServiceMill
