@@ -50,20 +50,20 @@ public static class Program
     {
         bool debug = DataMagusInfo.InDebug;
 
-        var config     = new LoggingConfiguration();
-        var logLevel = debug ? LogLevel.Trace : LogLevel.Info;
+        var config   = new LoggingConfiguration();
+        var logLevel = debug ? LogLevel.Debug : LogLevel.Info;
 
         var logConsole = new ConsoleTarget("console")
                          {
-                             Layout = @"${date:format=HH\:mm\:ss} ${level:uppercase=true} ${logger:shortName=true}: ${message}"
+                             Layout = @"${date:format=HH\:mm\:ss} ${pad:padding=5:inner=${level:uppercase=false}}  ${logger:shortName=true}: ${message}"
                          };
 
         config.AddRule(logLevel, LogLevel.Fatal, logConsole);
         LogManager.Configuration = config;
 
-        Log = LogManager.GetLogger("Application.Boot");
-        Log.Info($"DataMagus version {DataMagusInfo.ProductVersion} {(debug ? "in debug mode" : "")}");
-        Log.Debug($"Command-line options: {DataMagusInfo.CommandLineOptions.ActualOptions.Select(o => o.Code).JoinToString()}");
+        Log = LogManager.GetCurrentClassLogger();
+        Log.Info("DataMagus version {0} {1}", DataMagusInfo.ProductVersion, debug ? "in debug mode" : "");
+        Log.Debug("Command-line options: {0}", DataMagusInfo.CommandLineOptions.ActualOptions.Select(o => o.Code).JoinToString());
     }
 
 
