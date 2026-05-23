@@ -9,6 +9,10 @@ using Util.Fun;
 
 namespace Model.Generation;
 
+/// <summary>
+/// Collects the meta data from the manually authored interfaces and prepares our MetaModel.
+/// </summary>
+/// <param name="mm"></param>
 internal class MetaCollector (MetaModel mm)
 {
 
@@ -23,7 +27,7 @@ internal class MetaCollector (MetaModel mm)
         HandleInterface(typeof(NamedMediumMatter), false, 0);
         HandleInterface(typeof(NamedTermMatter), false, 0);
         HandleInterface(typeof(Root), true, 0);
-        
+
         mm.Matters.Sort((m1, m2) => (byte)(m1.SegmKind) - (byte)(m2.SegmKind));
     }
 
@@ -43,10 +47,10 @@ internal class MetaCollector (MetaModel mm)
         {
             var familyEntries =
                 from child in intf.GetProperties()
-                where child.MemberType == MemberTypes.Property 
+                where child.MemberType == MemberTypes.Property
                    && child.PropertyType.IsAssignableTo(familyType)
                 select child;
-            foreach (var fe in familyEntries) 
+            foreach (var fe in familyEntries)
                 HandleFamily(m, fe, level);
 
             var refEntries =
@@ -64,7 +68,7 @@ internal class MetaCollector (MetaModel mm)
                    && !p.PropertyType.IsAssignableTo(familyType)
                    && !p.PropertyType.IsAssignableTo(refType)
                 select p;
-            foreach (var pe in proEntries) 
+            foreach (var pe in proEntries)
                 HandleProperty(m, pe);
         }
     }
@@ -99,7 +103,7 @@ internal class MetaCollector (MetaModel mm)
     {
         var propType = prop.PropertyType;
         var propIntf = propType.GenericTypeArguments[0];
-        if (!mm.Intfs.ContainsKey(propIntf)) 
+        if (!mm.Intfs.ContainsKey(propIntf))
             HandleInterface(propIntf, true, parentLevel.Succ);
         var child = mm.Intfs[propIntf];
         Debug.Assert(child is not null);

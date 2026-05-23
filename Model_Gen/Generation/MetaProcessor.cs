@@ -6,6 +6,10 @@ using Util.Extensions;
 
 namespace Model.Generation;
 
+/// <summary>
+/// Analyses and refines the MetaModel.
+/// </summary>
+/// <param name="mm"></param>
 internal class MetaProcessor (MetaModel mm)
 {
     private readonly ImmutableHashSet<string> ManualImplementedMatters =
