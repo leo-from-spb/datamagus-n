@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Util.Fun;
+using Util.Structures;
 using static System.Math;
 
 namespace Util.Collections.Implementation;
@@ -13,7 +14,7 @@ namespace Util.Collections.Implementation;
 /// </summary>
 /// <typeparam name="K">type of keys.</typeparam>
 /// <typeparam name="V">type of associated values.</typeparam>
-internal sealed class ImmutablePatchedDict<K,V> : ImmutableDictionary<K,V>, ImmDict<K,V>
+internal class ImmutablePatchedDict<K,V> : ImmutableDictionary<K,V>, ImmDict<K,V>
 {
     protected override string DictionaryWord => "Patched Dictionary";
 
@@ -86,7 +87,7 @@ internal sealed class ImmutablePatchedDict<K,V> : ImmutableDictionary<K,V>, ImmD
     /// Makes a copy of this view that doesn't reference this instance or its delegates.
     /// </summary>
     /// <returns>the copy.</returns>
-    public ImmListDict<K,V> Repack()
+    public virtual ImmOrdDict<K,V> Repack()
     {
         var entries = EnumerateEntries().ToArray();
         return ImmutableArrayDictionary<K,V>.MakeListDict(entries, false);
@@ -269,4 +270,26 @@ internal sealed class ImmutablePatchedDict<K,V> : ImmutableDictionary<K,V>, ImmD
 
     }
 
+}
+
+
+
+internal class ImmutablePatchedUintDict<V> : ImmutablePatchedDict<uint, V>
+{
+    public ImmutablePatchedUintDict(ImmDict<uint, V> origin, ImmDict<uint, V> patch, ImmSet<uint> removed)
+        : base(origin, patch, removed) { }
+
+
+    public override ImmOrdDict<uint, V> Repack()
+    {
+        var entries = EnumerateEntries().ToArray();
+        int n       = Count;
+
+        if (n == 0) return EmptyDictionary<uint, V>.Instance;
+        if (n == 1) return new ImmutableSingletonSortedDictionary<uint,V>(entries.First());
+
+        var interval = ImmutableFlatDictionary<V>.CollectInterval(entries);
+        if (interval.Length() <= n * 5) return new ImmutableFlatDictionary<V>(interval, entries);
+        else return new ImmutableHashDictionary<uint,V>(entries, false);
+    }
 }

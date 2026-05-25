@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Util.Collections.Implementation;
 
 namespace Util.Collections;
@@ -794,6 +796,7 @@ public static class ImmExtensions
         /// <param name="patch">entries to add/change.</param>
         /// <param name="removed">keys to remove.</param>
         /// <returns>new dictionary.</returns>
+        [OverloadResolutionPriority(2)]
         public ImmDict<K,V> Patch(ImmDict<K,V> patch, ImmSet<K> removed)
         {
             int n = dict.Count;
@@ -805,6 +808,60 @@ public static class ImmExtensions
             return newDict.CascadingLevel <= 4 && (m + r) * 4 < n
                 ? newDict
                 : newDict.Repack();
+        }
+
+        /// <summary>
+        /// Patches this dictionary.
+        /// </summary>
+        /// <param name="patch">entries to add/change.</param>
+        /// <param name="removed">keys to remove.</param>
+        /// <returns>new dictionary.</returns>
+        [OverloadResolutionPriority(1)]
+        public ImmDict<K,V> Patch(IReadOnlyDictionary<K,V>? patch, IReadOnlySet<K>? removed)
+        {
+            var p = patch is not null && patch.Count > 0 ? patch.ToImmDict() : EmptyDictionary<K,V>.Instance;
+            var r = removed is not null && removed.Count > 0 ? removed.ToImmSet() : EmptySet<K>.Instance;
+            return dict.Patch(p, r);
+        }
+    }
+
+    /// <summary>
+    /// Additional functions for ImmDict, specialization for <c>uint</c> keys.
+    /// </summary>
+    extension<V>(ImmDict<uint,V> dict)
+    {
+        /// <summary>
+        /// Patches this dictionary.
+        /// </summary>
+        /// <param name="patch">entries to add/change.</param>
+        /// <param name="removed">keys to remove.</param>
+        /// <returns>new dictionary.</returns>
+        [OverloadResolutionPriority(2)]
+        public ImmDict<uint,V> Patch(ImmDict<uint,V> patch, ImmSet<uint> removed)
+        {
+            int n = dict.Count;
+            int m = patch.Count;
+            int r = removed.Count;
+            if (m == 0 && r == 0) return dict;
+
+            var newDict = new ImmutablePatchedUintDict<V>(dict, patch, removed);
+            return newDict.CascadingLevel <= 7 && (m + r) * 4 < n
+                ? newDict
+                : newDict.Repack();
+        }
+
+        /// <summary>
+        /// Patches this dictionary.
+        /// </summary>
+        /// <param name="patch">entries to add/change.</param>
+        /// <param name="removed">keys to remove.</param>
+        /// <returns>new dictionary.</returns>
+        [OverloadResolutionPriority(1)]
+        public ImmDict<uint,V> Patch(IReadOnlyDictionary<uint,V>? patch, IReadOnlySet<uint>? removed)
+        {
+            var p = patch is not null && patch.Count > 0 ? patch.ToImmDict() : EmptyDictionary<uint,V>.Instance;
+            var r = removed is not null && removed.Count > 0 ? removed.ToImmSet() : EmptySet<uint>.Instance;
+            return dict.Patch(p, r);
         }
     }
 

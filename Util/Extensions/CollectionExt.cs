@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
 namespace Util.Extensions;
@@ -9,7 +10,7 @@ namespace Util.Extensions;
 /// </summary>
 public static class CollectionExt
 {
-    extension<E>(IReadOnlyCollection<E>? collection)
+    extension<E>([NotNullWhen(true)] IReadOnlyCollection<E>? collection)
     {
         /// <summary>
         /// Checks whether this collection contains something.
@@ -17,7 +18,11 @@ public static class CollectionExt
         /// <seealso cref="Nothing"/>
         [OverloadResolutionPriority(10)]
         public bool Some => collection is not null && collection.Count != 0;
+    }
 
+
+    extension<E>(IReadOnlyCollection<E>? collection)
+    {
         /// <summary>
         /// Checks whether this collection is null or empty.
         /// <p>

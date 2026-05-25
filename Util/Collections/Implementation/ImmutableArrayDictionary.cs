@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Util.Extensions;
+using Util.Structures;
 using static Util.Collections.ImmConst;
 using static Util.Collections.Implementation.CollectionLogic;
 using static Util.Collections.Implementation.HashTableLogic;
@@ -49,7 +50,6 @@ internal abstract class ImmutableArrayDictionary<K,V> : ImmutableDictionary<K,V>
                <= 4 => new ImmutableMiniDictionary<K,V>(pairs, checkForDuplicates),
                _    => new ImmutableHashDictionary<K,V>(pairs, checkForDuplicates)
            };
-
 
     protected ImmutableArrayDictionary(KeyValuePair<K,V>[] pairs)
     {
