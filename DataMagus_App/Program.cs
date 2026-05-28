@@ -10,7 +10,7 @@ using NLog.Targets;
 using Util.Extensions;
 using static Core.Stationery.DataMagusState.ApplicationMode;
 
-namespace DataMagus.App;
+namespace DataMagus;
 
 
 /// <summary>
