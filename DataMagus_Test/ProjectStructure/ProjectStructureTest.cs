@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Util.Extensions;
 using Util.Fun;
 
@@ -122,6 +123,29 @@ public class ProjectStructureTest
         {
             var message = wrongProjectFiles.JoinToString(prefix: "The following project files specify .NET or C# version (should be set centrally in Directory.Build.props): \n",
                                                          separator: "\n");
+            Assert.Fail(message);
+        }
+    }
+
+    [Test]
+    public void NoRememberedEmptyDirectories()
+    {
+        var allDirs     = Trees.TraversDepthFirst(Root, d => d.Directories);
+        var csprojFiles = allDirs.SelectMany(d => d.Files).Where(f => f.Name.EndsWith(".csproj"));
+        var problems    = new List<string>();
+
+        foreach (var f in csprojFiles)
+        {
+            string text    = File.ReadAllText(f.FullName);
+            var    matches = Regex.Matches(text, """<Folder\s+Include\s*=\s*"([^"]*)"\s*/?>""");
+            foreach (Match m in matches)
+                problems.Add($"{f.FullName}: {m.Groups[1].Value}");
+        }
+
+        if (problems.Count > 0)
+        {
+            var message = problems.JoinToString(prefix: "The following project files have remembered empty directories (forgotten <Folder Include=\"...\"/> entries): \n",
+                                                separator: "\n");
             Assert.Fail(message);
         }
     }
