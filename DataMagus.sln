@@ -28,6 +28,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gena", "Gena\Gena.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gena_Test", "Gena_Test\Gena_Test.csproj", "{80BB5A45-F52B-4CBD-A356-A1758F08E3BA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataMagus_Test", "DataMagus_Test\DataMagus_Test.csproj", "{6CD04409-8859-42D7-AE16-4741547EAF3B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -90,5 +92,9 @@ Global
 		{80BB5A45-F52B-4CBD-A356-A1758F08E3BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80BB5A45-F52B-4CBD-A356-A1758F08E3BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80BB5A45-F52B-4CBD-A356-A1758F08E3BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CD04409-8859-42D7-AE16-4741547EAF3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CD04409-8859-42D7-AE16-4741547EAF3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CD04409-8859-42D7-AE16-4741547EAF3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CD04409-8859-42D7-AE16-4741547EAF3B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

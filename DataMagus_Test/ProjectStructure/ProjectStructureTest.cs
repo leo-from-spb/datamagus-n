@@ -5,7 +5,7 @@ using System.Linq;
 using Util.Extensions;
 using Util.Fun;
 
-namespace Core.ProjectStructure;
+namespace DataMagus.ProjectStructure;
 
 public class ProjectStructureTest
 {

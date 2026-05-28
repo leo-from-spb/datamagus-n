@@ -16,22 +16,23 @@ We have three kinds of modules:
             
 Modules:
 
-| Module                                 | Kind  | Description                                       |
-|----------------------------------------|-------|---------------------------------------------------|
-| [Core](Core)                           | C     | Core interfaces and simple classes                |
-| [Core_Imp](Core_Imp)                   | C     | Core implementation                               |
-| [Core_Test](Core_Test)                 | T     | Tests for core modules                            |
-| [Gena](Gena)                           | **G** | Gena the Crocodile — code genaration framework    |
-| [Gena_Test](Gena_Test)                 | T     | Tests for Gena the Crocodile                      |
-| [Model_Essence](Model_Essence)         | C     | Model definition                                  |
-| [Model_Gen](Model_Gen)                 | **G** | Model generator (a command-line app)              |  
-| [Model_Imp](Model_Imp)                 | C     | Model implementation (including generated code)   |
-| [Model_Test](Model_Test)               | T     | Tests for model modules                           |
-| [DataMagus_App](DataMagus_App)         | C     | Application bootstrap                             |
-| [DataMagus_Main](DataMagus_Main)       | C     | Most GUI code (UI is based on Avalonia framework) |
-| [Util](Util)                           | C     | Utility classes and functions                     |
-| [Util_Test](Util_Test)                 | T     | Tests for utility module                          |
-| [Testing_Appliance](Testing_Appliance) | T     | Test infrastructure                               |
+| Module                                 | Kind  | Description                                           |
+|----------------------------------------|-------|-------------------------------------------------------|
+| [Core](Core)                           | C     | Core interfaces and simple classes                    |
+| [Core_Imp](Core_Imp)                   | C     | Core implementation                                   |
+| [Core_Test](Core_Test)                 | T     | Tests for core modules                                |
+| [Gena](Gena)                           | **G** | Gena the Crocodile — code genaration framework        |
+| [Gena_Test](Gena_Test)                 | T     | Tests for Gena the Crocodile                          |
+| [Model_Essence](Model_Essence)         | C     | Model definition                                      |
+| [Model_Gen](Model_Gen)                 | **G** | Model generator (a command-line app)                  |  
+| [Model_Imp](Model_Imp)                 | C     | Model implementation (including generated code)       |
+| [Model_Test](Model_Test)               | T     | Tests for model modules                               |
+| [DataMagus_App](DataMagus_App)         | C     | Application bootstrap                                 |
+| [DataMagus_Main](DataMagus_Main)       | C     | Most GUI code (UI is based on Avalonia framework)     |
+| [DataMagus_Test](DataMagus_Test)       | T     | Solution-wide tests, also tests on the infrastructure |
+| [Util](Util)                           | C     | Utility classes and functions                         |
+| [Util_Test](Util_Test)                 | T     | Tests for utility module                              |
+| [Testing_Appliance](Testing_Appliance) | T     | Test infrastructure                                   |
 
       
 
